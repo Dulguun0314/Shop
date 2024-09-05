@@ -28,7 +28,9 @@ const Header = () => {
         <div className="flex items-center gap-6">
           <div className="flex gap-6">
             <CiHeart className="text-white w-6 h-6" />
-            <PiShoppingCartSimple className="text-white w-6 h-6" />
+            <Link href={`/basket`}>
+              <PiShoppingCartSimple className="text-white w-6 h-6" />
+            </Link>
           </div>
 
           <div className="flex gap-2">

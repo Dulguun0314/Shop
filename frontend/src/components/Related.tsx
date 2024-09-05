@@ -57,13 +57,13 @@ const Related = () => {
     },
   ];
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-12">
       <div className="container">
         <p className="text-[30px] font-bold">Холбоотой бараа</p>
-        <div className="w-full grid grid-cols-4 grid-rows-5 gap-5 my-6">
+        <div className="w-full grid grid-cols-4 grid-rows-2 gap-5 my-6">
           {Asides.map((aside, index) => {
             return (
-              <Link href={`/productCard`}>
+              <Link href={`/productCard`} key={index}>
                 <div key={index} className="grid gap-4">
                   <div className="overflow-hidden rounded-2xl">
                     <div

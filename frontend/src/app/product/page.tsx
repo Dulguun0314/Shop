@@ -127,7 +127,7 @@ const Product = () => {
         <div className="w-full grid grid-cols-3 grid-rows-5 gap-5">
           {Asides.map((aside, index) => {
             return (
-              <Link href={`/productCard`}>
+              <Link href={`/productCard`} key={index}>
                 <div key={index} className="grid gap-4">
                   <div className="overflow-hidden rounded-2xl">
                     <div

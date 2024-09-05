@@ -140,13 +140,11 @@ const Aside = () => {
                 ? "h-[990px] w-full"
                 : "h-[450px]";
             return (
-              <Link href={`/productCard`}>
-                <div key={index} className="grid gap-4">
+              <div key={index} className="grid gap-4">
+                <Link href={`/productCard`}>
                   <div className="overflow-hidden rounded-md ">
                     <div
-                      className={`relative cursor-pointer group ${customHeight}
-                      
-                   `}
+                      className={`relative cursor-pointer group ${customHeight} `}
                     >
                       <Image
                         src={aside.src}
@@ -164,8 +162,8 @@ const Aside = () => {
                     <p className="text-[16px]">{aside.title}</p>
                     <p className="text-[16px] font-bold">{aside.price}</p>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             );
           })}
         </div>
