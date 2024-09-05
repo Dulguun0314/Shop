@@ -1,4 +1,5 @@
 import Logo from "@/assets/icon/Logo";
+import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { PiShoppingCartSimple } from "react-icons/pi";
@@ -8,8 +9,12 @@ const Header = () => {
     <div className="container w-fit">
       <div className=" w-screen bg-black flex justify-between px-6 py-4">
         <div className="flex items-center gap-4">
-          <Logo />
-          <p className="opacity-75 text-white">Бүтээгдэхүүн</p>
+          <Link href={`/`}>
+            <Logo />
+          </Link>
+          <Link href={`/product`}>
+            <p className="opacity-75 text-white">Бүтээгдэхүүн</p>
+          </Link>
         </div>
         <div className="flex items-center bg-[#18181B] px-4 py-2 rounded-md gap-4">
           <CiSearch className="text-white w-6 h-6" />

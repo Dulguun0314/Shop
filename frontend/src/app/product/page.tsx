@@ -2,8 +2,7 @@
 import Heart from "@/assets/icon/Heart";
 import Image from "next/image";
 import Link from "next/link";
-
-const Aside = () => {
+const Product = () => {
   const Asides = [
     {
       src: "/prompt.png",
@@ -95,56 +94,44 @@ const Aside = () => {
       price: "120’000₮",
       title: "Chunky Glyph Tee",
     },
-    {
-      src: "/smile.png",
-      alt: "smile",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      src: "/back.png",
-      alt: "back",
-      price: "120’000₮",
-      title: "Wildflower Hoodie",
-    },
-    {
-      src: "/blot.png",
-      alt: "blot",
-      price: "120’000₮",
-      title: "Inkblot Tee",
-    },
   ];
   return (
     <div className="flex justify-center">
-      <div className="container  border py-14">
-        <div className="relative h-[600px]">
-          <Image
-            src={`/hoodie.png`}
-            alt="hoodie"
-            priority
-            fill
-            className="object-cover rounded-2xl"
-          />
-          <div className="absolute bottom-8 left-8 ">
-            <p className="text-lg">Wildflower Hoodie</p>
-            <p className="font-bold text-4xl leading-10">120’000₮</p>
+      <div className="container flex my-12">
+        <div className="grid h-fit gap-12 w-[475px]">
+          <div className="grid h-fit">
+            <p className="text-[16px] font-bold my-4">Ангилал</p>
+            <div className="grid gap-1">
+              <p>Малгай</p>
+              <p>Усны сав</p>
+              <p>T-shirt</p>
+              <p>Hoodie</p>
+              <p>Tee</p>
+              <p>Цүнх</p>
+            </div>
+          </div>
+          <div>
+            <p className="text-[16px] font-bold my-4">Хэмжээ</p>
+            <div className="grid gap-1">
+              <p>Free</p>
+              <p>S</p>
+              <p>M</p>
+              <p>L</p>
+              <p>2XL</p>
+              <p>3XL</p>
+              <p>4XL</p>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-6 gap-5 my-8 [&>div:nth-child(7)]:col-span-2 [&>div:nth-child(7)]:row-span-2 [&>div:nth-child(8)]:col-span-2  [&>div:nth-child(8)]:row-span-2  ">
+        <div className="w-full grid grid-cols-3 grid-rows-5 gap-5">
           {Asides.map((aside, index) => {
-            const customHeight =
-              index === 6
-                ? "h-[1000px] w-full "
-                : index === 7
-                ? "h-[990px] w-full"
-                : "h-[450px]";
             return (
               <Link href={`/productCard`}>
                 <div key={index} className="grid gap-4">
-                  <div className="overflow-hidden rounded-md ">
+                  <div className="overflow-hidden rounded-2xl">
                     <div
-                      className={`relative cursor-pointer group ${customHeight}
+                      className={`relative cursor-pointer group h-[450px]
                       
                    `}
                     >
@@ -174,4 +161,4 @@ const Aside = () => {
   );
 };
 
-export default Aside;
+export default Product;
