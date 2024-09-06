@@ -27,7 +27,9 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-6">
           <div className="flex gap-6">
-            <CiHeart className="text-white w-6 h-6" />
+            <Link href={`/saved`}>
+              <CiHeart className="text-white w-6 h-6" />
+            </Link>
             <Link href={`/basket`}>
               <PiShoppingCartSimple className="text-white w-6 h-6" />
             </Link>
@@ -38,7 +40,9 @@ const Header = () => {
               <p className="mx-3 my-2 text-white">Бүртгүүлэх</p>
             </button>
             <button className="bg-[#2563EB] rounded-md">
-              <p className="mx-3 my-2 text-white ">Нэвтрэх</p>
+              <Link href={`/login`}>
+                <p className="mx-3 my-2 text-white ">Нэвтрэх</p>
+              </Link>
             </button>
           </div>
         </div>

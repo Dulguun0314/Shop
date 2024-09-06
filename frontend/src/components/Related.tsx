@@ -63,32 +63,32 @@ const Related = () => {
         <div className="w-full grid grid-cols-4 grid-rows-2 gap-5 my-6">
           {Asides.map((aside, index) => {
             return (
-              <Link href={`/productCard`} key={index}>
-                <div key={index} className="grid gap-4">
-                  <div className="overflow-hidden rounded-2xl">
-                    <div
-                      className={`relative cursor-pointer group h-[450px]
-                
-             `}
-                    >
-                      <Image
-                        src={aside.src}
-                        alt={aside.alt}
-                        priority
-                        fill
-                        className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black"
-                      />
-                      <div className="absolute top-4 right-4 overflow-hidden">
-                        <Heart />
+              <div key={index} className="relative">
+                <Link href={`/productCard`}>
+                  <div className="grid gap-4">
+                    <div className="overflow-hidden rounded-2xl">
+                      <div
+                        className={`relative cursor-pointer group h-[450px]`}
+                      >
+                        <Image
+                          src={aside.src}
+                          alt={aside.alt}
+                          priority
+                          fill
+                          className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black"
+                        />
                       </div>
                     </div>
+                    <div>
+                      <p className="text-[16px]">{aside.title}</p>
+                      <p className="text-[16px] font-bold">{aside.price}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[16px]">{aside.title}</p>
-                    <p className="text-[16px] font-bold">{aside.price}</p>
-                  </div>
+                </Link>
+                <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
+                  <Heart />
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

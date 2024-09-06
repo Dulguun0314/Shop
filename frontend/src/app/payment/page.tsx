@@ -4,7 +4,7 @@ import { IoMdCheckmark } from "react-icons/io";
 
 const Payment = () => {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center h-screen">
       <div className="container justify-center grid">
         <div className="flex items-center justify-center mt-12">
           <div className="w-[32px] h-[32px] bg-black rounded-full flex justify-center items-center">
@@ -23,7 +23,7 @@ const Payment = () => {
             <p className=" text-white">3</p>
           </div>
         </div>
-        <div className="p-8  bg-[#F4F4F5E5] w-[500px] my-24 rounded-xl">
+        <div className="p-8  bg-[#F4F4F5E5] w-[500px] my-24 rounded-xl h-fit">
           <div className=" grid justify-center pb-[36px]">
             <p className="text-[18px] font-semibold text-center">
               3. Төлбөр төлөлт

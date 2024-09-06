@@ -102,57 +102,59 @@ const Product = () => {
           <div className="grid h-fit">
             <p className="text-[16px] font-bold my-4">Ангилал</p>
             <div className="grid gap-1">
-              <p>Малгай</p>
-              <p>Усны сав</p>
-              <p>T-shirt</p>
-              <p>Hoodie</p>
-              <p>Tee</p>
-              <p>Цүнх</p>
+              <p className="hover:font-bold cursor-pointer">Малгай</p>
+              <p className="hover:font-bold cursor-pointer">Усны сав</p>
+              <p className="hover:font-bold cursor-pointer">T-shirt</p>
+              <p className="hover:font-bold cursor-pointer">Hoodie</p>
+              <p className="hover:font-bold cursor-pointer">Tee</p>
+              <p className="hover:font-bold cursor-pointer">Цүнх</p>
             </div>
           </div>
           <div>
             <p className="text-[16px] font-bold my-4">Хэмжээ</p>
-            <div className="grid gap-1">
-              <p>Free</p>
-              <p>S</p>
-              <p>M</p>
-              <p>L</p>
-              <p>2XL</p>
-              <p>3XL</p>
-              <p>4XL</p>
+            <div className="grid gap-1 ">
+              <p className="hover:font-bold cursor-pointer">Free</p>
+              <p className="hover:font-bold cursor-pointer">S</p>
+              <p className="hover:font-bold cursor-pointer">M</p>
+              <p className="hover:font-bold cursor-pointer">L</p>
+              <p className="hover:font-bold cursor-pointer">2XL</p>
+              <p className="hover:font-bold cursor-pointer">3XL</p>
+              <p className="hover:font-bold cursor-pointer">4XL</p>
             </div>
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-3 grid-rows-5 gap-5">
+        <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10">
           {Asides.map((aside, index) => {
             return (
-              <Link href={`/productCard`} key={index}>
-                <div key={index} className="grid gap-4">
-                  <div className="overflow-hidden rounded-2xl">
-                    <div
-                      className={`relative cursor-pointer group h-[450px]
+              <div key={index} className="relative">
+                <Link href={`/productCard`}>
+                  <div className="grid gap-4">
+                    <div className="overflow-hidden rounded-2xl">
+                      <div
+                        className={`relative cursor-pointer group h-[450px]
                       
                    `}
-                    >
-                      <Image
-                        src={aside.src}
-                        alt={aside.alt}
-                        priority
-                        fill
-                        className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black"
-                      />
-                      <div className="absolute top-4 right-4 overflow-hidden">
-                        <Heart />
+                      >
+                        <Image
+                          src={aside.src}
+                          alt={aside.alt}
+                          priority
+                          fill
+                          className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black"
+                        />
                       </div>
                     </div>
+                    <div>
+                      <p className="text-[16px]">{aside.title}</p>
+                      <p className="text-[16px] font-bold">{aside.price}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[16px]">{aside.title}</p>
-                    <p className="text-[16px] font-bold">{aside.price}</p>
-                  </div>
+                </Link>
+                <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
+                  <Heart />
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

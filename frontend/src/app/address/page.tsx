@@ -7,21 +7,21 @@ import { IoMdCheckmark } from "react-icons/io";
 const Address = () => {
   const Addresses: addressType[] = [
     {
-      src: "/chunky.png",
+      src: "/smallChunky.png",
       text: "Chunky Glyph Tee",
       alt: "Chunky Glyph Tee",
       price: "120’000₮",
     },
     {
-      src: "/chunky.png",
+      src: "/smallBlot.png",
       text: "Chunky Glyph Tee",
       alt: "Chunky Glyph Tee",
       price: "120’000₮",
     },
     {
-      src: "/chunky.png",
-      text: "Chunky Glyph Tee",
-      alt: "Chunky Glyph Tee",
+      src: "/smallDoodie.png",
+      text: "Doodie hoodie",
+      alt: "Doodie hoodie",
       price: "120’000₮",
     },
   ];
@@ -32,7 +32,7 @@ const Address = () => {
     price: number | string;
   }
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center h-screen">
       <div className="container justify-center">
         <div className="flex items-center justify-center mt-12">
           <div className="w-[32px] h-[32px] bg-black rounded-full flex justify-center items-center">
@@ -93,7 +93,7 @@ const Address = () => {
               <div className="grid gap-2">
                 <p>Овог:</p>
                 <input
-                  className="w-full py-3 px-1 rounded-md border-[#E4E4E7] border "
+                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border "
                   placeholder="Овог"
                   type="surName"
                   name="surName"
@@ -102,7 +102,7 @@ const Address = () => {
               <div className="grid gap-2">
                 <p>Нэр:</p>
                 <input
-                  className="w-full py-3 px-1 rounded-md border-[#E4E4E7] border "
+                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border "
                   placeholder="Самбуу"
                   type="name "
                   name="name"
@@ -111,7 +111,7 @@ const Address = () => {
               <div className="grid gap-2">
                 <p>Утасны дугаар:</p>
                 <input
-                  className="w-full py-3 px-1 rounded-md border-[#E4E4E7] border "
+                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border "
                   placeholder="Утасны дугаар:"
                   name="number"
                   type="number"
@@ -121,7 +121,7 @@ const Address = () => {
               <div className="grid gap-2">
                 <p>Хаяг:</p>
                 <input
-                  className="w-full py-3 px-1 rounded-md border-[#E4E4E7] border pb-[70px]"
+                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border pb-[70px]"
                   placeholder="Хаяг"
                   type="address"
                   name="address"
@@ -131,7 +131,7 @@ const Address = () => {
                 <p>Нэмэлт мэдээлэл:</p>
                 <input
                   type="text "
-                  className="w-full py-3 px-1 rounded-md border-[#E4E4E7] border pb-[50px] "
+                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border pb-[50px] "
                   placeholder="Нэмэлт мэдээлэл:"
                   name="text"
                 />

@@ -8,23 +8,23 @@ import { BsTrash3 } from "react-icons/bs";
 const Basket = () => {
   const Baskets: BasketType[] = [
     {
-      src: "/chunky.png",
-      text: "Chunky Glyph Tee",
-      alt: "Chunky Glyph Tee",
+      src: "/smallChunky.png",
+      text: "smallChunky Glyph Tee",
+      alt: "smallChunky Glyph Tee",
       price: "120’000₮",
       icon: <BsTrash3 className="w-6 h-6" />,
     },
     {
-      src: "/chunky.png",
-      text: "Chunky Glyph Tee",
-      alt: "Chunky Glyph Tee",
+      src: "/smallChunky.png",
+      text: "smallChunky Glyph Tee",
+      alt: "smallChunky Glyph Tee",
       price: "120’000₮",
       icon: <BsTrash3 className="w-6 h-6" />,
     },
     {
-      src: "/chunky.png",
-      text: "Chunky Glyph Tee",
-      alt: "Chunky Glyph Tee",
+      src: "/smallChunky.png",
+      text: "smallChunky Glyph Tee",
+      alt: "smallChunky Glyph Tee",
       price: "120’000₮",
       icon: <BsTrash3 className="w-6 h-6" />,
     },
@@ -45,7 +45,7 @@ const Basket = () => {
     setCount(count - 1);
   };
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center h-screen">
       <div className="container grid justify-center ">
         <div className="flex items-center justify-center mt-12">
           <div className="w-[32px] h-[32px] bg-black rounded-full flex justify-center items-center">
@@ -68,7 +68,7 @@ const Basket = () => {
             </div>
             {Baskets.map((basket, index) => {
               return (
-                <div key={index} className=" ">
+                <div key={index}>
                   <div className="flex justify-between  gap-6">
                     <div className="">
                       <div className="relative w-[120px] h-[120px] ">

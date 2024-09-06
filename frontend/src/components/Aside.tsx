@@ -116,7 +116,7 @@ const Aside = () => {
   ];
   return (
     <div className="flex justify-center">
-      <div className="container  border py-14">
+      <div className="container py-14">
         <div className="relative h-[600px]">
           <Image
             src={`/hoodie.png`}
@@ -140,9 +140,9 @@ const Aside = () => {
                 ? "h-[990px] w-full"
                 : "h-[450px]";
             return (
-              <div key={index} className="grid gap-4">
+              <div key={index} className="grid gap-4 relative">
                 <Link href={`/productCard`}>
-                  <div className="overflow-hidden rounded-md ">
+                  <div className="overflow-hidden rounded-2xl ">
                     <div
                       className={`relative cursor-pointer group ${customHeight} `}
                     >
@@ -151,11 +151,8 @@ const Aside = () => {
                         alt={aside.alt}
                         priority
                         fill
-                        className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black"
+                        className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black  "
                       />
-                      <div className="absolute top-4 right-4 overflow-hidden">
-                        <Heart />
-                      </div>
                     </div>
                   </div>
                   <div>
@@ -163,6 +160,11 @@ const Aside = () => {
                     <p className="text-[16px] font-bold">{aside.price}</p>
                   </div>
                 </Link>
+                <div
+                  className={`absolute top-4 right-4 overflow-hidden cursor-pointer `}
+                >
+                  <Heart />
+                </div>
               </div>
             );
           })}
