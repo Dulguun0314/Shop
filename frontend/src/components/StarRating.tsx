@@ -49,9 +49,9 @@ const StarRating: React.FC<StarRatingProps> = ({
           );
         })}
       </div>
-      {/* <p className="text-gray-700 font-semibold">
+      <p className="text-gray-700 font-semibold">
         Average Rating: {ratingPercentage.toFixed(1)}%
-      </p> */}
+      </p>
     </div>
   );
 };

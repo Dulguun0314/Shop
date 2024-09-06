@@ -87,7 +87,9 @@ const Page = () => {
     setCount(count + 1);
   };
   const minus = () => {
-    setCount(count - 1);
+    if (count > 0) {
+      setCount(count - 1);
+    }
   };
   const [slide, setSlide] = useState(false);
 
@@ -193,19 +195,19 @@ const Page = () => {
                 <div className="flex gap-4">
                   <p>Үнэлгээ</p>
                   <p
-                    className={`text-[#2563EB] underline underline-offset-4 cursor-pointer`}
+                    className={`text-[#2563EB] underline underline-offset-4 cursor-pointer duration-1000 `}
                     onClick={() => setSlide(!slide)}
                   >
-                    бүгдийг харах
+                    {slide ? "бүгдийг хураах" : " бүгдийг харах"}
                   </p>
                 </div>
               </div>
               <StarRating totalStars={5} />
             </div>
             <div
-              className={`w-full grid justify-center  gap-6 ${
+              className={`w-full grid justify-center  gap-6 transition-transform duration-1000 ${
                 slide ? "visible" : "hidden"
-              }`}
+              } duration-1000`}
             >
               <div className="bg-[#F4F4F5] p-6 grid h-fit gap-6 rounded-lg ">
                 <div>
