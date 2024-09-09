@@ -1,119 +1,138 @@
 "use client";
 import Heart from "@/assets/icon/Heart";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Aside = () => {
   const Asides = [
     {
+      id: "1",
       src: "/prompt.png",
       alt: "The Prompt Magazine",
       price: "120’000₮",
       title: "The Prompt Magazine",
     },
     {
+      id: "2",
       src: "/chunky.png",
       alt: "Chunky Glyph Tee",
       price: "120’000₮",
       title: "Chunky Glyph Tee",
     },
     {
+      id: "3",
       src: "/smile.png",
       alt: "smile",
       price: "120’000₮",
       title: "All Smiles Nalgene",
     },
     {
+      id: "4",
       src: "/back.png",
       alt: "back",
       price: "120’000₮",
       title: "Wildflower Hoodie",
     },
     {
+      id: "5",
       src: "/blot.png",
       alt: "blot",
       price: "120’000₮",
       title: "Inkblot Tee",
     },
     {
+      id: "6",
       src: "/long.png",
       alt: "long",
       price: "120’000₮",
       title: "All Smiles Nalgene",
     },
     {
+      id: "7",
       src: "/cap.png",
       alt: "cap",
       price: "120’000₮",
       title: "Chunky Glyph Cap",
     },
     {
+      id: "8",
       src: "/style.png",
       alt: "style",
       price: "120’000₮",
       title: "Local Styles Crewneck",
     },
     {
+      id: "9",
       src: "/cap.png",
       alt: "cap",
       price: "120’000₮",
       title: "Chunky Glyph Cap",
     },
     {
+      id: "10",
       src: "/doodie.png",
       alt: "doodie",
       price: "120’000₮",
       title: "Doodle Hoodie",
     },
     {
+      id: "11",
       src: "/chunky.png",
       alt: "chunky",
       price: "120’000₮",
       title: "Chunky Glyph Tee",
     },
     {
+      id: "12",
       src: "/smile.png",
       alt: "smile",
       price: "120’000₮",
       title: "All Smiles Nalgene",
     },
     {
+      id: "13",
       src: "/chunky.png",
       alt: "Chunky Glyph Tee",
       price: "120’000₮",
       title: "Chunky Glyph Tee",
     },
     {
+      id: "14",
       src: "/long.png",
       alt: "long",
       price: "120’000₮",
       title: "All Smiles Nalgene",
     },
     {
+      id: "15",
       src: "/chunky.png",
       alt: "Chunky Glyph Tee",
       price: "120’000₮",
       title: "Chunky Glyph Tee",
     },
     {
+      id: "16",
       src: "/smile.png",
       alt: "smile",
       price: "120’000₮",
       title: "All Smiles Nalgene",
     },
     {
+      id: "17",
       src: "/back.png",
       alt: "back",
       price: "120’000₮",
       title: "Wildflower Hoodie",
     },
     {
+      id: "18",
       src: "/blot.png",
       alt: "blot",
       price: "120’000₮",
       title: "Inkblot Tee",
     },
   ];
+  const router = useRouter();
   return (
     <div className="flex justify-center">
       <div className="container py-14">
@@ -141,7 +160,7 @@ const Aside = () => {
                 : "h-[450px]";
             return (
               <div key={index} className="grid gap-4 relative">
-                <Link href={`/productCard`}>
+                <div onClick={() => router.push(`/product/${aside.id}`)}>
                   <div className="overflow-hidden rounded-2xl ">
                     <div
                       className={`relative cursor-pointer group ${customHeight} `}
@@ -159,7 +178,7 @@ const Aside = () => {
                     <p className="text-[16px]">{aside.title}</p>
                     <p className="text-[16px] font-bold">{aside.price}</p>
                   </div>
-                </Link>
+                </div>
                 <div
                   className={`absolute top-4 right-4 overflow-hidden cursor-pointer `}
                 >

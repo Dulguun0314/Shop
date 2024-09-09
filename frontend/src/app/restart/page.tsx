@@ -13,16 +13,16 @@ const Restart = () => {
               placeholder="Шинэ нууц үг"
               type="password"
               name="password"
-              className="w-full px-3 py-2 border border-[#E4E4E7] rounded-md outline-none"
+              className="w-full px-3 py-2 border border-[#E4E4E7] rounded-[18px] outline-none"
             />
             <input
               placeholder="Шинэ нууц үг давтах"
               type="rePassword"
               name="rePassword"
-              className="w-full px-3 py-2 border border-[#E4E4E7] rounded-md outline-none"
+              className="w-full px-3 py-2 border border-[#E4E4E7] rounded-[18px] outline-none"
             />
             <Link href={`/succesPassword`}>
-              <button className="bg-black text-white px-4 py-2 w-full rounded-md">
+              <button className="bg-[#2563EB] text-white px-4 py-2 w-full rounded-[18px]">
                 Үүсгэх
               </button>
             </Link>

@@ -12,11 +12,11 @@ const Forget = () => {
             placeholder="Имэйл хаяг оруулах"
             type="email"
             name="name"
-            className="w-full px-3 py-2 border border-[#E4E4E7] rounded-md outline-none my-4"
+            className="w-full px-3 py-2 border border-[#E4E4E7] rounded-[18px] outline-none my-4"
           />
 
           <Link href={`/otp`}>
-            <button className="bg-black text-white px-4 py-2 w-full rounded-md">
+            <button className="bg-[#2563EB] text-white px-4 py-2 w-full rounded-[18px]">
               Илгээх
             </button>
           </Link>

@@ -33,7 +33,7 @@ interface Comment {
   text: string;
 }
 
-const Page = () => {
+const ProductCard = () => {
   const products: Product[] = [
     {
       src: "/hoodieBack.png",
@@ -250,4 +250,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ProductCard;
