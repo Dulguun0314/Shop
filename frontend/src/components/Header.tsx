@@ -62,11 +62,11 @@ const Header = () => {
 
           <div className="flex gap-2">
             <Link href={`/signup`}>
-              <button className="border border-[#2563EB] rounded-md">
+              <button className="border border-[#2563EB] rounded-[18px]">
                 <p className="mx-3 my-2 text-white">Бүртгүүлэх</p>
               </button>
             </Link>
-            <button className="bg-[#2563EB] rounded-md">
+            <button className="bg-[#2563EB] rounded-[18px]">
               <Link href={`/login`}>
                 <p className="mx-3 my-2 text-white ">Нэвтрэх</p>
               </Link>

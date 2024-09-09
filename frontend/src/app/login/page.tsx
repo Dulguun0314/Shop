@@ -28,7 +28,7 @@ const Login = () => {
                 Нууц үг мартсан
               </p>
             </Link>
-            <Link href={`/singup`}>
+            <Link href={`/signup`}>
               <button className="border border-[#2563EB] text-[#2563EB] px-4 py-2 w-full rounded-[18px] mt-12">
                 Бүртгүүлэх
               </button>
