@@ -50,14 +50,14 @@ const Basket = () => {
     <div className="flex justify-center h-screen">
       <div className="container grid justify-center ">
         <div className="flex items-center justify-center mt-12">
-          <div className="w-[32px] h-[32px] bg-black rounded-full flex justify-center items-center">
+          <div className="w-[32px] h-[32px] bg-[#2563EB] rounded-full flex justify-center items-center">
             <p className=" text-white">1</p>
           </div>
-          <div className="w-20 h-[1px] bg-black"></div>
+          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
           <div className="w-[32px] h-[32px] border border-black rounded-full flex justify-center items-center ">
             <p className=" text-black">2</p>
           </div>
-          <div className="w-20 h-[1px] bg-black"></div>
+          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
           <div className="w-[32px] h-[32px] border border-black rounded-full flex justify-center items-center">
             <p className=" text-black">3</p>
           </div>
@@ -65,7 +65,7 @@ const Basket = () => {
         <div>
           <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6 my-24  p-8">
             <div className="flex gap-1 items-center">
-              <p className="font-medium text-[20px]   ">1. Сагс</p>
+              <p className="font-medium text-[20px]">1. Сагс</p>
               <p className="text-[#71717A]">(4)</p>
             </div>
             {Baskets.map((basket, index) => {

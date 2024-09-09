@@ -32,19 +32,19 @@ const Address = () => {
     price: number | string;
   }
   return (
-    <div className="flex justify-center h-screen">
-      <div className="container justify-center">
-        <div className="flex items-center justify-center mt-12">
-          <div className="w-[32px] h-[32px] bg-black rounded-full flex justify-center items-center">
+    <div className="flex justify-center h-screen my-24">
+      <div className="container justify-center ">
+        <div className="flex items-center justify-center pt-12 ">
+          <div className="w-[32px] h-[32px] bg-[#2563EB] rounded-full flex justify-center items-center">
             <p className=" text-white">
-              <IoMdCheckmark className="text-green-600" />
+              <IoMdCheckmark className="text-white" />
             </p>
           </div>
-          <div className="w-20 h-[1px] bg-black"></div>
-          <div className="w-[32px] h-[32px] border border-black bg-black rounded-full flex justify-center items-center ">
+          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
+          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center ">
             <p className=" text-white">2</p>
           </div>
-          <div className="w-20 h-[1px] bg-black"></div>
+          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
           <div className="w-[32px] h-[32px] border border-black rounded-full flex justify-center items-center">
             <p className=" text-black">3</p>
           </div>

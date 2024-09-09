@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const userInfo = () => {
+const UserInfo = () => {
   const pathname: string = usePathname();
+
   interface Path {
     name: string;
     path: string;
   }
+
   const paths: Path[] = [
     {
       name: "Хэрэглэгчийн хэсэг",
@@ -19,6 +21,7 @@ const userInfo = () => {
       path: "/orderHistory",
     },
   ];
+
   return (
     <div className="flex justify-center bg-[#F7F7F8]">
       <div className="container justify-center h-screen flex gap-5 my-32 ">
@@ -39,12 +42,12 @@ const userInfo = () => {
         </div>
         <div className="grid w-full h-fit">
           <p className="font-bold text-[18px]">Хэрэглэгчийн хэсэг</p>
-          <div className="w-full border "></div>
+          <div className="w-full border my-6"></div>
           <div className="grid gap-4">
             <div>
               <p className="font-medium">Овог:</p>
               <input
-                type="name "
+                type="name"
                 placeholder="Овог"
                 className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2"
               />
@@ -52,8 +55,8 @@ const userInfo = () => {
             <div>
               <p className="font-medium">Нэр:</p>
               <input
-                name="name "
-                placeholder="Нэр "
+                name="name"
+                placeholder="Нэр"
                 className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2"
                 type="name"
               />
@@ -61,9 +64,9 @@ const userInfo = () => {
             <div>
               <p className="font-medium">Утасны дугаар:</p>
               <input
-                type="number "
-                name="number "
-                placeholder="Утасны дугаар "
+                type="number"
+                name="number"
+                placeholder="Утасны дугаар"
                 className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2"
               />
             </div>
@@ -73,21 +76,23 @@ const userInfo = () => {
                 name="email"
                 type="email"
                 placeholder="Имэйл"
-                className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2 "
+                className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2"
               />
             </div>
             <div>
               <p className="font-medium">Хаяг</p>
               <input
-                type="name "
+                type="text"
                 placeholder="Хаяг"
-                className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2"
-                name="name"
+                className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2 pb-20"
+                name="address"
               />
             </div>
-            <button className="bg-[#2563EB] text-white   flex  justify-end">
-              <p className="w-fit px-9 py-2">Мэдээлэл шинэчлэх</p>
-            </button>
+            <div className="w-full flex justify-end ">
+              <button className="bg-[#2563EB] text-white rounded-2xl">
+                <p className="px-9 py-2 ">Мэдээлэл шинэчлэх</p>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -95,4 +100,4 @@ const userInfo = () => {
   );
 };
 
-export default userInfo;
+export default UserInfo;

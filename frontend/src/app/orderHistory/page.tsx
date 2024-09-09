@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 
-const orderHistory = () => {
+const OrderHistory = () => {
   const pathname: string = usePathname();
   interface Path {
     name: string;
@@ -76,10 +76,10 @@ const orderHistory = () => {
             </Link>
           ))}
         </div>
-        <div className="grid w-full h-fit">
+        <div className="grid w-full h-fit gap-4">
           <p className="text-[18px] font-bold">Захиалгын түүх</p>
           <div className="w-full border my-6"></div>
-          <div className="bg-white rounded-2xl  px-8 py-6">
+          <div className="bg-white rounded-2xl  px-8 py-6 grid gap-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <p className="text-[16px] font-bold">2024-09-03 15:34</p>
@@ -93,15 +93,17 @@ const orderHistory = () => {
             </div>
             <div className={`w-full ${side ? "visible" : "hidden"}`}>
               {histories.map((history, index) => (
-                <div key={index} className="flex  justify-between">
-                  <div className=" flex items-center">
-                    <div className="relative w-12 h-12 grid gap-2">
-                      <Image
-                        src={history.src}
-                        alt="hi"
-                        fill
-                        className="rounded-md  "
-                      />
+                <div key={index} className="flex  justify-between items-center">
+                  <div className=" flex items-center gap-2">
+                    <div className="my-2">
+                      <div className="relative w-12 h-12 ">
+                        <Image
+                          src={history.src}
+                          alt="hi"
+                          fill
+                          className="rounded-md  "
+                        />
+                      </div>
                     </div>
                     <div>
                       <p>{history.text}</p>
@@ -110,14 +112,46 @@ const orderHistory = () => {
                       </div>
                     </div>
                   </div>
-                  <div>{history.price}</div>
+                  <div className="font-bold">{history.price}</div>
                 </div>
               ))}
-              <div className="w-full border-dashed "></div>
-              <div>
-                <p>Үнийн дүн:</p>
-                <p>480’000₮</p>
+              <div className="w-full border-dashed border my-4"></div>
+            </div>
+            <div className="flex justify-between">
+              <p>Үнийн дүн:</p>
+              <p className="font-bold">480’000₮</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl  px-8 py-6 grid gap-4 ">
+            <div className="flex justify-between">
+              <div className="flex gap-2 ">
+                <p>2024-08-23 15:34</p>
+                <button className=" bg-[#afc8fe] flex items-center border border-[#2563EB] rounded-xl px-2 ">
+                  <p className="text-[#2563EB]">дууссан</p>
+                </button>
               </div>
+              <div>{side ? <FaChevronDown /> : <FaChevronUp />}</div>
+            </div>
+
+            <div className="flex justify-between ">
+              <p>Үнийн дүн:</p>
+              <p className="font-bold">120’000₮</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl  px-8 py-6 grid gap-4 ">
+            <div className="flex justify-between">
+              <div className="flex gap-2 ">
+                <p>2024-08-23 15:34</p>
+                <button className=" bg-[#afc8fe] flex items-center border border-[#2563EB] rounded-xl px-2 ">
+                  <p className="text-[#2563EB]">дууссан</p>
+                </button>
+              </div>
+              <div>{side ? <FaChevronDown /> : <FaChevronUp />}</div>
+            </div>
+
+            <div className="flex justify-between ">
+              <p>Үнийн дүн:</p>
+              <p className="font-bold">120’000₮</p>
             </div>
           </div>
         </div>
@@ -126,4 +160,4 @@ const orderHistory = () => {
   );
 };
 
-export default orderHistory;
+export default OrderHistory;

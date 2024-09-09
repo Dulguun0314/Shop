@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-const signUp = () => {
+const SignUp = () => {
   interface FormValues {
     name: string;
     email: string;
@@ -24,45 +24,56 @@ const signUp = () => {
       const errors: Partial<FormValues> = {};
 
       if (!values.email) {
+        errors.email = "Имэйл хаяг шаардлагатай";
       } else if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
       ) {
         errors.email = "Зөв имэйл хаяг оруулна уу";
       }
+
       if (!values.password) {
-        // errors.password = " Нууц үг шаардлагатай";
-      } else if (values.password.toLocaleUpperCase()) {
-        errors.password = "Том үсэг орсон байх";
-      } else if (values.password.toLocaleLowerCase()) {
-        errors.password = "Жижиг үсэг орсон байх";
-      } else if (!/\d/.test(values.password)) {
-        errors.password = "Тоо орсон байх";
-      } else if (!/[a-zA-Z]/.test(values.password)) {
-        errors.password = "Тэмдэгт орсон байхs";
+        errors.password = "Нууц үг шаардлагатай";
+      } else {
+        if (!/[A-Z]/.test(values.password)) {
+          errors.password = "Том үсэг орсон байх";
+        } else if (!/[a-z]/.test(values.password)) {
+          errors.password = "Жижиг үсэг орсон байх";
+        } else if (!/\d/.test(values.password)) {
+          errors.password = "Тоо орсон байх";
+        } else if (!/[!@#$%^&*]/.test(values.password)) {
+          errors.password = "Тэмдэгт орсон байх";
+        }
       }
 
       if (!values.rePassword) {
-        // errors.rePassword = "Шаардлагатай нууц үгийг баталгаажуулна уу";
+        errors.rePassword = "Шаардлагатай нууц үгийг баталгаажуулна уу";
       } else if (values.rePassword !== values.password) {
         errors.rePassword = "Нууц үг ижил биш байна";
       }
+
       return errors;
     },
     onSubmit: (values) => {
       console.log("Form submitted:", values);
     },
   });
+
   const [showPassword, setShowPassword] = useState(false);
+
+  const hasUppercase = /[A-Z]/.test(formik.values.password);
+  const hasLowercase = /[a-z]/.test(formik.values.password);
+  const hasNumber = /\d/.test(formik.values.password);
+  const hasSpecialChar = /[!@#$%^&*]/.test(formik.values.password);
 
   return (
     <div className="flex justify-center h-screen">
-      <div className="container grid justify-center items-center  ">
-        <div className="grid fit w-[400px] ">
+      <div className="container grid justify-center items-center">
+        <div className="grid fit w-[400px]">
           <p className="text-2xl font-semibold text-center p-6">Бүртгүүлэх</p>
-          <div className="grid gap-4">
+          <form onSubmit={formik.handleSubmit} className="grid gap-4">
             <input
               placeholder="Нэр"
-              type="name"
+              type="text"
               name="name"
               className="w-full px-3 py-2 border border-[#E4E4E7] rounded-[18px] outline-none"
               value={formik.values.name}
@@ -102,7 +113,7 @@ const signUp = () => {
             </div>
             <div className="relative">
               <input
-                placeholder="Нууц үг давтах "
+                placeholder="Нууц үг давтах"
                 name="rePassword"
                 type={showPassword ? "text" : "password"}
                 className="w-full px-3 py-2 border border-[#E4E4E7] rounded-[18px] outline-none"
@@ -126,51 +137,54 @@ const signUp = () => {
             <div className="px-3">
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasUppercase
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Том үсэг орсон байх
               </li>
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasLowercase
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Жижиг үсэг орсон байх
               </li>
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasNumber
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Тоо орсон байх
               </li>
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasSpecialChar
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Тэмдэгт орсон байх
               </li>
             </div>
 
-            <button className="bg-[#2563EB] text-white px-4 py-2 w-full rounded-[18px]">
+            <button
+              type="submit"
+              className="bg-[#2563EB] text-white px-4 py-2 w-full rounded-[18px]"
+            >
               Үүсгэх
             </button>
             <Link href={`/login`}>
@@ -178,11 +192,11 @@ const signUp = () => {
                 Нэвтрэх
               </button>
             </Link>
-          </div>
+          </form>
         </div>
       </div>
     </div>
   );
 };
 
-export default signUp;
+export default SignUp;

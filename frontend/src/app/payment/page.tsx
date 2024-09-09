@@ -7,20 +7,20 @@ const Payment = () => {
     <div className="flex justify-center h-screen">
       <div className="container justify-center grid">
         <div className="flex items-center justify-center mt-12">
-          <div className="w-[32px] h-[32px] bg-black rounded-full flex justify-center items-center">
+          <div className="w-[32px] h-[32px] bg-[#2563EB] rounded-full flex justify-center items-center">
             <p className=" text-white">
-              <IoMdCheckmark className="text-green-600" />
+              <IoMdCheckmark className="text-white" />
             </p>
           </div>
-          <div className="w-20 h-[1px] bg-black"></div>
-          <div className="w-[32px] h-[32px] border border-black bg-black rounded-full flex justify-center items-center ">
+          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
+          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center ">
             <p className=" text-white">
-              <IoMdCheckmark className="text-green-600" />
+              <IoMdCheckmark className="text-white" />
             </p>
           </div>
-          <div className="w-20 h-[1px] bg-black"></div>
-          <div className="w-[32px] h-[32px] border border-black bg-black rounded-full flex justify-center items-center">
-            <p className=" text-white">3</p>
+          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
+          <div className="w-[32px] h-[32px] border  border-black rounded-full flex justify-center items-center">
+            <p className=" text-black">3</p>
           </div>
         </div>
         <div className="p-8  bg-[#F4F4F5E5] w-[500px] my-24 rounded-xl h-fit">
