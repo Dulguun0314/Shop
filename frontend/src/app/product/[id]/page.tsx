@@ -5,32 +5,11 @@ import Image from "next/image";
 import Heart from "@/assets/icon/Heart";
 import StarRating from "@/components/StarRating";
 import Related from "@/components/Related";
+import { Comments, sizes } from "./mockdata";
 
 interface Product {
   src: string;
   alt: string;
-}
-const Comments: Comment[] = [
-  {
-    name: "Saraa",
-    text: "Ваав материал ёстой гоё  байна 😍",
-  },
-  {
-    name: "Saraa",
-    text: "🔥🔥🔥",
-  },
-  {
-    name: "Saraa",
-    text: "Ваав материал ёстой гоё харагдаж байна Ваав материал ёстой гоё  байна ",
-  },
-  {
-    name: "Saraa",
-    text: "Ваав материал ёстой гоё  байна",
-  },
-];
-interface Comment {
-  name: string;
-  text: string;
 }
 
 const ProductCard = () => {
@@ -53,30 +32,8 @@ const ProductCard = () => {
     },
   ];
 
-  interface Size {
-    text: string;
-  }
-
-  const sizes: Size[] = [
-    {
-      text: "S",
-    },
-    {
-      text: "M",
-    },
-    {
-      text: "L",
-    },
-    {
-      text: "XL",
-    },
-    {
-      text: "2XL",
-    },
-  ];
-
   const [selectedImage, setSelectedImage] = useState<Product>(products[0]);
-  const [selectedSize, setSelectedSize] = useState<Size>(sizes[0]);
+  const [selectedSize, setSelectedSize] = useState(sizes[0]);
 
   const handleClick = (product: Product) => {
     setSelectedImage(product);

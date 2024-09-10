@@ -3,68 +3,20 @@
 import Heart from "@/assets/icon/Heart";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Asides } from "./mockData";
 
 const Related = () => {
-  const Asides = [
-    {
-      src: "/prompt.png",
-      alt: "The Prompt Magazine",
-      price: "120’000₮",
-      title: "The Prompt Magazine",
-    },
-    {
-      src: "/chunky.png",
-      alt: "Chunky Glyph Tee",
-      price: "120’000₮",
-      title: "Chunky Glyph Tee",
-    },
-    {
-      src: "/smile.png",
-      alt: "smile",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      src: "/back.png",
-      alt: "back",
-      price: "120’000₮",
-      title: "Wildflower Hoodie",
-    },
-    {
-      src: "/blot.png",
-      alt: "blot",
-      price: "120’000₮",
-      title: "Inkblot Tee",
-    },
-    {
-      src: "/long.png",
-      alt: "long",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      src: "/cap.png",
-      alt: "cap",
-      price: "120’000₮",
-      title: "Chunky Glyph Cap",
-    },
-    {
-      src: "/style.png",
-      alt: "style",
-      price: "120’000₮",
-      title: "Local Styles Crewneck",
-    },
-  ];
+  const router = useRouter();
   return (
     <div className="flex justify-center mt-12">
       <div className="container">
         <p className="text-[30px] font-bold">Холбоотой бараа</p>
         <div className="w-full grid grid-cols-4 grid-rows-2 gap-5 my-6">
-          {Asides.map((aside, index) => {
+          {Asides.slice(0, 8).map((aside, index) => {
             return (
               <div key={index} className="relative">
-                <Link href={`/productCard`}>
+                <div onClick={() => router.push(`/product/${aside.id}`)}>
                   <div className="grid gap-4">
                     <div className="overflow-hidden rounded-2xl">
                       <div
@@ -84,7 +36,7 @@ const Related = () => {
                       <p className="text-[16px] font-bold">{aside.price}</p>
                     </div>
                   </div>
-                </Link>
+                </div>
                 <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
                   <Heart />
                 </div>

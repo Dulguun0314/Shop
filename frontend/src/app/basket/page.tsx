@@ -36,16 +36,23 @@ const Basket = () => {
     price: number | string;
     icon: JSX.Element;
   }
-  const [count, setCount] = useState(0);
+  // Initialize state with counts for each basket item
+  const [counts, setCounts] = useState(Array(Baskets.length).fill(0));
 
-  const plus = () => {
-    setCount(count + 1);
+  const handlePlus = (index: number) => {
+    const newCounts = [...counts];
+    newCounts[index] += 1;
+    setCounts(newCounts);
   };
-  const minus = () => {
-    if (count > 0) {
-      setCount(count - 1);
+
+  const handleMinus = (index: number) => {
+    const newCounts = [...counts];
+    if (newCounts[index] > 0) {
+      newCounts[index] -= 1;
     }
+    setCounts(newCounts);
   };
+
   return (
     <div className="flex justify-center h-screen">
       <div className="container grid justify-center ">
@@ -68,46 +75,44 @@ const Basket = () => {
               <p className="font-medium text-[20px]">1. Сагс</p>
               <p className="text-[#71717A]">(4)</p>
             </div>
-            {Baskets.map((basket, index) => {
-              return (
-                <div key={index}>
-                  <div className="flex justify-between  gap-6">
-                    <div className="">
-                      <div className="relative w-[120px] h-[120px] ">
-                        <Image
-                          src={basket.src}
-                          alt={basket.alt}
-                          fill
-                          className="rounded-xl"
-                        />
-                      </div>
+            {Baskets.map((basket, index) => (
+              <div key={index}>
+                <div className="flex justify-between gap-6">
+                  <div className="">
+                    <div className="relative w-[120px] h-[120px] ">
+                      <Image
+                        src={basket.src}
+                        alt={basket.alt}
+                        fill
+                        className="rounded-xl"
+                      />
                     </div>
-                    <div>
-                      <p className="text-[20px] font-medium w-[620px] pb-1">
-                        {basket.text}
-                      </p>
-                      <div className="flex items-center gap-2 mb-8">
-                        <div
-                          className="cursor-pointer border  border-black w-8 h-8 justify-center flex items-center rounded-full"
-                          onClick={minus}
-                        >
-                          <p>-</p>
-                        </div>
-                        <div>{count}</div>
-                        <div
-                          className="cursor-pointer border  border-black w-8 h-8 justify-center flex items-center rounded-full"
-                          onClick={plus}
-                        >
-                          <p>+</p>
-                        </div>
-                      </div>
-                      <p className="text-[16px] font-bold">{basket.price}</p>
-                    </div>
-                    <div className="w-6 h-6"> {basket.icon}</div>
                   </div>
+                  <div>
+                    <p className="text-[20px] font-medium w-[620px] pb-1">
+                      {basket.text}
+                    </p>
+                    <div className="flex items-center gap-2 mb-8">
+                      <div
+                        className="cursor-pointer border border-black w-8 h-8 justify-center flex items-center rounded-full"
+                        onClick={() => handleMinus(index)}
+                      >
+                        <p>-</p>
+                      </div>
+                      <div>{counts[index]}</div>
+                      <div
+                        className="cursor-pointer border border-black w-8 h-8 justify-center flex items-center rounded-full"
+                        onClick={() => handlePlus(index)}
+                      >
+                        <p>+</p>
+                      </div>
+                    </div>
+                    <p className="text-[16px] font-bold">{basket.price}</p>
+                  </div>
+                  <div className="w-6 h-6"> {basket.icon}</div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
             <div className="flex justify-between my-6">
               <p className="text-[18px]">Үнийн дүн:</p>
               <p className="font-bold text-[20px]">360’000₮</p>

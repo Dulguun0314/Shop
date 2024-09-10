@@ -1,117 +1,11 @@
 "use client";
 import Heart from "@/assets/icon/Heart";
+import { Asides } from "@/components/mockData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 const Product = () => {
   const router = useRouter();
-  const Asides = [
-    {
-      id: "1",
-      src: "/prompt.png",
-      alt: "The Prompt Magazine",
-      price: "120’000₮",
-      title: "The Prompt Magazine",
-    },
-    {
-      id: "2",
-      src: "/chunky.png",
-      alt: "Chunky Glyph Tee",
-      price: "120’000₮",
-      title: "Chunky Glyph Tee",
-    },
-    {
-      id: "3",
-      src: "/smile.png",
-      alt: "smile",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      id: "4",
-      src: "/back.png",
-      alt: "back",
-      price: "120’000₮",
-      title: "Wildflower Hoodie",
-    },
-    {
-      id: "5",
-      src: "/blot.png",
-      alt: "blot",
-      price: "120’000₮",
-      title: "Inkblot Tee",
-    },
-    {
-      id: "6",
-      src: "/long.png",
-      alt: "long",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      id: "7",
-      src: "/cap.png",
-      alt: "cap",
-      price: "120’000₮",
-      title: "Chunky Glyph Cap",
-    },
-    {
-      id: "8",
-      src: "/style.png",
-      alt: "style",
-      price: "120’000₮",
-      title: "Local Styles Crewneck",
-    },
-    {
-      id: "9",
-      src: "/cap.png",
-      alt: "cap",
-      price: "120’000₮",
-      title: "Chunky Glyph Cap",
-    },
-    {
-      id: "10",
-      src: "/doodie.png",
-      alt: "doodie",
-      price: "120’000₮",
-      title: "Doodle Hoodie",
-    },
-    {
-      id: "11",
-      src: "/chunky.png",
-      alt: "chunky",
-      price: "120’000₮",
-      title: "Chunky Glyph Tee",
-    },
-    {
-      id: "12",
-      src: "/smile.png",
-      alt: "smile",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      id: "13",
-      src: "/chunky.png",
-      alt: "Chunky Glyph Tee",
-      price: "120’000₮",
-      title: "Chunky Glyph Tee",
-    },
-    {
-      id: "14",
-      src: "/long.png",
-      alt: "long",
-      price: "120’000₮",
-      title: "All Smiles Nalgene",
-    },
-    {
-      id: "15",
-      src: "/chunky.png",
-      alt: "Chunky Glyph Tee",
-      price: "120’000₮",
-      title: "Chunky Glyph Tee",
-    },
-  ];
 
   type Category = "Малгай" | "Усны сав" | "T-shirt" | "Hoodie" | "Tee" | "Цүнх";
   type Size = "Free" | "S" | "M" | "L" | "2XL" | "3XL" | "4XL";
@@ -191,7 +85,7 @@ const Product = () => {
         </div>
 
         <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10">
-          {Asides.map((aside) => {
+          {Asides.slice(0, 15).map((aside) => {
             return (
               <div key={aside.id} className="relative">
                 <div onClick={() => router.push(`/product/${aside.id}`)}>

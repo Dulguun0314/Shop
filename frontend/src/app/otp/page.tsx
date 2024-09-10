@@ -1,7 +1,26 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const OTP = () => {
+  const [secondsLeft, setSecondsLeft] = useState(30);
+
+  useEffect(() => {
+    // 1 секунд тутамд секундийг бууруулах
+    const timer = setInterval(() => {
+      setSecondsLeft((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+    }, 1000);
+
+    // Компонентыг салгахад таймерийг цэвэрлэх
+    return () => clearInterval(timer);
+  }, [secondsLeft]);
+
+  // Таймерийг дахин эхлүүлэх функц
+  const restartTimer = () => {
+    setSecondsLeft(30); // Таймерийг 30 секундээс дахин эхлүүлэх
+  };
+
   return (
     <div className="flex justify-center h-screen">
       <div className="container grid justify-center items-center  ">
@@ -18,42 +37,47 @@ const OTP = () => {
             </p>
           </div>
           <Link href={`/restart`}>
-            <form id="otp-form" className="flex gap-3 w-full justify-center">
-              <input
-                placeholder=""
-                type="number"
-                name="number"
-                maxLength={1}
-                pattern="\d*"
-                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl  border border-[#E4E4E7] rounded-md outline-none "
-              />
-              <input
-                placeholder=""
-                type="number"
-                name="number"
-                maxLength={1}
-                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7] rounded-md outline-none "
-              />
-              <input
-                placeholder=""
-                type="number"
-                name="number"
-                maxLength={1}
-                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7] rounded-md outline-none "
-              />
-              <input
-                placeholder=""
-                type="number"
-                name="number"
-                maxLength={1}
-                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7] rounded-md outline-none "
-              />
-            </form>
+          <form id="otp-form" className="flex w-full justify-center">
+            <input
+              placeholder=""
+              type="number"
+              name="number"
+              maxLength={1}
+              pattern="\d*"
+              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl  border border-[#E4E4E7] rounded-l-md outline-black "
+            />
+            <input
+              placeholder=""
+              type="number"
+              name="number"
+              maxLength={1}
+              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7]  outline-black "
+            />
+            <input
+              placeholder=""
+              type="number"
+              name="number"
+              maxLength={1}
+              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7]  outline-black "
+            />
+            <input
+              placeholder=""
+              type="number"
+              name="number"
+              maxLength={1}
+              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7] rounded-r-md outline-black "
+            />
+          </form>
           </Link>
 
-          <p className="text-[#71717A] font-medium text-center mt-12">
-            Дахин илгээх{" "}
-          </p>
+          <div>
+            <p
+              className="text-[#71717A] font-medium text-center mt-12 underline underline-offset-4 cursor-pointer"
+              onClick={restartTimer}
+            >
+              Дахин илгээх ({secondsLeft > 0 ? secondsLeft : "Цаг дууссан"})
+            </p>
+          </div>
         </div>
       </div>
     </div>

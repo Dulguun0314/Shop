@@ -41,6 +41,10 @@ const Restart = () => {
     },
   });
   const [showPassword, setShowPassword] = useState(false);
+  const hasUppercase = /[A-Z]/.test(formik.values.password);
+  const hasLowercase = /[a-z]/.test(formik.values.password);
+  const hasNumber = /\d/.test(formik.values.password);
+  const hasSpecialChar = /[!@#$%^&*]/.test(formik.values.password);
   return (
     <div className="flex justify-center h-screen">
       <div className="container grid justify-center items-center  ">
@@ -91,44 +95,44 @@ const Restart = () => {
             <div className="px-3">
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasUppercase
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Том үсэг орсон байх
               </li>
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasLowercase
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Жижиг үсэг орсон байх
               </li>
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasNumber
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Тоо орсон байх
               </li>
               <li
                 className={`${
-                  formik.errors.password
-                    ? "text-red-500"
+                  hasSpecialChar
+                    ? "text-green-500"
                     : formik.values.password.length === 0
                     ? "text-gray-500"
-                    : "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 Тэмдэгт орсон байх
