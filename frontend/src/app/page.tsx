@@ -1,6 +1,6 @@
 "use client";
 
-import Aside from "@/components/Product";
+import Aside from "@/components/Aside";
 
 export default function Home() {
   return (

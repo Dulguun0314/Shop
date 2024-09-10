@@ -21,7 +21,7 @@ const Aside = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 grid-flow-row gap-5 my-8 [&>div:nth-child(7)]:col-span-2 [&>div:nth-child(7)]:row-span-2 [&>div:nth-child(8)]:col-span-2 [&>div:nth-child(8)]:bg-red-600  [&>div:nth-child(8)]:row-span-2  ">
+        <div className="grid grid-cols-4 grid-flow-row gap-5 my-8 [&>div:nth-child(7)]:col-span-2 [&>div:nth-child(7)]:row-span-2 [&>div:nth-child(8)]:col-span-2  [&>div:nth-child(8)]:row-span-2  ">
           {Asides.map((aside, index) => {
             return (
               <div key={index}>

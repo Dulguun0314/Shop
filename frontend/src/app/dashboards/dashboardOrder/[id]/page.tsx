@@ -8,8 +8,8 @@ import { IoGrid } from "react-icons/io5";
 import { MdDiscount } from "react-icons/md";
 import { PiNotepad } from "react-icons/pi";
 
-const Dashboard = () => {
-  const pathname: string = usePathname();
+const OrderDetails = () => {
+  const pathname = usePathname();
   const paths = [
     {
       name: "Хяналтын самбар",
@@ -18,7 +18,7 @@ const Dashboard = () => {
     },
     {
       name: "Захиалга",
-      path: `/dashboards/dashboardOrder`,
+      path: "/dashboards/dashboardOrder/",
       icon: <PiNotepad width={24} height={24} />,
     },
     {
@@ -37,10 +37,9 @@ const Dashboard = () => {
       icon: <IoMdSettings width={24} height={24} />,
     },
   ];
-
   return (
-    <div className="flex justify-start">
-      <div className="container flex ">
+    <div className="flex justify-center">
+      <div className="container flex items-start">
         <div className="grid gap-4 py-6">
           {paths.map((path, index) => {
             return (
@@ -48,7 +47,8 @@ const Dashboard = () => {
                 <div
                   className="flex gap-2 bg-white w-full items-center px-4 py-1 text-[16px] font-semibold "
                   style={{
-                    backgroundColor: pathname === path.path ? "#ECEDF0" : "",
+                    backgroundColor:
+                      pathname === path.path ? "#ECEDF0" : "white",
                   }}
                 >
                   {path.icon}
@@ -58,10 +58,9 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <div className="flex-1"></div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default OrderDetails;

@@ -46,7 +46,7 @@ const Dashboard = () => {
             return (
               <Link key={index} href={path.path}>
                 <div
-                  className="flex gap-2 bg-white w-full items-center px-2 py-1 text-[16px] font-semibold "
+                  className="flex gap-2 bg-white w-full items-center px-4 py-1 text-[16px] font-semibold "
                   style={{
                     backgroundColor: pathname === path.path ? "#ECEDF0" : "",
                   }}
