@@ -10,8 +10,8 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { IoChevronBack } from "react-icons/io5";
 import { PiNotepad } from "react-icons/pi";
 import { FaCarSide } from "react-icons/fa6";
-import { products } from "../../dashboardPanel/mockData";
 import Image from "next/image";
+import { products } from "../../dashboardPanel/mockData";
 
 const OrderDetails = () => {
   const pathname = usePathname();

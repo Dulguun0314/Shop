@@ -15,6 +15,7 @@ import { IoChevronForward } from "react-icons/io5";
 
 const DashboardOrder = () => {
   const pathname = usePathname();
+
   const paths = [
     {
       name: "Хяналтын самбар",
@@ -67,7 +68,6 @@ const DashboardOrder = () => {
         <div className="flex-1 bg-gray-100 h-fit p-6 w-screen">
           <div className="flex gap-4">
             {Bars.map((bar, index) => {
-              const pathname = usePathname();
               return (
                 <div key={index}>
                   <p
@@ -141,9 +141,7 @@ const DashboardOrder = () => {
                   <IoChevronForward
                     className="flex-1"
                     onClick={() =>
-                      router.push(
-                        `/dashboards/dashboardOrder/${order.id}`
-                      )
+                      router.push(`/dashboards/dashboardOrder/${order.id}`)
                     }
                   />
                 </div>

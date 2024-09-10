@@ -13,7 +13,6 @@ import { IoChevronUp } from "react-icons/io5";
 import { useState } from "react";
 import { products } from "./mockData";
 import Image from "next/image";
-import { Chart } from "./Chart";
 
 const Dashboard = () => {
   const pathname: string = usePathname();
@@ -137,9 +136,7 @@ const Dashboard = () => {
                     {chart ? <IoChevronForward /> : <IoChevronUp />}
                   </p>
                 </div>
-                <div className={`${chart ? "visible" : "hidden"}`}>
-                  <Chart />
-                </div>
+                <div className={`${chart ? "visible" : "hidden"}`}></div>
               </div>
             </div>
           </div>
