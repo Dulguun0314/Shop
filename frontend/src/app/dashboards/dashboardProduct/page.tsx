@@ -39,7 +39,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex justify-start">
+    <div className="flex justify-center">
       <div className="container flex ">
         <div className="grid gap-4 py-6">
           {paths.map((path, index) => {
@@ -58,7 +58,13 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <div className="flex-1"></div>
+        <div className="flex-1">
+          <div className="flex">
+            {" "}
+            <p>Бүтээгдэхүүн</p>
+            <p>Ангилал</p>
+          </div>
+        </div>
       </div>
     </div>
   );
