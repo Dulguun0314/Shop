@@ -14,7 +14,7 @@ const Address = () => {
 
   if (!isClient) return null;
   return (
-    <div className="flex justify-center h-screen my-24">
+    <div className="flex justify-center  my-24">
       <div className="container justify-center ">
         <AddressCheck />
         <div className=" flex items-start gap-5 my-24">
@@ -29,7 +29,7 @@ const Address = () => {
               <p className="font-bold text-[20px]">360’000₮</p>
             </div>
           </div>
-          <div className="flex-3 w-full bg-[#F4F4F5E5] rounded-2xl p-8">
+          <div className="flex-3 w-full bg-[#F4F4F5E5] rounded-2xl p-8 h-screen">
             <AddressDelivery />
             <div className="flex justify-between pt-8">
               <button className="px-9 py-2 bg-white border border-[#E4E4E7] rounded-3xl">

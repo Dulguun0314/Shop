@@ -54,9 +54,9 @@ const Basket = () => {
   };
 
   return (
-    <div className="flex justify-center h-screen">
-      <div className="container grid justify-center ">
-        <div className="flex items-center justify-center mt-12">
+    <div className="flex justify-center">
+      <div className="container grid justify-center h-full ">
+        <div className="flex items-center justify-center mt-12 ">
           <div className="w-[32px] h-[32px] bg-[#2563EB] rounded-full flex justify-center items-center">
             <p className=" text-white">1</p>
           </div>
@@ -70,7 +70,7 @@ const Basket = () => {
           </div>
         </div>
         <div>
-          <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6 my-24  p-8">
+          <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6 my-24  p-8 h-screen">
             <div className="flex gap-1 items-center">
               <p className="font-medium text-[20px]">1. Сагс</p>
               <p className="text-[#71717A]">(4)</p>
