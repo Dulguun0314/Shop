@@ -1,38 +1,11 @@
 "use client";
-
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { IoMdCheckmark } from "react-icons/io";
-import { Textarea } from "../components/ui/textarea";
+import AddressCheck from "./AddressCheck";
+import AddressBasket from "./AddressBasket";
+import AddressDelivery from "./AddressDelivery";
 
 const Address = () => {
-  const Addresses: addressType[] = [
-    {
-      src: "/smallChunky.png",
-      text: "Chunky Glyph Tee",
-      alt: "Chunky Glyph Tee",
-      price: "120’000₮",
-    },
-    {
-      src: "/smallBlot.png",
-      text: "Chunky Glyph Tee",
-      alt: "Chunky Glyph Tee",
-      price: "120’000₮",
-    },
-    {
-      src: "/smallDoodie.png",
-      text: "Doodie hoodie",
-      alt: "Doodie hoodie",
-      price: "120’000₮",
-    },
-  ];
-  interface addressType {
-    src: string;
-    alt: string;
-    text: string;
-    price: number | string;
-  }
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -43,110 +16,21 @@ const Address = () => {
   return (
     <div className="flex justify-center h-screen my-24">
       <div className="container justify-center ">
-        <div className="flex items-center justify-center pt-12 ">
-          <div className="w-[32px] h-[32px] bg-[#2563EB] rounded-full flex justify-center items-center">
-            <p className=" text-white">
-              <IoMdCheckmark className="text-white" />
-            </p>
-          </div>
-          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
-          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center ">
-            <p className=" text-white">2</p>
-          </div>
-          <div className="w-20 h-[1px] bg-[#2563EB]"></div>
-          <div className="w-[32px] h-[32px] border border-black rounded-full flex justify-center items-center">
-            <p className=" text-black">3</p>
-          </div>
-        </div>
+        <AddressCheck />
         <div className=" flex items-start gap-5 my-24">
           <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6  w-[400px] p-8">
             <div className="flex gap-1 items-center">
               <p className="font-medium text-[20px]   "> Сагс</p>
               <p className="text-[#71717A]">(3)</p>
             </div>
-            {Addresses.map((Address, index) => {
-              return (
-                <div key={index}>
-                  <div className="flex justify-between  gap-6">
-                    <div>
-                      <div className="relative w-[120px] h-[120px] ">
-                        <Image
-                          src={Address.src}
-                          alt={Address.alt}
-                          fill
-                          className="rounded-xl"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-[20px] font-medium w-[620px] pb-1">
-                        {Address.text}
-                      </p>
-
-                      <p className="text-[16px] font-bold">{Address.price}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            <AddressBasket />
             <div className="flex w-fit gap-32 my-6">
               <p className="text-[18px]">Үнийн дүн:</p>
               <p className="font-bold text-[20px]">360’000₮</p>
             </div>
           </div>
           <div className="flex-3 w-full bg-[#F4F4F5E5] rounded-2xl p-8">
-            <div className="h-full grid gap-8">
-              <p className="text-[18px] font-semibold text-black">
-                2. Хүргэлтийн мэдээлэл оруулах
-              </p>
-              <div className="grid gap-2">
-                <p>Овог:</p>
-                <input
-                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border "
-                  placeholder="Овог"
-                  type="surName"
-                  name="surName"
-                />
-              </div>
-              <div className="grid gap-2">
-                <p>Нэр:</p>
-                <input
-                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border "
-                  placeholder="Самбуу"
-                  type="name "
-                  name="name"
-                />
-              </div>
-              <div className="grid gap-2">
-                <p>Утасны дугаар:</p>
-                <input
-                  className="w-full py-3 px-1 rounded-md outline-none border-[#E4E4E7] border "
-                  placeholder="Утасны дугаар:"
-                  name="number"
-                  type="number"
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <p>Хаяг:</p>
-                <Textarea
-                  className="w-full py-3 px-1 rounded-md outline-none bg-white border-[#E4E4E7] border max-h-[70px] flex items-start"
-                  placeholder="Хаяг"
-                  name="address"
-                />
-              </div>
-              <div className="grid gap-2">
-                <p>Нэмэлт мэдээлэл:</p>
-                <Textarea
-                  className="w-full py-3 px-1 rounded-md outline-none bg-white  border-[#E4E4E7] border max-h-[50px] "
-                  placeholder="Нэмэлт мэдээлэл:"
-                  name="text"
-                />
-                <p className="text-[#71717A]">
-                  Хүргэлттэй холбоотой нэмэлт мэдээлэл үлдээгээрэй
-                </p>
-              </div>
-            </div>
+            <AddressDelivery />
             <div className="flex justify-between pt-8">
               <button className="px-9 py-2 bg-white border border-[#E4E4E7] rounded-3xl">
                 <Link href={`/basket`}>

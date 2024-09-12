@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MdOutlineFileDownload } from "react-icons/md";
 import { FaRegCalendar, FaRegListAlt } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { IoChevronDownOutline, IoGrid } from "react-icons/io5";
 import { MdDiscount } from "react-icons/md";
 import { PiNotepad } from "react-icons/pi";
-import { Incomes, IncomesTitle } from "./mockData";
+import Income from "./income";
+import IncomeOrder from "./IncomeOrder";
 
 const Dashboard = () => {
   const pathname: string = usePathname();
@@ -48,7 +48,7 @@ const Dashboard = () => {
             return (
               <Link key={index} href={path.path}>
                 <div
-                  className="flex gap-2 bg-white w-full items-center px-4 py-1 text-[16px] font-semibold "
+                  className="flex gap-2 bg-white w-full items-center px-4 py-2 text-[16px] font-semibold "
                   style={{
                     backgroundColor: pathname === path.path ? "#ECEDF0" : "",
                   }}
@@ -62,16 +62,7 @@ const Dashboard = () => {
         </div>
         <div className="flex-1 bg-gray-100 h-fit py-8 px-32 grid gap-4 ">
           <div>
-            <div className="flex  bg-white border rounded-t-xl w-full ">
-              <div className="flex justify-between px-6 py-5 items-center w-full ">
-                <p className="text-[24px] font-bold">Орлого</p>
-                <button className="flex  gap-2 p-4 items-center rounded-md bg-gray-100">
-                  <MdOutlineFileDownload />
-
-                  <p>Хуулга татах</p>
-                </button>
-              </div>
-            </div>
+            <Income />
             <div className="flex justify-between bg-white border rounded-b-xl p-6 ">
               <p className="text-[28px] font-bold">235,000₮</p>
               <div className="flex gap-2">
@@ -89,34 +80,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div className="flex w-full bg-white border rounded-t-xl px-6 py-3 justify-between">
-              {IncomesTitle.map((title, index) => {
-                return (
-                  <div key={index} className="flex-1 ">
-                    <p className="font-bold">{title.name}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="bg-white border rounded-b-xl px-6 py-3 justify-between ">
-              {Incomes.map((income, index) => {
-                return (
-                  <div key={index} className="border-b-2">
-                    <div className="flex w-full my-4 items-center">
-                      <p className="flex-1">{income.orderNumber}</p>
-                      <div>
-                        <p className="flex-1">{income.gmail}</p>
-                        <p className="flex-1">{income.phone}</p>
-                      </div>
-                      <p className="flex-1 pl-20">{income.price}</p>
-                      <p className="flex-1">{income.date}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <IncomeOrder />
         </div>
       </div>
     </div>
