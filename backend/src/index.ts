@@ -25,10 +25,10 @@ server.listen(5000, () => {
   console.log("Server running on http://localhost:5000/");
 });
 
-const MONGO_URL = //MONGO_URL нь MongoDB-ийн холболтын URL бөгөөд mongoose санг ашиглан өгөгдлийн сантай холбогдоно.
-  "mongodb+srv://Dulguun:Dulguun0714@dulguun.aibkp.mongodb.net/?retryWrites=true&w=majority&appName=Dulguun";
+const MONGO_URL =
+  "mongodb+srv://Dulguun:Dulguun0714@dulguun.aibkp.mongodb.net/?retryWrites=true&w=majority&appName=Dulguun"; //MONGO_URL нь MongoDB-ийн холболтын URL бөгөөд mongoose санг ашиглан өгөгдлийн сантай холбогдоно.
 
-mongoose.Promise - Promise;
+mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);
 mongoose.connection.on("error", (error: Error) => console.log("error")); //Энэ хэсэг нь өгөгдлийн сантай холбогдох үед алдаа гарвал консолд алдааны мэдээллийг хэвлэнэ.
 
