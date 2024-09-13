@@ -32,14 +32,14 @@ const Saved = () => {
   const [color, setColor] = useState(true);
   return (
     <div className="flex justify-center">
-      <div className="container flex justify-center">
+      <div className="container flex justify-center bg-gray-50">
         <div className="grid my-24 p-8">
-          <p className="text-xl font-bold">Хадгалсан бараа</p>
+          <p className="text-xl font-bold">Хадгалсан бараа(3)</p>
           <div className="  grid gap-6  ">
             {Baskets.map((basket, index) => {
               return (
                 <div key={index} className="my-6">
-                  <div className="flex gap-6">
+                  <div className="flex gap-6 border p-4 rounded-xl bg-white">
                     <div className="">
                       <div className="relative w-[120px] h-[120px] ">
                         <Image
@@ -86,10 +86,6 @@ const Saved = () => {
               );
             })}
             <div className="w-full h-[1px] border border-gray-100"></div>
-            <div className="flex items-center justify-between">
-              <p className="text-[18px] font-bold">Нийт: 3 бараа</p>
-              <p className="font-bold text-[20px]">360’000₮</p>
-            </div>
           </div>
         </div>
       </div>

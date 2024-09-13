@@ -31,7 +31,7 @@ const Address = () => {
           </div>
           <div className="flex-3 w-full bg-[#F4F4F5E5] rounded-2xl p-8 h-screen">
             <AddressDelivery />
-            <div className="flex justify-between pt-8">
+            <div className="flex justify-between my-12">
               <button className="px-9 py-2 bg-white border border-[#E4E4E7] rounded-3xl">
                 <Link href={`/basket`}>
                   <p>Буцах</p>

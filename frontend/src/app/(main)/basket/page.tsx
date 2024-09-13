@@ -76,7 +76,7 @@ const Basket = () => {
               <p className="text-[#71717A]">(4)</p>
             </div>
             {Baskets.map((basket, index) => (
-              <div key={index}>
+              <div key={index} className="h-fit">
                 <div className="flex justify-between gap-6">
                   <div className="">
                     <div className="relative w-[120px] h-[120px] ">
@@ -113,11 +113,11 @@ const Basket = () => {
                 </div>
               </div>
             ))}
-            <div className="flex justify-between my-6">
+            <div className="flex justify-between  h-fit">
               <p className="text-[18px]">Үнийн дүн:</p>
               <p className="font-bold text-[20px]">360’000₮</p>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end h-fit">
               <button className="bg-[#2563EB] rounded-xl">
                 <Link href={`/address`}>
                   <p className="px-9 py-2 font-medium text-white">

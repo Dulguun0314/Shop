@@ -7,7 +7,6 @@ const Income = () => {
         <p className="text-[24px] font-bold">Орлого</p>
         <button className="flex  gap-2 p-4 items-center rounded-md bg-gray-100">
           <MdOutlineFileDownload />
-
           <p>Хуулга татах</p>
         </button>
       </div>
