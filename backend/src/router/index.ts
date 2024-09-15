@@ -1,17 +1,17 @@
 import express from "express";
-import authentication from "./authentication";
-import users from "./users";
+import authentication from "./authentication"; // Authentication модулийг импортлох
+import users from "./users"; // Users модулийг импортлох
 
-// Express маршрутын объектыг үүсгэх
+// Express маршрутын объектийг үүсгэх
 const router = express.Router();
 
 export default (): express.Router => {
-  // authentication модулийг маршрутын объект дээр дуудах
+  // Authentication модулийг маршрутын объект дээр дуудах
   authentication(router);
 
-  // users модулийг маршрутын объект дээр дуудах
+  // Users модулийг маршрутын объект дээр дуудах
   users(router);
 
-  // Шинэ маршрутын объектийг буцаах
+  // Маршрутын объектийг буцаах
   return router;
 };

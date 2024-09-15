@@ -2,6 +2,7 @@ import express from "express";
 import { getUserBySessionToken } from "../database/users";
 import { get, merge } from "lodash";
 
+// Authentication middleware
 export const isAuthenticated = async (
   req: express.Request,
   res: express.Response,
@@ -12,14 +13,14 @@ export const isAuthenticated = async (
 
     // Session token байхгүй тохиолдолд
     if (!sessionToken) {
-      return res.status(403);
+      return res.status(403).json({ message: "Session token is missing" });
     }
 
     // Session token-аар хэрэглэгчийн мэдээлэл олох
     const existingUser = await getUserBySessionToken(sessionToken);
 
     if (!existingUser) {
-      return res.status(403);
+      return res.status(403).json({ message: "Invalid session token" });
     }
 
     // Хэрэглэгчийн мэдээллийг хүсэлтэд нэмэх
@@ -33,6 +34,7 @@ export const isAuthenticated = async (
   }
 };
 
+// Ownership шалгах middleware
 export const isOwner = (
   req: express.Request,
   res: express.Response,
@@ -51,13 +53,15 @@ export const isOwner = (
     if (currentUserId !== id) {
       return res
         .status(403)
-        .json({ message: "Not authorized to access this resource" });
+        .json({
+          message: "You do not have permission to access this resource",
+        });
     }
 
     // Дараагийн middleware руу шилжих
     return next();
   } catch (error) {
-    console.error(error);
+    console.error("Ownership check error:", error);
     return res.status(400).json({ message: "An error occurred", error });
   }
 };

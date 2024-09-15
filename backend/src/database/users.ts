@@ -4,12 +4,12 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
+    required: true, // Хэрэглэгчийн нэр шаардлагатай
   },
   email: {
     type: String,
-    required: true,
-    unique: true, // И-мэйл хосгүй байх ёстой
+    required: true, // И-мэйл шаардлагатай
+    unique: true, // И-мэйл давтагдахгүй байх нөхцөл
   },
   authentication: {
     // Нууцлалтай холбоотой мэдээллүүдийг агуулсан объект
@@ -22,36 +22,27 @@ const UserSchema = new mongoose.Schema({
 // User моделийг үүсгэнэ
 export const UserModel = mongoose.model("User", UserSchema);
 
-// Бүх хэрэглэгчдийг олж авах
-export const getUsers = () => UserModel.find(); // Бүх хэрэглэгчийн бичлэгийг буцаана
+// Бүх хэрэглэгчдийг олж авах функц
+export const getUsers = () => UserModel.find(); // Бүх хэрэглэгчдийн жагсаалтыг буцаана
 
-// Өгөгдсөн и-мэйлээр хэрэглэгчийг олж авах
-export const getUserByEmail = (email: string) => UserModel.findOne({ email }); // Зөвхөн нэг хэрэглэгчийг буцаана
+// И-мэйлээр хэрэглэгчийг олж авах функц
+export const getUserByEmail = (email: string) => 
+  UserModel.findOne({ email }).select("+authentication.salt +authentication.password"); // select ашиглан нууцлалын талбаруудыг буцаана
 
-// Хэрэглэгчийн сессийн токенээр хэрэглэгчийг олж авах
+// Сессийн токенээр хэрэглэгчийг олж авах функц
 export const getUserBySessionToken = (sessionToken: string) =>
-  UserModel.findOne({ "authentication.sessionToken": sessionToken }); // Зөвхөн нэг хэрэглэгчийг буцаана
+  UserModel.findOne({ "authentication.sessionToken": sessionToken }).select("+authentication.salt +authentication.password");
 
-// Хэрэглэгчийн ID-аар хэрэглэгчийг олж авах
-export const getUserById = (id: string) => UserModel.findById(id); // Зөвхөн нэг хэрэглэгчийг буцаана
+// Хэрэглэгчийн ID-аар хэрэглэгчийг олж авах функц
+export const getUserById = (id: string) => UserModel.findById(id); // ID ашиглан хэрэглэгчийг буцаана
 
-// Шинэ хэрэглэгч үүсгэж, хадгалах
-export const createUser = (
-  values: Record<string, any> // Шинэ хэрэглэгчийн мэдээллийг өгнө
-) => new UserModel(values).save().then((user) => user.toObject()); // Хадгалаад, объектыг буцаана
+// Шинэ хэрэглэгч үүсгэх функц
+export const createUser = (values: Record<string, any>) => 
+  new UserModel(values).save().then((user) => user.toObject()); // Хэрэглэгчийг үүсгээд буцаана
 
-// Хэрэглэгчийн ID-аар хэрэглэгчийг устгах
-export const deleteUserById = (id: string) =>
-  UserModel.findOneAndDelete({ _id: id }); // Хэрэглэгчийн мэдээллийг устгана
+// Хэрэглэгчийн ID-аар хэрэглэгчийг устгах функц
+export const deleteUserById = (id: string) => UserModel.findByIdAndDelete(id); // ID ашиглан хэрэглэгчийг устгана
 
-// Хэрэглэгчийн ID болон шинэ мэдээлэл ашиглан хэрэглэгчийн мэдээллийг шинэчлэх
-export const updateUserById = async (
-  id: string,
-  value: Record<string, any>
-) => {
-  const user = await UserModel.findByIdAndUpdate(id, value, { new: true }); // Шинэ мэдээлэлтэй хэрэглэгчийг буцаана
-  if (!user) {
-    throw new Error("User not found"); // Хэрэглэгч олдохгүй бол алдаа гаргана
-  }
-  return user.toObject(); // Хэрэглэгчийн шинэ мэдээллийг буцаана
-};
+// Хэрэглэгчийн ID-аар мэдээллийг шинэчлэх функц
+export const updateUserById = (id: string, values: Record<string, any>) =>
+  UserModel.findByIdAndUpdate(id, values, { new: true }); // Шинэ мэдээлэлтэй хэрэглэгчийг буцаана

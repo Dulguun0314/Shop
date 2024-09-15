@@ -56,10 +56,10 @@ export const register = async (req: express.Request, res: express.Response) => {
       return res.sendStatus(400); // Хэрэглэгчийн мэдээлэл дутуу бол 400 статус буцаана.
     }
 
-    const existingUser = await getUserByEmail(email); // 'exitingUser'-г 'existingUser' гэж заслаа.
+    const existingUser = await getUserByEmail(email); // Хэрэглэгч байгаа эсэхийг шалгах
 
     if (existingUser) {
-      return res.sendStatus(400); // Хэрэв хэрэглэгч аль хэдийн бүртгэлтэй бол 400 статус буцаана.
+      return res.sendStatus(400); // Хэрэв хэрэглэгч бүртгэлтэй бол 400 статус буцаана
     }
 
     const salt = random(); // Санамсаргүй утга үүсгэж давс болгон ашиглана.
