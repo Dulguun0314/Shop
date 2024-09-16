@@ -1,23 +1,18 @@
 import express from "express";
-import mongoose from "mongoose";
-import authRoutes from "./routes/auth";
+import { userRouter } from "./routes/user.route";
+import { connectToDatabase } from "./db";
+import cors from "cors";
 
 const app = express();
+
 const port = 5000;
-
-// Middleware
+connectToDatabase();
 app.use(express.json());
+app.use(cors());
 
-// Routes
-app.use("/", authRoutes);
+app.use("/register", userRouter);
+app.use("/login", userRouter);
 
-// MongoDB руу холбогдох
-mongoose
-  .connect("mongodb+srv://Dulguun:Dulguun0714@cluster0.ljmmd.mongodb.net/Shop")
-  .then(() => console.log("MongoDB холбогдлоо"))
-  .catch((err) => console.log(err));
-
-// Сервер эхлүүлэх
 app.listen(port, () => {
   console.log(`Сервер ${port} порт дээр ажиллаж байна`);
 });
