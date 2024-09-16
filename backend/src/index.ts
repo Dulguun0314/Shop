@@ -1,6 +1,23 @@
-const express = require("express");
-const app = express(); // Энэ нь Express апп үүсгэж, серверийн зам болон middleware-уудыг тохируулахад ашиглана.
+import express from "express";
+import mongoose from "mongoose";
+import authRoutes from "./routes/auth";
 
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000/");
+const app = express();
+const port = 5000;
+
+// Middleware
+app.use(express.json());
+
+// Routes
+app.use("/", authRoutes);
+
+// MongoDB руу холбогдох
+mongoose
+  .connect("mongodb+srv://Dulguun:Dulguun0714@cluster0.ljmmd.mongodb.net/Shop")
+  .then(() => console.log("MongoDB холбогдлоо"))
+  .catch((err) => console.log(err));
+
+// Сервер эхлүүлэх
+app.listen(port, () => {
+  console.log(`Сервер ${port} порт дээр ажиллаж байна`);
 });
