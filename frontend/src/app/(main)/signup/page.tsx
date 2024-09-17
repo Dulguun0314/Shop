@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useUser } from "../components/utils/AuthProvider";
 
 const SignUp = () => {
   interface FormValues {
@@ -12,6 +13,8 @@ const SignUp = () => {
     password: string;
     rePassword: string;
   }
+
+  const { register } = useUser(); // Контекстоос `register` функцийг авна
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -23,6 +26,7 @@ const SignUp = () => {
     validate: (values) => {
       const errors: Partial<FormValues> = {};
 
+      // Имэйл шалгах
       if (!values.email) {
         errors.email = "Имэйл хаяг шаардлагатай";
       } else if (
@@ -31,6 +35,7 @@ const SignUp = () => {
         errors.email = "Зөв имэйл хаяг оруулна уу";
       }
 
+      // Нууц үг шалгах
       if (!values.password) {
         errors.password = "Нууц үг шаардлагатай";
       } else {
@@ -45,6 +50,7 @@ const SignUp = () => {
         }
       }
 
+      // Нууц үгийг давтах
       if (!values.rePassword) {
         errors.rePassword = "Шаардлагатай нууц үгийг баталгаажуулна уу";
       } else if (values.rePassword !== values.password) {
@@ -53,12 +59,22 @@ const SignUp = () => {
 
       return errors;
     },
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
+    onSubmit: async (values) => {
+      try {
+        // `register` функцээр хэрэглэгчийн бүртгэл хийх
+        await register({
+          id: "", // ID нь backend-аас үүсгэгдэнэ гэж үзсэн
+          username: values.name,
+          email: values.email,
+          password: values.password,
+        });
+      } catch (error) {
+        console.error("Бүртгэлийн алдаа:", error);
+      }
     },
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Нууц үгийн харагдах байдал
 
   const hasUppercase = /[A-Z]/.test(formik.values.password);
   const hasLowercase = /[a-z]/.test(formik.values.password);

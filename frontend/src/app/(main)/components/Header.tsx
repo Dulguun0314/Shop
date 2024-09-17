@@ -4,9 +4,15 @@ import { CiSearch } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { PiShoppingCartSimple } from "react-icons/pi";
 import Logo from "../assets/icon/Logo";
+import { FaRegUser } from "react-icons/fa";
+
+import { useUser } from "./utils/AuthProvider";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const pathname: string = usePathname();
+  const { user } = useUser(); // Аутентификацийн төлөвийг авах
+
   interface Path {
     name: string;
     path: string;
@@ -22,10 +28,20 @@ const Header = () => {
       path: "/product",
     },
   ];
+  const handleShopClick = () => {
+    if (!user.isAuthenticated) {
+      toast.info("Сагсалсан бараагаа харахын тулд Нэвтэрнэ үү!");
+    }
+  };
+  const handleSaveClick = () => {
+    if (!user.isAuthenticated) {
+      toast.info("Хадгалсан  бараагаа харахын тулд Нэвтэрнэ үү!");
+    }
+  };
 
   return (
     <div className="container w-fit">
-      <div className=" w-screen bg-black flex justify-between px-6 py-4">
+      <div className="w-screen bg-black flex justify-between px-6 py-4">
         <div className="flex items-center gap-4">
           <Link href={`/`}>
             <Logo />
@@ -47,30 +63,49 @@ const Header = () => {
             type="search"
             name="search"
             placeholder="Бүтээгдэхүүн хайх"
-            className="text-[#71717A] outline-none bg-[#18181B] "
+            className="text-[#71717A] outline-none bg-[#18181B]"
           />
         </div>
         <div className="flex items-center gap-6">
           <div className="flex gap-6">
-            <Link href={`/saved`}>
-              <CiHeart className="text-white w-6 h-6" />
-            </Link>
-            <Link href={`/basket`}>
-              <PiShoppingCartSimple className="text-white w-6 h-6" />
-            </Link>
+            {user && (
+              <Link
+                href={`${user.isAuthenticated ? "/saved" : "/login"}`}
+                onClick={handleSaveClick}
+              >
+                <CiHeart className="text-white w-6 h-6" />
+              </Link>
+            )}
+            {user && (
+              <Link
+                href={`${user.isAuthenticated ? "/basket" : "/login"}`}
+                onClick={handleShopClick}
+              >
+                <PiShoppingCartSimple className="text-white w-6 h-6" />
+              </Link>
+            )}
           </div>
 
           <div className="flex gap-2">
-            <Link href={`/signup`}>
-              <button className="border border-[#2563EB] rounded-[18px]">
-                <p className="mx-3 my-2 text-white">Бүртгүүлэх</p>
-              </button>
-            </Link>
-            <button className="bg-[#2563EB] rounded-[18px]">
-              <Link href={`/login`}>
-                <p className="mx-3 my-2 text-white ">Нэвтрэх</p>
-              </Link>
-            </button>
+            {!user.isAuthenticated && (
+              <>
+                <Link href={`/signup`}>
+                  <button className="border border-[#2563EB] rounded-[18px]">
+                    <p className="mx-3 my-2 text-white">Бүртгүүлэх</p>
+                  </button>
+                </Link>
+                <Link href={`/login`}>
+                  <button className="bg-[#2563EB] rounded-[18px]">
+                    <p className="mx-3 my-2 text-white">Нэвтрэх</p>
+                  </button>
+                </Link>
+              </>
+            )}
+            {user.isAuthenticated && (
+              <p className="text-white my-2">
+                <FaRegUser />
+              </p>
+            )}
           </div>
         </div>
       </div>

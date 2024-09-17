@@ -2,36 +2,16 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import axios from "axios";
-import { api } from "@/lib/axios";
+import { useUser } from "../components/utils/AuthProvider";
 
 const Login = () => {
+  const { login } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [token, setToken] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await api.get(`/login`, {
-        params: {
-          email,
-          password,
-        },
-      });
-      setToken(response.data.token);
-      setMessage("Login successful");
-    } catch (error) {
-      console.log(error);
-
-      if (axios.isAxiosError(error)) {
-        setMessage(error.response?.data.error || "Error logging in");
-      } else {
-        setMessage("Unexpected error occurred");
-      }
-    }
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Формын анхдагч үйлдлийг таслах
+    login(email, password);
   };
 
   return (
@@ -39,7 +19,7 @@ const Login = () => {
       <div className="container grid justify-center items-center">
         <div className="grid fit w-[400px]">
           <p className="text-2xl font-semibold text-center p-6">Нэвтрэх</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <div className="grid gap-4">
               <input
                 placeholder="Имэйл хаяг"
@@ -65,8 +45,6 @@ const Login = () => {
               >
                 Нэвтрэх
               </button>
-              <p>{message}</p>
-              {token && <p>Token: {token}</p>}
               <Link href={`/forget`}>
                 <p className="underline underline-offset-4 text-[#71717A] text-center hover:text-black cursor-pointer">
                   Нууц үг мартсан

@@ -5,6 +5,9 @@ import { sizes } from "./mockData";
 import { Heart } from "lucide-react";
 import StarRating from "../../components/StarRating";
 import OthersComments from "./OthersComment";
+import { useUser } from "../../components/utils/AuthProvider";
+import { toast } from "react-toastify";
+import Link from "next/link";
 
 const ImagesDescription = () => {
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
@@ -19,6 +22,17 @@ const ImagesDescription = () => {
   const [slide, setSlide] = useState(false);
 
   const [count, setCount] = useState(0);
+  const { user } = useUser();
+  const handleBasketClick = () => {
+    if (!user.isAuthenticated) {
+      toast.info("Сагсалхын тулд Нэвтэрнэ үү1");
+    }
+  };
+  const handleReviewClick = () => {
+    if (!user.isAuthenticated) {
+      toast.info("Сэтгэгдэл үлээхийн тулд Нэвтэрнэ ");
+    }
+  };
 
   return (
     <>
@@ -74,20 +88,29 @@ const ImagesDescription = () => {
         </div>
         <div className="grid h-fit gap-2 pt-4">
           <p className="text-[20px] font-bold">120’000₮</p>
-          <button className="bg-[#2563EB] px-9 py-2 text-white rounded-[20px] w-fit">
-            <p>Сагсанд нэмэх</p>
-          </button>
+          {user && (
+            <Link href={`${user.isAuthenticated ? "" : "/login"}`}>
+              <button
+                className="bg-[#2563EB] px-9 py-2 text-white rounded-[20px] w-fit"
+                onClick={handleBasketClick}
+              >
+                <p>Сагсанд нэмэх</p>
+              </button>
+            </Link>
+          )}
         </div>
         <div className="mt-[60px]">
-          <div className="flex gap-4">
-            <p>Үнэлгээ</p>
-            <p
-              className={`text-[#2563EB] underline underline-offset-4 cursor-pointer duration-1000 `}
-              onClick={() => setSlide(!slide)}
-            >
-              {slide ? "бүгдийг хураах" : " бүгдийг харах"}
-            </p>
-          </div>
+          <Link href={`${user.isAuthenticated ? "" : "/login"}`}>
+            <div className="flex gap-4" onClick={handleReviewClick}>
+              <p>Үнэлгээ</p>
+              <p
+                className={`text-[#2563EB] underline underline-offset-4 cursor-pointer duration-1000 `}
+                onClick={() => setSlide(!slide)}
+              >
+                {slide ? "бүгдийг хураах" : " бүгдийг харах"}
+              </p>
+            </div>
+          </Link>
         </div>
         <StarRating totalStars={5} />
       </div>
