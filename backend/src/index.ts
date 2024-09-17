@@ -1,8 +1,8 @@
 import express from "express";
-import { userRouter } from "./routes/user.route";
 import { connectToDatabase } from "./db";
 import cors from "cors";
-import { productRouter } from "./routes/product.route";
+import { loginRouter, registerRouter } from "./routes/user.route";
+import { productGetRouter, productPostRouter } from "./routes/product.route";
 
 const app = express();
 
@@ -11,10 +11,10 @@ connectToDatabase();
 app.use(express.json());
 app.use(cors());
 
-app.use("/register", userRouter);
-app.use("/login", userRouter);
-app.use("/product", productRouter);
-app.use("/getProducts", productRouter);
+app.use("/", registerRouter);
+app.use("/", loginRouter);
+app.use("/", productPostRouter);
+app.use("/", productGetRouter);
 
 app.listen(port, () => {
   console.log(`Сервер ${port} порт дээр ажиллаж байна`);
