@@ -21,6 +21,7 @@ export const ProductCard = ({ index, aside }: ProductCardProps) => {
       : index === 7
       ? "h-[990px] w-full"
       : "h-[450px]";
+
   return (
     <div key={index} className="grid gap-4 relative">
       <div onClick={() => router.push(`/product/${aside.id}`)}>
@@ -40,7 +41,7 @@ export const ProductCard = ({ index, aside }: ProductCardProps) => {
           <p className="text-[16px] font-bold">{aside.price}</p>
         </div>
       </div>
-      <div className={`absolute top-4 right-4 overflow-hidden cursor-pointer `}>
+      <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
         <Heart />
       </div>
     </div>
