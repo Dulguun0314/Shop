@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
+import { api } from "@/lib/axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,13 +15,17 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/login", {
-        email,
-        password,
+      const response = await api.get(`/login`, {
+        params: {
+          email,
+          password,
+        },
       });
       setToken(response.data.token);
       setMessage("Login successful");
     } catch (error) {
+      console.log(error);
+
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data.error || "Error logging in");
       } else {
