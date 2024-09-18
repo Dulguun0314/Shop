@@ -30,14 +30,14 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
         products: {
           products: null,
         },
-        createProduct: (product) => {},
-        getProduct: (product) => {
+        createProduct: () => {},
+        getProduct: () => {
           // Fetch product from the database or state
         },
-        deleteProduct: (productId) => {
+        deleteProduct: () => {
           // Delete product from the database or state
         },
-        updateProduct: (product) => {
+        updateProduct: () => {
           // Update product in the database or state
         },
       }}
