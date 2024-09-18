@@ -10,7 +10,7 @@ const Heart = () => {
 
   const handleHeartClick = () => {
     if (!user.isAuthenticated) {
-      toast.info("Сагсалсан бараагаа харахын тулд Нэвтэрнэ үү!");
+      toast.info("Хадгалхын тулд Нэвтэрнэ үү!");
     }
   };
   return (
