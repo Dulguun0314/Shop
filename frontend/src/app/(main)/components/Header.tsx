@@ -28,6 +28,16 @@ const Header = () => {
       path: "/product",
     },
   ];
+  const userPaths: Path[] = [
+    {
+      name: "Бүртгүүлэх",
+      path: "/signup",
+    },
+    {
+      name: "Нэвтрэх",
+      path: "/login",
+    },
+  ];
   const handleShopClick = () => {
     if (!user.isAuthenticated) {
       toast.info("Сагсалсан бараагаа харахын тулд Нэвтэрнэ үү!");
@@ -89,22 +99,28 @@ const Header = () => {
           <div className="flex gap-2">
             {!user.isAuthenticated && (
               <>
-                <Link href={`/signup`}>
-                  <button className="border border-[#2563EB] rounded-[18px]">
-                    <p className="mx-3 my-2 text-white">Бүртгүүлэх</p>
-                  </button>
-                </Link>
-                <Link href={`/login`}>
-                  <button className="bg-[#2563EB] rounded-[18px]">
-                    <p className="mx-3 my-2 text-white">Нэвтрэх</p>
-                  </button>
-                </Link>
+                {userPaths.map((path, index) => {
+                  return (
+                    <Link href={path.path} key={index}>
+                      <button
+                        className="border border-[#2563EB] rounded-[18px] hover:bg-[#2563EB] transition-transform duration-1000"
+                        style={{
+                          background: pathname === path.path ? "#2563EB" : "",
+                        }}
+                      >
+                        <p className="mx-3 my-2 text-white">{path.name}</p>
+                      </button>
+                    </Link>
+                  );
+                })}
               </>
             )}
             {user.isAuthenticated && (
-              <p className="text-white my-2">
-                <FaRegUser />
-              </p>
+              <Link href={`/userInfo`}>
+                <p className="text-white my-2">
+                  <FaRegUser />
+                </p>
+              </Link>
             )}
           </div>
         </div>

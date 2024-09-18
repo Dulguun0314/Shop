@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useUser } from "../../components/utils/AuthProvider";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const Heart = () => {
   const [color, setColor] = useState(false);
@@ -16,7 +17,10 @@ const Heart = () => {
   return (
     <>
       {user && (
-        <div onClick={handleHeartClick}>
+        <Link
+          href={user.isAuthenticated ? "" : "/login"}
+          onClick={handleHeartClick}
+        >
           <div onClick={() => setColor(!color)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +38,7 @@ const Heart = () => {
               />
             </svg>
           </div>
-        </div>
+        </Link>
       )}
     </>
   );

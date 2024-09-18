@@ -1,9 +1,14 @@
-import { PropsWithChildren, createContext, useContext, useState } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import { api } from "@/lib/axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-// Хэрэглэгч болон Аутентификат хэрэглэгчийн интерфэйсүүд
 interface User {
   id?: string;
   username?: string;
@@ -16,45 +21,40 @@ interface AuthUser {
   isAuthenticated: boolean;
 }
 
-// Контекстийн төрөл
 interface UserContextType {
   user: AuthUser;
   register: (user: User) => void;
   login: (email: string, password: string) => void;
 }
 
-// Контекст үүсгэх
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
-// Нийлүүлэгч компонент
 export const UserProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<AuthUser>({
     user: null,
     isAuthenticated: false,
   });
   const router = useRouter();
+  const [isReady, setIsReady] = useState(false);
+  const pathname = usePathname();
+  const authPaths = ["/login", "/signup", "/", "/product", ``];
 
   const register = async (newUser: User) => {
     try {
-      // Шинэ хэрэглэгчийн мэдээллийг сервер рүү POST хүсэлтээр илгээх
       const response = await api.post("/register", newUser);
-      // Серверээс ирсэн хариуны мэдээллээс token болон user-ийг авах
       const { token, user } = response.data;
-      // Хэрэглэгчийн мэдээлэл болон аутентификацийн төлөвийг state-д шинэчлэх
+
       setUser({
         user,
         isAuthenticated: true,
       });
-      // Амжилттай бүртгэлд зориулан мэдэгдэл харуулах
       toast.success("Бүртгэл амжилттай!");
-      // Бүртгэл амжилттай болсны дараа үндсэн хуудсанд шилжих
-      router.push("/");
-      // JWT токен-г localStorage-д хадгалах
+      router.push("/login");
+
+      // JWT токен-г localStorage-д зөв хадгалах
       localStorage.setItem("token", token);
     } catch (error) {
-      // Бүртгэлд алдаа гарсан тохиолдолд алдаа мэдэгдэл харуулах
       toast.error("Бүртгэл амжилтгүй!");
-      // Консолд алдааг хэвлэх
       console.error("Бүртгэлийн алдаа:", error);
     }
   };
@@ -63,18 +63,53 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     try {
       const response = await api.post("/login", { email, password });
       const { token, user } = response.data;
+
       setUser({
         user,
         isAuthenticated: true,
       });
       toast.success("Нэвтрэлт амжилттай!");
-      router.push("/"); // Нэвтэрсний дараа үндсэн хуудсанд шилжих
-      localStorage.setItem("token", token); // JWT токен хадгалах
+      router.push("/");
+
+      // JWT токен-г хадгална
+      localStorage.setItem("token", token);
     } catch (error) {
-      toast.error("Нэвтэрч чадаагүй!");
+      toast.error("Нэвтрэхэд алдаа гарлаа!");
       console.error("Нэвтрэх алдаа:", error);
     }
   };
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        setIsReady(false);
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const res = await api.get("/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser({ user: res.data, isAuthenticated: true });
+      } catch (err) {
+        console.log(err);
+        localStorage.removeItem("token");
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (authPaths.includes(pathname)) return;
+    if (!isReady) return;
+    if (!user.user) router.replace("/login");
+  }, [pathname, user, isReady]);
+
+  if (!isReady) return null;
 
   return (
     <UserContext.Provider value={{ user, register, login }}>
@@ -83,5 +118,4 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-// Хэрэглэгчийн контекстыг ашиглах өөрийн хуурамч дуудлага
 export const useUser = () => useContext(UserContext);
