@@ -1,4 +1,12 @@
-"use client";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "E-commerce",
+  description: "moya page",
+  icons: {
+    icon: "/headIcon.png",
+  },
+};
 
 export default function RootLayout({
   children,

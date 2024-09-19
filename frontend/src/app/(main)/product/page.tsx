@@ -1,9 +1,19 @@
 "use client";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/axios";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Image from "next/image";
 import { Asides } from "../components/mockData";
-import Heart from "../assets/icon/Heart";
+import { Heart } from "lucide-react";
+
+interface ProductType {
+  _id: string;
+  productName: string;
+  price: number;
+  qty: number;
+}
 const Product = () => {
   const router = useRouter();
 
@@ -40,6 +50,28 @@ const Product = () => {
     );
   };
 
+  const [products, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
+
+  const getProducts = async () => {
+    try {
+      const response = await api.get("/getProducts");
+      console.log(response);
+
+      setProducts(response.data as ProductType[]); // Cast response data to ProductType[]
+    } catch (err: unknown) {
+      console.log(err);
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message || "An error occurred.");
+      } else {
+        toast.error("An unknown error occurred.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <div className="flex justify-center">
       <div className="container flex my-12">
@@ -62,6 +94,9 @@ const Product = () => {
                 </label>
               ))}
             </div>
+            {products?.map((product, index) => {
+              return <div key={index}>{product.productName}</div>;
+            })}
           </div>
           <div>
             <p className="text-[16px] font-bold my-4">Хэмжээ</p>
@@ -92,9 +127,7 @@ const Product = () => {
                   <div className="grid gap-4">
                     <div className="overflow-hidden rounded-2xl">
                       <div
-                        className={`relative cursor-pointer group h-[450px]
-                      
-                   `}
+                        className={`relative cursor-pointer group h-[450px]`}
                       >
                         <Image
                           src={aside.src}

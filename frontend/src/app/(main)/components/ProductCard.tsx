@@ -25,14 +25,14 @@ export const ProductCard = ({ index, aside }: ProductCardProps) => {
   return (
     <div key={index} className="grid gap-4 relative">
       <div onClick={() => router.push(`/product/${aside.id}`)}>
-        <div className="overflow-hidden rounded-2xl ">
-          <div className={`relative cursor-pointer group ${customHeight} `}>
+        <div className="overflow-hidden rounded-2xl hover:border hover:border-black ">
+          <div className={`relative cursor-pointer group  ${customHeight} `}>
             <Image
               src={aside.src}
               alt={aside.alt}
               priority
               fill
-              className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black  "
+              className="object-cover rounded-md transition-transform duration-700 hover:scale-125   "
             />
           </div>
         </div>

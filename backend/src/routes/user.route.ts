@@ -1,8 +1,14 @@
-import { Router } from "express";
-import { login, register } from "../controllers/user/user.controller";
+// routes.ts or similar
+import express from "express";
+import { login, logout, register } from "../controllers/user/user.controller";
+import { getMe } from "../controllers/auth/auth.controller";
+import { authMiddleware } from "../middlewares/auth.middlewares";
 
-const userRouter = Router();
+const userRouter = express.Router();
 
-userRouter.post("/register", register).post("/login", login);
+userRouter.post("/register", register);
+userRouter.post("/login", login);
+userRouter.post("/logout", logout);
+userRouter.get("/me", authMiddleware, getMe);
 
-export { userRouter };
+export default userRouter;

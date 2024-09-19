@@ -1,29 +1,33 @@
-import { RequestHandler } from "express";
+// middlewares.ts
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-const JWT_SECRET = "Dulguun"; // Токен үүсгэхэд ашигласан нууц түлхүүр
+dotenv.config();
 
-export const authMiddleware: RequestHandler = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
-  // Authorization толгой байгаа эсэхийг шалгана
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token байхгүй байна." });
-  }
-
-  const token = authHeader.split(" ")[1]; // "Bearer" түлхүүрийг авч хаяад токен-г авна
-
+// Middleware to check JWT token
+export const authMiddleware: (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void = (req, res, next) => {
   try {
-    // Token-г шалгана, decode хийнэ
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const token = req.headers.authorization?.split(" ")[1]; // Get token from headers
 
-    // Request-д хэрэглэгчийн decoded мэдээллийг хадгална
-    (req as any).user = decoded;
+    if (!token) {
+      return res.status(401).json({ message: "Токен байхгүй байна." });
+    }
 
-    // Дараагийн middleware эсвэл route руу шилжих
+    // Verify token
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+
+    // Attach userId to request object
+    req.user = decoded.userId;
     next();
   } catch (error) {
-    console.error("Token шалгахад алдаа гарлаа:", error);
-    return res.status(401).json({ message: "Буруу токен." });
+    // console.error("Токен шалгах алдаа:", error);
+    return res.status(401).json({ message: "Токен буруу байна." });
   }
 };

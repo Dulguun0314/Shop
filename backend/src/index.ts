@@ -2,8 +2,7 @@ import express from "express";
 import { connectToDatabase } from "./db";
 import cors from "cors";
 import { productGetRouter, productPostRouter } from "./routes/product.route";
-import { userRouter } from "./routes/user.route";
-import { authMiddleware } from "./middlewares/auth.middlewares";
+import userRouter from "./routes/user.route";
 
 const app = express();
 const port = 5000;
@@ -14,14 +13,13 @@ connectToDatabase();
 // Middleware-үүдийг ашиглана
 app.use(express.json()); // JSON дата-г боловсруулна
 app.use(cors()); // CORS-ийг нээж өгнө
-app.use(authMiddleware);
 
-// Хэрэглэгчийн бүртгэл болон нэвтрэлт
-app.use("/", userRouter); // Бүртгэл
+// Хэрэглэгчийн бүртгэл болон нэвтрэлт (public routes, no auth required)
+app.use("/users", userRouter); // User routes for registration and login
 
-// Бүтээгдэхүүний замууд
+// Бүтээгдэхүүний замууд (protected routes, require auth)
 app.use("/", productPostRouter); // Бүтээгдэхүүн нэмэх
-app.use("/", productGetRouter); // Бүтээгдэхүүн авах
+app.use("/", productGetRouter); // Бүтээгдэхүүн авах (public or use auth if needed)
 
 // Серверийг ажиллуулна
 app.listen(port, () => {

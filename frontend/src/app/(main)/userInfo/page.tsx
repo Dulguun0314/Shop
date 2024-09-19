@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUser } from "../components/utils/AuthProvider";
 
 const UserInfo = () => {
   const pathname: string = usePathname();
@@ -21,6 +22,7 @@ const UserInfo = () => {
       path: "/orderHistory",
     },
   ];
+  const { logout } = useUser();
 
   return (
     <div className="flex justify-center bg-[#F7F7F8]">
@@ -88,8 +90,14 @@ const UserInfo = () => {
                 name="address"
               />
             </div>
-            <div className="w-full flex justify-end ">
-              <button className="bg-[#2563EB] text-white rounded-2xl">
+            <div className="w-full flex justify-between ">
+              <button
+                onClick={logout}
+                className="border border-red-500  rounded-2xl text-red-500 hover:bg-red-600 duration-700 hover:text-white"
+              >
+                <p className="px-9 py-2">Систэмээс гарах</p>
+              </button>
+              <button className="border border-[#2563EB] text-[#2563EB] rounded-2xl hover:bg-[#2563EB] hover:text-white duration-1000">
                 <p className="px-9 py-2 ">Мэдээлэл шинэчлэх</p>
               </button>
             </div>

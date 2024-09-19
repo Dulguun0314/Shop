@@ -104,7 +104,7 @@ const ImagesDescription = () => {
             <div className="flex gap-4" onClick={handleReviewClick}>
               <p>Үнэлгээ</p>
               <p
-                className={`text-[#2563EB] underline underline-offset-4 cursor-pointer duration-1000 `}
+                className={`text-[#2563EB] underline underline-offset-4 cursor-pointer duration-1000 transition-transform `}
                 onClick={() => setSlide(!slide)}
               >
                 {slide ? "бүгдийг хураах" : " бүгдийг харах"}
