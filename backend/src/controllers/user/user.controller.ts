@@ -37,11 +37,12 @@ export const register: RequestHandler = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      role: "user", // default role for new users
     });
 
     // JWT токен үүсгэх (Шинэ хэрэглэгчийг нэвтрүүлэх)
     const token = jwt.sign(
-      { userId: newUser._id, email: newUser.email },
+      { userId: newUser._id, email: newUser.email, role: newUser.role },
       JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -53,6 +54,7 @@ export const register: RequestHandler = async (req, res) => {
         id: newUser._id,
         username: newUser.username,
         email: newUser.email,
+        role: newUser.role,
       },
     });
   } catch (error) {
@@ -91,7 +93,7 @@ export const login: RequestHandler = async (req, res) => {
 
     // JWT токен үүсгэх
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -103,6 +105,7 @@ export const login: RequestHandler = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -110,10 +113,11 @@ export const login: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: "Серверт алдаа гарлаа." });
   }
 };
+
+// Хэрэглэгч гарах
 export const logout: RequestHandler = (req, res) => {
   try {
     // Ideally, you would use token blacklisting here
-    // For simplicity, just send a success message
     return res.status(200).json({ message: "Амжилттай гарлаа." });
   } catch (error) {
     console.error("Гарах алдаа:", error);

@@ -1,10 +1,14 @@
 "use client";
 
+import { useAdmin } from "../utils/AdminProvider";
+
 const Dashboard = () => {
+  const { logout } = useAdmin();
+
   return (
     <div className="flex justify-center">
       <div className="container flex items-start">
-        <div className="w-screen bg-gray-100 w-screen flex justify-center px-48 py-12 h-screen items-start">
+        <div className="w-screen bg-gray-100 w-screen   px-48 py-12 h-screen items-start ">
           <div className="bg-white border rounded-lg px-[30px] py-8 w-full h-fit grid gap-5">
             <p className="text-[18px] font-semibold">Тохиргоо </p>
             <div className="border p-2 rounded-lg flex justify-between items-center">
@@ -27,6 +31,12 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
+          <button
+            onClick={logout}
+            className="border border-red-500  rounded-2xl text-red-500 hover:bg-red-600 duration-700 hover:text-white m-4"
+          >
+            <p className="px-9 py-2">Систэмээс гарах</p>
+          </button>
         </div>
       </div>
     </div>

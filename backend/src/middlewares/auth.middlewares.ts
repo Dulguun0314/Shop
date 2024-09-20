@@ -31,3 +31,10 @@ export const authMiddleware: (
     return res.status(401).json({ message: "Токен буруу байна." });
   }
 };
+const checkAdminRole = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user && req.user.role === "admin") {
+    next(); // User is admin, proceed to the next middleware or controller
+  } else {
+    return res.status(403).json({ message: "Access denied. Admins only." });
+  }
+};

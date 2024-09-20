@@ -8,33 +8,40 @@ import {
 import { toast } from "react-toastify";
 import { api } from "@/lib/axios";
 import { usePathname, useRouter, useParams } from "next/navigation";
-// import { useRouter } from 'next/router';
 
 interface User {
   id?: string;
   username?: string;
   email: string;
   password: string;
+  role?: string; // Add role here
 }
 
 interface AuthUser {
   user: User | null;
   isAuthenticated: boolean;
+  role?: string; // Add role here
 }
 
 interface UserContextType {
   user: AuthUser;
   register: (user: User) => void;
   login: (email: string, password: string) => void;
-  logout: () => void; // Update to a function with no arguments
+  logout: () => void; // Function with no arguments
 }
 
-const UserContext = createContext<UserContextType>({} as UserContextType);
+const UserContext = createContext<UserContextType>({
+  user: { user: null, isAuthenticated: false, role: undefined },
+  register: () => {},
+  login: () => {},
+  logout: () => {},
+});
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<AuthUser>({
     user: null,
     isAuthenticated: false,
+    role: undefined,
   });
 
   const router = useRouter();
@@ -51,11 +58,14 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
       setUser({
         user,
         isAuthenticated: true,
+        role: user.role, // Save the role
       });
       toast.success("Бүртгэл амжилттай!");
-      router.push("/");
 
-      // JWT токен-г localStorage-д зөв хадгалах
+      // Redirect based on role
+      const redirectPath = user.role === "admin" ? "/admin" : "/";
+      router.push(redirectPath);
+
       localStorage.setItem("token", token);
     } catch (error) {
       toast.error("Бүртгэлтэй байна!");
@@ -71,11 +81,14 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
       setUser({
         user,
         isAuthenticated: true,
+        role: user.role, // Save the role
       });
       toast.success("Нэвтрэлт амжилттай!");
-      router.push("/");
 
-      // JWT токен-г хадгална
+      // Redirect based on role
+      const redirectPath = user.role === "admin" ? "/admin" : "/";
+      router.push(redirectPath);
+
       localStorage.setItem("token", token);
     } catch (error) {
       toast.error("Нууц үг эсвэл майл буруу байна!");
@@ -84,16 +97,12 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   };
 
   const logout = () => {
-    // Update user state to reflect logout
-    setUser({ user: null, isAuthenticated: false });
+    setUser({ user: null, isAuthenticated: false, role: undefined });
 
-    // Display success message
     toast.success("Систэмээс гарсан!");
 
-    // Remove JWT token from localStorage
     localStorage.removeItem("token");
 
-    // Redirect to home page
     router.push("/"); // Navigate to home page or login page
   };
 
@@ -109,7 +118,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser({ user: res.data, isAuthenticated: true });
+        setUser({
+          user: res.data,
+          isAuthenticated: true,
+          role: res.data.role, // Save the role
+        });
       } catch (err) {
         console.log(err);
         localStorage.removeItem("token");
@@ -124,7 +137,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (authPaths.includes(pathname)) return;
     if (!isReady) return;
-    if (!user.user) router.replace("/login");
+    if (!user.user) {
+      router.replace("/login");
+    } else if (user.role === "admin" && pathname !== "/admin") {
+      router.replace("/"); // Redirect admin users to admin dashboard
+    }
   }, [pathname, user, isReady, authPaths, router]);
 
   if (!isReady) return null;

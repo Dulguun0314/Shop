@@ -3,6 +3,7 @@
 import AdminHeader from "./components/AdminHeader";
 import AllCategory from "./components/allCategory";
 import "./global.css";
+import { AdminProvider } from "./utils/AdminProvider";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,7 @@ export default function RootLayout({
         <AdminHeader />
         <div className="flex justify-center items-start ">
           <AllCategory />
-          {children}
+          <AdminProvider>{children}</AdminProvider>
         </div>
       </body>
     </html>
