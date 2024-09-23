@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sizes } from "./mockData";
 import { Heart } from "lucide-react";
 import StarRating from "../../components/StarRating";
@@ -8,8 +8,13 @@ import OthersComments from "./OthersComment";
 import { useUser } from "../../components/utils/AuthProvider";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { api } from "@/lib/axios";
+import { AxiosError } from "axios";
 
-const ImagesDescription = () => {
+type DescriptionProps = {
+  id: string;
+};
+const ImagesDescription = ({ id }: DescriptionProps) => {
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const plus = () => {
     setCount(count + 1);
@@ -33,6 +38,33 @@ const ImagesDescription = () => {
       toast.info("Сэтгэгдэл үлээхийн тулд Нэвтэрнэ ");
     }
   };
+  interface ProductType {
+    _id: string;
+    productName: string;
+    price: number;
+    qty: number;
+    images: [string];
+  }
+  const [productsDescription, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
+  const getProducts = async () => {
+    try {
+      const response = await api.get(`/getProductById/${id}`);
+      console.log(response);
+
+      setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
+    } catch (err: unknown) {
+      console.log(err);
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message || "An error occurred.");
+      } else {
+        toast.error("An unknown error occurred.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <>
@@ -41,6 +73,9 @@ const ImagesDescription = () => {
           шинэ
         </p>
         <div className="flex gap-2 items-center my-2">
+          {productsDescription.map((productDescription, index) => {
+            return <div key={index}>{productDescription.productName}</div>;
+          })}
           <p className="text-2xl font-semibold">Wildflower Hoodie</p>
           <Heart />
         </div>

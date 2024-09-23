@@ -5,14 +5,14 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Asides } from "../components/mockData";
-import { Heart } from "lucide-react";
+import Heart from "../assets/icon/Heart";
 
 interface ProductType {
   _id: string;
   productName: string;
   price: number;
   qty: number;
+  images: [string];
 }
 const Product = () => {
   const router = useRouter();
@@ -51,7 +51,6 @@ const Product = () => {
   };
 
   const [products, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
-
   const getProducts = async () => {
     try {
       const response = await api.get("/getProducts");
@@ -94,9 +93,6 @@ const Product = () => {
                 </label>
               ))}
             </div>
-            {products?.map((product, index) => {
-              return <div key={index}>{product.productName}</div>;
-            })}
           </div>
           <div>
             <p className="text-[16px] font-bold my-4">Хэмжээ</p>
@@ -120,18 +116,18 @@ const Product = () => {
         </div>
 
         <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10">
-          {Asides.slice(0, 15).map((aside) => {
+          {products.map((product, index) => {
             return (
-              <div key={aside.id} className="relative">
-                <div onClick={() => router.push(`/product/${aside.id}`)}>
+              <div key={index} className="relative">
+                <div onClick={() => router.push(`/product/${product._id}`)}>
                   <div className="grid gap-4">
                     <div className="overflow-hidden rounded-2xl">
                       <div
                         className={`relative cursor-pointer group h-[450px]`}
                       >
                         <Image
-                          src={aside.src}
-                          alt={aside.alt}
+                          src={product.images[0]}
+                          alt={product.productName}
                           priority
                           fill
                           className="object-cover rounded-md transition-transform duration-700 hover:scale-125 hover:border-black"
@@ -139,8 +135,8 @@ const Product = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="text-[16px]">{aside.title}</p>
-                      <p className="text-[16px] font-bold">{aside.price}</p>
+                      <p className="text-[16px]">{product.productName}</p>
+                      <p className="text-[16px] font-bold">{product.price}</p>
                     </div>
                   </div>
                 </div>

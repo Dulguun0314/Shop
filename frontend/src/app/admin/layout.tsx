@@ -1,9 +1,11 @@
 "use client";
 
+import { ToastContainer } from "react-toastify";
 import AdminHeader from "./components/AdminHeader";
 import AllCategory from "./components/allCategory";
 import "./global.css";
 import { AdminProvider } from "./utils/AdminProvider";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RootLayout({
   children,
@@ -17,6 +19,7 @@ export default function RootLayout({
         <div className="flex justify-center items-start ">
           <AllCategory />
           <AdminProvider>{children}</AdminProvider>
+          <ToastContainer />
         </div>
       </body>
     </html>

@@ -45,12 +45,11 @@ export const AdminProvider = ({ children }: PropsWithChildren) => {
   const logout = () => {
     setUser({ user: null, isAuthenticated: false, role: undefined });
 
-    toast.success("Систэмээс гарсан!");
-
     // Clear localStorage of token
     localStorage.removeItem("token");
+    toast.success("Систэмээс гарсан!");
 
-    router.push("/"); // Navigate to home page or login page
+    router.push("/");
   };
 
   useEffect(() => {

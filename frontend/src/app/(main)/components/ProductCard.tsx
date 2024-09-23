@@ -41,7 +41,7 @@ export const ProductCard = ({ index, aside }: ProductCardProps) => {
           <p className="text-[16px] font-bold">{aside.price}</p>
         </div>
       </div>
-      <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
+      <div className="absolute top-4 right-4 overflow-hidden cursor-pointer ">
         <Heart />
       </div>
     </div>
