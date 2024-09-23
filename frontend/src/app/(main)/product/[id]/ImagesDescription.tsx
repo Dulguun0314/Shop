@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { sizes } from "./mockData";
-import { Heart } from "lucide-react";
 import StarRating from "../../components/StarRating";
 import OthersComments from "./OthersComment";
 import { useUser } from "../../components/utils/AuthProvider";
@@ -10,6 +9,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
+import Heart from "../../assets/icon/Heart";
 
 type DescriptionProps = {
   id: string;
@@ -44,12 +44,12 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     price: number;
     qty: number;
     images: [string];
+    description: string;
   }
   const [productsDescription, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
   const getProducts = async () => {
     try {
       const response = await api.get(`/getProductById/${id}`);
-      console.log(response);
 
       setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
     } catch (err: unknown) {
@@ -72,16 +72,19 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
         <p className="border w-fit h-fit border-[#2563EB] px-2 rounded-xl items-center my-2 font-semibold text-[12px]">
           шинэ
         </p>
-        <div className="flex gap-2 items-center my-2">
+        <div className="flex gap-2 items-start my-2">
           {productsDescription.map((productDescription, index) => {
-            return <div key={index}>{productDescription.productName}</div>;
+            return (
+              <div key={index}>
+                <p className="text-2xl font-semibold">
+                  {productDescription.productName}
+                </p>
+                {productDescription.description}
+              </div>
+            );
           })}
-          <p className="text-2xl font-semibold">Wildflower Hoodie</p>
           <Heart />
         </div>
-        <p className="text-[16px]">
-          Зэрлэг цэцгийн зурагтай даавуун материалтай цамц
-        </p>
         <div className="grid h-fit gap-2 my-4">
           <p className="underline underline-offset-4">Хэмжээний заавар</p>
           <div className="flex gap-1">

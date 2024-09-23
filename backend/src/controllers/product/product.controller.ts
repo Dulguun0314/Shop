@@ -1,9 +1,18 @@
 import { RequestHandler } from "express";
 import { productModel } from "../../models/product.schema";
 
-export const Product: RequestHandler = async (req, res) => {
+export const createProducts: RequestHandler = async (req, res) => {
   try {
-    const { productName, price, qty, images, categoryId, type } = req.body;
+    const {
+      productName,
+      price,
+      qty,
+      images,
+      categoryId,
+      type,
+      size,
+      description,
+    } = req.body;
 
     // Create a new product
     const newProduct = await productModel.create({
@@ -13,6 +22,8 @@ export const Product: RequestHandler = async (req, res) => {
       images,
       categoryId,
       type,
+      size,
+      description,
     });
 
     // Send back the newly created product

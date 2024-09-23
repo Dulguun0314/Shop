@@ -3,7 +3,6 @@
 import { Textarea } from "../../components/ui/textarea";
 
 const IdProductName = () => {
-
   return (
     <>
       <div className="h-fit grid gap-2 p-6 border bg-white rounded-xl">
@@ -12,7 +11,7 @@ const IdProductName = () => {
           <input
             placeholder="Нэр"
             type="text"
-            className="bg-gray-100 rounded-lg border border-[#D6D8DB] p-2 outline-none"
+            className="bg-gray-100 rounded-lg border border-[#D6zD8DB] p-2 outline-none"
           />
           <p className="font-semibold">Нэмэлт мэдээлэл</p>
           <Textarea

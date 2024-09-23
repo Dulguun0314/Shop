@@ -48,7 +48,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const { id } = useParams();
   const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
-  const authPaths = ["/login", "/signup", "/", "/product", `/product/${id}`];
+  const authPaths = ["/login", "/signup", "/", "/product", `/product/${id} ` , "/admin"];
 
   const register = async (newUser: User) => {
     try {

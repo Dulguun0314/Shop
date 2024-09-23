@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { api } from "@/lib/axios";
 import { toast } from "react-toastify";
@@ -13,7 +14,10 @@ interface ProductType {
   price: number;
   qty: number;
   images: [string];
+  type: string; // Assuming this is the category
+  size: string[]; // Add size if available
 }
+
 const Product = () => {
   const router = useRouter();
 
@@ -33,6 +37,7 @@ const Product = () => {
 
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<Size[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
 
   const handleCategoryChange = (category: Category) => {
     setSelectedCategories((prev) =>
@@ -50,15 +55,11 @@ const Product = () => {
     );
   };
 
-  const [products, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
   const getProducts = async () => {
     try {
       const response = await api.get("/getProducts");
-      console.log(response);
-
-      setProducts(response.data as ProductType[]); // Cast response data to ProductType[]
+      setProducts(response.data as ProductType[]);
     } catch (err: unknown) {
-      console.log(err);
       if (err instanceof AxiosError) {
         toast.error(err.response?.data?.message || "An error occurred.");
       } else {
@@ -70,6 +71,18 @@ const Product = () => {
   useEffect(() => {
     getProducts();
   }, []);
+
+  // Filter products based on selected categories and sizes
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(product.type as Category);
+    const matchesSize =
+      selectedSizes.length === 0 ||
+      selectedSizes.some((selectedSize) => product.size.includes(selectedSize));
+
+    return matchesCategory && matchesSize;
+  });
 
   return (
     <div className="flex justify-center">
@@ -116,7 +129,7 @@ const Product = () => {
         </div>
 
         <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10">
-          {products.map((product, index) => {
+          {filteredProducts.map((product, index) => {
             return (
               <div key={index} className="relative">
                 <div onClick={() => router.push(`/product/${product._id}`)}>
