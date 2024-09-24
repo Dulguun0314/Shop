@@ -25,24 +25,23 @@ const Images = ({ id }: ImagesProps) => {
     setSelectedImage(image); // Update selected image
   };
 
-  const getProductById = async () => {
-    try {
-      const response = await api.get(`/getProductById/${id}`);
-      const product: ProductType = response.data;
-      setImages(product.images); // Set images from the product
-      setSelectedImage(product.images[0]); // Set the first image as selected initially
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        toast.error(err.response?.data?.message || "An error occurred.");
-      } else {
-        toast.error("An unknown error occurred.");
-      }
-    }
-  };
-
   useEffect(() => {
+    const getProductById = async () => {
+      try {
+        const response = await api.get(`/getProductById/${id}`);
+        const product: ProductType = response.data;
+        setImages(product.images); // Set images from the product
+        setSelectedImage(product.images[0]); // Set the first image as selected initially
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data?.message || "An error occurred.");
+        } else {
+          toast.error("An unknown error occurred.");
+        }
+      }
+    };
     getProductById();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -61,8 +60,8 @@ const Images = ({ id }: ImagesProps) => {
               <Image
                 src={image}
                 alt={`Product Image ${index + 1}`}
-                fill
                 className="rounded-md"
+                fill
               />
             </div>
           ))}
@@ -76,7 +75,7 @@ const Images = ({ id }: ImagesProps) => {
                 src={selectedImage}
                 alt="Selected Product Image"
                 fill
-                className="rounded-md"
+                className="rounded-md object-cover"
               />
             </div>
           </div>

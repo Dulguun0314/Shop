@@ -4,16 +4,15 @@ import { connectToDatabase } from "./db";
 import { productGetRouter, productPostRouter } from "./routes/product.route";
 import userRouter from "./routes/user.route";
 import dotenv from "dotenv";
-import { v2 as cloudinary } from "cloudinary";
-import Multer, { memoryStorage } from "multer";
 import uploadRouter from "./routes/upload.route";
+import categoryRouter from "./routes/category.route";
 
 dotenv.config(); // Ensure environment variables are loaded
 
 const app = express();
 const port = 5000;
 
-// MongoDB-д холбогдоно
+// MongoDB-д холбогдон
 connectToDatabase();
 
 // Middleware-үүдийг ашиглана
@@ -29,6 +28,7 @@ app.use("/users", userRouter); // User routes for registration and login
 app.use("/", productPostRouter); // Бүтээгдэхүүн нэмэх
 app.use("/", productGetRouter); // Бүтээгдэхүүн авах (public or use auth if needed)
 
+app.use("/", categoryRouter);
 // Серверийг ажиллуулна
 app.listen(port, () => {
   console.log(`Сервер ${port} порт дээр ажиллаж байна`);

@@ -47,24 +47,25 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     description: string;
   }
   const [productsDescription, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
-  const getProducts = async () => {
-    try {
-      const response = await api.get(`/getProductById/${id}`);
-
-      setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
-    } catch (err: unknown) {
-      console.log(err);
-      if (err instanceof AxiosError) {
-        toast.error(err.response?.data?.message || "An error occurred.");
-      } else {
-        toast.error("An unknown error occurred.");
-      }
-    }
-  };
 
   useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const response = await api.get(`/getProductById/${id}`);
+
+        setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
+      } catch (err: unknown) {
+        console.log(err);
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data?.message || "An error occurred.");
+        } else {
+          toast.error("An unknown error occurred.");
+        }
+      }
+    };
+
     getProducts();
-  }, []);
+  }, [id]);
 
   return (
     <>

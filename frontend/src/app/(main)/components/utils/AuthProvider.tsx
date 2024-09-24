@@ -3,6 +3,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { toast } from "react-toastify";
@@ -48,7 +49,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const { id } = useParams();
   const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
-  const authPaths = ["/login", "/signup", "/", "/product", `/product/${id} ` , "/admin"];
+  // const authPaths = ["/login", "/signup", "/", "/product", `/product/${id}`];
+  const authPaths = useMemo(
+    () => ["/login", "/signup", "/", "/product", `/product/${id}`],
+    [id]
+  );
 
   const register = async (newUser: User) => {
     try {

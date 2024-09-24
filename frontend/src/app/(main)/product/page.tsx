@@ -17,27 +17,22 @@ interface ProductType {
   type: string; // Assuming this is the category
   size: string[]; // Add size if available
 }
+interface Category {
+  _id: string;
+  type: string;
+}
 
 const Product = () => {
   const router = useRouter();
 
-  type Category = "Малгай" | "Усны сав" | "T-shirt" | "Hoodie" | "Tee" | "Цүнх";
   type Size = "Free" | "S" | "M" | "L" | "2XL" | "3XL" | "4XL";
-
-  const categories: Category[] = [
-    "Малгай",
-    "Усны сав",
-    "T-shirt",
-    "Hoodie",
-    "Tee",
-    "Цүнх",
-  ];
 
   const sizes: Size[] = ["Free", "S", "M", "L", "2XL", "3XL", "4XL"];
 
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<Size[]>([]);
   const [products, setProducts] = useState<ProductType[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const handleCategoryChange = (category: Category) => {
     setSelectedCategories((prev) =>
@@ -54,6 +49,22 @@ const Product = () => {
         : [...prev, size]
     );
   };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await api.get("/getCategories");
+        setCategories(response.data as Category[]);
+      } catch (err: unknown) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data?.message || "An error occurred.");
+        } else {
+          toast.error("An unknown error occurred.");
+        }
+      }
+    };
+    getCategories();
+  }, []);
 
   const getProducts = async () => {
     try {
@@ -76,7 +87,7 @@ const Product = () => {
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategories.length === 0 ||
-      selectedCategories.includes(product.type as Category);
+      selectedCategories.some((category) => category.type === product.type);
     const matchesSize =
       selectedSizes.length === 0 ||
       selectedSizes.some((selectedSize) => product.size.includes(selectedSize));
@@ -91,9 +102,9 @@ const Product = () => {
           <div className="grid h-fit">
             <p className="text-[16px] font-bold my-4">Ангилал</p>
             <div className="grid gap-1">
-              {categories.map((category) => (
+              {categories.map((category, index) => (
                 <label
-                  key={category}
+                  key={index}
                   className="flex items-center cursor-pointer hover:font-bold"
                 >
                   <input
@@ -102,7 +113,7 @@ const Product = () => {
                     onChange={() => handleCategoryChange(category)}
                     className="mr-2"
                   />
-                  {category}
+                  {category.type}
                 </label>
               ))}
             </div>

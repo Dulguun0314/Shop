@@ -24,7 +24,7 @@ export const authMiddleware: (
     const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
 
     // Attach userId to request object
-    // req.user = decoded.userId;
+    req.user = decoded.userId;
     next();
   } catch (error) {
     // console.error("Токен шалгах алдаа:", error);
