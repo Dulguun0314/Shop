@@ -4,6 +4,11 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
+type UserType = {
+  userId: string;
+  email: string;
+  role: string;
+};
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -21,10 +26,10 @@ export const authMiddleware: (
     }
 
     // Verify token
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as UserType;
 
     // Attach userId to request object
-    req.user = decoded.userId;
+    req.user = decoded;
     next();
   } catch (error) {
     // console.error("Токен шалгах алдаа:", error);
