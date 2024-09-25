@@ -12,6 +12,7 @@ export const createProducts: RequestHandler = async (req, res) => {
       type,
       size,
       description,
+      productCode,
     } = req.body;
 
     // Create a new product
@@ -24,6 +25,7 @@ export const createProducts: RequestHandler = async (req, res) => {
       type,
       size,
       description,
+      productCode,
     });
 
     // Send back the newly created product

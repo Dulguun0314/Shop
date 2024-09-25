@@ -37,7 +37,7 @@ const Basket = () => {
     icon: JSX.Element;
   }
   // Initialize state with counts for each basket item
-  const [counts, setCounts] = useState(Array(Baskets.length).fill(0));
+  const [counts, setCounts] = useState(Array(Baskets.length).fill(1));
 
   const handlePlus = (index: number) => {
     const newCounts = [...counts];
@@ -47,7 +47,7 @@ const Basket = () => {
 
   const handleMinus = (index: number) => {
     const newCounts = [...counts];
-    if (newCounts[index] > 0) {
+    if (newCounts[index] > 1) {
       newCounts[index] -= 1;
     }
     setCounts(newCounts);

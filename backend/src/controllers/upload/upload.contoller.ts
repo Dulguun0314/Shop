@@ -17,7 +17,7 @@ async function handleUpload(file: string) {
   });
   return res;
 }
-
+  
 // Controller function for file upload
 export const uploadFile = async (req: Request, res: Response) => {
   if (!req.file) return res.status(400).send("No file uploaded.");

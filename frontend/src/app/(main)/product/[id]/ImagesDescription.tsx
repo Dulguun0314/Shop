@@ -20,13 +20,13 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     setCount(count + 1);
   };
   const minus = () => {
-    if (count > 0) {
+    if (count > 1) {
       setCount(count - 1);
     }
   };
   const [slide, setSlide] = useState(false);
 
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const { user } = useUser();
   const handleBasketClick = () => {
     if (!user.isAuthenticated) {

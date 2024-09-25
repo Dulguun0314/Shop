@@ -97,7 +97,7 @@ const Product = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="container flex my-12">
+      <div className="container flex my-12 h-screen">
         <div className="grid h-fit gap-12 w-[475px]">
           <div className="grid h-fit">
             <p className="text-[16px] font-bold my-4">Ангилал</p>
