@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { IoChevronBackOutline } from "react-icons/io5";
 import IdProductName from "./IdProductName";
@@ -8,15 +9,27 @@ import IdProductPiece from "./IdProductPiece";
 import IdProductType from "./IdProductType";
 import IdProductTypes from "./IdProductTypes";
 import IdProductTag from "./IdProductTag";
-import { useState } from "react";
 import { api } from "@/lib/axios";
 
+// Формын өгөгдлийн төрөл
+interface FormData {
+  productName: string;
+  price: number;
+  qty: number;
+  images: string[];
+  categoryId: string;
+  type: string;
+  size: string;
+  description: string;
+  productCode: string;
+}
+
 const Page = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     productName: "",
     price: 0,
     qty: 0,
-    images: [] as string[], // Array of image URLs
+    images: [], // Зургийн URL-уудын массив
     categoryId: "",
     type: "",
     size: "",
@@ -24,21 +37,28 @@ const Page = () => {
     productCode: "",
   });
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
 
-  // Handle input changes
+  // Оруулалтын өөрчлөлтийг удирдах функц
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  // Handle image URLs change
-  const handleImagesChange = (urls: string[]) => {
-    setFormData({ ...formData, images: urls });
+  // Зургийн URL-уудыг шинэчлэх функц
+  const handleImagesChange = (newImageUrls: string[]) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...newImageUrls],
+    }));
   };
 
-  // Handle form submission
+  // Формыг илгээх функц
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -46,7 +66,7 @@ const Page = () => {
       setMessage(response.data.message);
     } catch (error) {
       console.error(error);
-      setMessage("Error creating product");
+      setMessage("Бүтээгдэхүүн үүсгэхэд алдаа гарлаа");
     }
   };
 
@@ -67,12 +87,14 @@ const Page = () => {
                   productName={formData.productName}
                   description={formData.description}
                   productCode={formData.productCode}
-                  onProductNameChange={handleInputChange}
-                  onDescriptionChange={handleInputChange}
-                  onProductCodeChange={handleInputChange}
+                  handleInputChange={handleInputChange}
                 />
                 <IdProductImage onImagesChange={handleImagesChange} />
-                <IdProductPiece />
+                <IdProductPiece
+                  price={formData.price}
+                  qty={formData.qty}
+                  handleInputChange={handleInputChange} // Хэрэглэх бол гүйлгэх
+                />
               </div>
               <div className="flex-1 h-full grid gap-6">
                 <IdProductType />
