@@ -14,7 +14,7 @@ interface ProductType {
   price: number;
   qty: number;
   images: [string];
-  type: string; // Assuming this is the category
+  productType: string; // Assuming this is the category
   size: string[]; // Add size if available
 }
 interface Category {
@@ -87,7 +87,9 @@ const Product = () => {
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategories.length === 0 ||
-      selectedCategories.some((category) => category.type === product.type);
+      selectedCategories.some(
+        (category) => category.type === product.productType
+      );
     const matchesSize =
       selectedSizes.length === 0 ||
       selectedSizes.some((selectedSize) => product.size.includes(selectedSize));
@@ -96,8 +98,8 @@ const Product = () => {
   });
 
   return (
-    <div className="flex justify-center">
-      <div className="container flex my-12 h-screen">
+    <div className="flex justify-center ">
+      <div className="container flex my-12 h-fit">
         <div className="grid h-fit gap-12 w-[475px]">
           <div className="grid h-fit">
             <p className="text-[16px] font-bold my-4">Ангилал</p>
@@ -139,7 +141,7 @@ const Product = () => {
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10">
+        <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10 ">
           {filteredProducts.map((product, index) => {
             return (
               <div key={index} className="relative">

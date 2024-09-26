@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { IoChevronBackOutline } from "react-icons/io5";
@@ -11,37 +10,35 @@ import IdProductTypes from "./IdProductTypes";
 import IdProductTag from "./IdProductTag";
 import { api } from "@/lib/axios";
 
-// Формын өгөгдлийн төрөл
 interface FormData {
   productName: string;
   price: number;
   qty: number;
   images: string[];
-  categoryId: string;
-  type: string;
-  size: string;
+  productType: string;
+  size: string[];
   description: string;
   productCode: string;
 }
 
-const Page = () => {
+const Page: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     productName: "",
     price: 0,
     qty: 0,
-    images: [], // Зургийн URL-уудын массив
-    categoryId: "",
-    type: "",
-    size: "",
+    images: [],
+    productType: "",
+    size: [],
     description: "",
     productCode: "",
   });
 
   const [message, setMessage] = useState<string>("");
 
-  // Оруулалтын өөрчлөлтийг удирдах функц
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -50,7 +47,6 @@ const Page = () => {
     }));
   };
 
-  // Зургийн URL-уудыг шинэчлэх функц
   const handleImagesChange = (newImageUrls: string[]) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -58,7 +54,6 @@ const Page = () => {
     }));
   };
 
-  // Формыг илгээх функц
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -80,41 +75,52 @@ const Page = () => {
               Бүтээгдэхүүн нэмэх
             </div>
           </Link>
-          <form onSubmit={handleSubmit}>
-            <div className="flex items-start p-6 gap-4">
-              <div className="flex-1 grid gap-4 h-full">
-                <IdProductName
-                  productName={formData.productName}
-                  description={formData.description}
-                  productCode={formData.productCode}
-                  handleInputChange={handleInputChange}
-                />
-                <IdProductImage onImagesChange={handleImagesChange} />
-                <IdProductPiece
-                  price={formData.price}
-                  qty={formData.qty}
-                  handleInputChange={handleInputChange} // Хэрэглэх бол гүйлгэх
-                />
-              </div>
-              <div className="flex-1 h-full grid gap-6">
-                <IdProductType />
-                <IdProductTypes />
-                <IdProductTag />
-              </div>
+
+          <div className="flex items-start p-6 gap-4">
+            <div className="flex-1 grid gap-4 h-full">
+              <IdProductName
+                productName={formData.productName}
+                description={formData.description}
+                productCode={formData.productCode}
+                handleInputChange={handleInputChange}
+              />
+              <IdProductImage onImagesChange={handleImagesChange} />
+              <IdProductPiece
+                price={formData.price}
+                qty={formData.qty}
+                handleInputChange={handleInputChange}
+              />
             </div>
-            <div className="w-full flex justify-end gap-5 px-4">
-              <button className="font-semibold rounded-lg px-5 py-4 border">
-                Ноорог
-              </button>
-              <button
-                className="font-semibold rounded-lg bg-black text-white px-5 py-4"
-                type="submit"
-              >
-                Нийтлэх
-              </button>
+            <div className="flex-1 h-full grid gap-6">
+              <IdProductType
+                productType={formData.productType}
+                handleInputChange={handleInputChange}
+                setProductType={(type) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    productType: type,
+                  }))
+                }
+              />
+              <IdProductTypes
+                handleInputChange={handleInputChange}
+                size={formData.size}
+              />
+              <IdProductTag />
             </div>
-            {message && <div className="mb-4 text-green-500">{message}</div>}
-          </form>
+          </div>
+          <div className="w-full flex justify-end gap-5 px-4">
+            <button className="font-semibold rounded-lg px-5 py-4 border">
+              Ноорог
+            </button>
+            <button
+              className="font-semibold rounded-lg bg-black text-white px-5 py-4"
+              onClick={handleSubmit}
+            >
+              Нийтлэх
+            </button>
+          </div>
+          {message && <div className="mb-4 text-green-500">{message}</div>}
         </div>
       </div>
     </div>

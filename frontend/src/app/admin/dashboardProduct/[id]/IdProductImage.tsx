@@ -3,63 +3,66 @@ import { api } from "@/lib/axios";
 import Image from "next/image";
 
 interface IdProductImageProps {
-  onImagesChange?: (imageUrls: string[]) => void; // Зургийн URL-уудыг эцэг компонент руу илгээх callback
+  onImagesChange?: (imageUrls: string[]) => void; // Callback to send image URLs to parent
 }
 
-const IdProductImage: React.FC<IdProductImageProps> = ({ onImagesChange }) => {
-  const [, setFiles] = useState<File[]>([]); // Сонгосон файлуудыг хадгалах төлөв
-  const [, setUploading] = useState(false); // Хуулалтын төлөв
-  const [imageUrls, setImageUrls] = useState<string[]>([]); // Амжилттай хуулагдсан зургийн URL-ууд
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Хулганы үзүүлэлттэй зургийн индекс
+const Spinner = () => (
+  <div className="">
+    <div className="bg-white w-12 h-12 rounded-full border-4 border-t-4 border-t-black animate-spin border-gray-500"></div>
+  </div>
+);
 
-  // Файл сонгоход автоматаар хуулалт хийх функц
+const IdProductImage: React.FC<IdProductImageProps> = ({ onImagesChange }) => {
+  const [, setFiles] = useState<File[]>([]); // Files state
+  const [uploading, setUploading] = useState(false); // Uploading state
+  const [imageUrls, setImageUrls] = useState<string[]>([]); // Image URLs state
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Hovered image index
+
+  // Handle file selection
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
-      setFiles(selectedFiles); // Сонгосон файлуудыг төлөвт хадгална
-      await handleUpload(selectedFiles); // Автоматаар хуулалтыг эхлүүлнэ
+      setFiles(selectedFiles); // Save selected files to state
+      await handleUpload(selectedFiles); // Start upload
     }
   };
 
-  // Хуулалт хийх функц
+  // Handle file upload
   const handleUpload = async (selectedFiles: File[]) => {
-    if (selectedFiles.length === 0) {
-      return;
-    }
+    if (selectedFiles.length === 0) return;
 
-    setUploading(true); // Хуулалт эхлэх үед төлөвийг true болгоно
+    setUploading(true); // Set uploading state to true
 
     try {
       const uploadedImageUrls: string[] = [];
       for (const file of selectedFiles) {
         const formData = new FormData();
-        formData.append("ProductImage", file); // Файлыг formData-д нэмнэ
+        formData.append("ProductImage", file); // Append file to formData
 
         const response = await api.post("/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         });
 
-        const uploadedImageUrl = response.data.url; // Серверээс ирсэн зургийн URL
-        uploadedImageUrls.push(uploadedImageUrl); // Хуулсан зургийн URL-ийг хадгална
+        const uploadedImageUrl = response.data.url; // Get image URL from response
+        uploadedImageUrls.push(uploadedImageUrl); // Save image URL
       }
 
-      setImageUrls((prevImageUrls) => [...prevImageUrls, ...uploadedImageUrls]); // URL-уудыг төлөвт шинэчлэнэ
-      if (onImagesChange) onImagesChange(uploadedImageUrls); // Эцэг компонент руу URL-уудыг илгээнэ
+      setImageUrls((prevImageUrls) => [...prevImageUrls, ...uploadedImageUrls]); // Update image URLs state
+      if (onImagesChange) onImagesChange(uploadedImageUrls); // Send URLs to parent component
     } catch (error) {
+      console.error(error); // Handle errors
     } finally {
-      setUploading(false); // Хуулалт дууссаны дараа төлөвийг false болгоно
+      setUploading(false); // Set uploading state to false
     }
   };
 
-  // Зураг устгах функц
+  // Remove image
   const handleRemoveImage = (index: number) => {
     const updatedImages = imageUrls.filter((_, i) => i !== index);
     setImageUrls(updatedImages);
-    if (onImagesChange) onImagesChange(updatedImages); // Эцэг компонент руу шинэчлэгдсэн URL-уудыг илгээнэ
+    if (onImagesChange) onImagesChange(updatedImages); // Send updated URLs to parent component
   };
 
   return (
@@ -70,9 +73,9 @@ const IdProductImage: React.FC<IdProductImageProps> = ({ onImagesChange }) => {
           ? imageUrls.map((url, index) => (
               <div
                 key={index}
-                className="relative w-[150px] h-[150px]  border rounded-lg flex justify-center items-center"
-                onMouseEnter={() => setHoveredIndex(index)} // Хулганы үзүүлэлт тухайн зургийн дээр байхад
-                onMouseLeave={() => setHoveredIndex(null)} // Хулганы үзүүлэлт зурагнаас гарвал
+                className="relative w-[150px] h-[150px] border rounded-lg flex justify-center items-center"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
                 <Image
                   src={url}
@@ -80,10 +83,11 @@ const IdProductImage: React.FC<IdProductImageProps> = ({ onImagesChange }) => {
                   fill
                   className="object-cover rounded-lg"
                 />
+                {/* Display spinner when uploading */}
                 {hoveredIndex === index && (
                   <button
                     className="absolute top-1 right-1 bg-gray-500 text-white w-6 h-6 rounded-full flex justify-center items-center"
-                    onClick={() => handleRemoveImage(index)} // Устгах товчийг дарахад зургийг устгах
+                    onClick={() => handleRemoveImage(index)}
                   >
                     X
                   </button>
@@ -91,15 +95,20 @@ const IdProductImage: React.FC<IdProductImageProps> = ({ onImagesChange }) => {
               </div>
             ))
           : ""}
-        <div className="relative w-[150px] h-[150px] flex justify-center items-center">
+        <div className="relative w-[150px] h-[150px] flex justify-center items-center border-dashed border">
           <label className="bg-gray-100 w-[32px] h-[32px] flex justify-center items-center rounded-full cursor-pointer">
-            <p className="text-[24px]">+</p>
+            {uploading ? (
+              <Spinner /> // Display spinner when uploading
+            ) : (
+              <p className="text-[24px]">+</p> // Display "+" when not uploading
+            )}
+
             <input
               type="file"
-              multiple // Олон файл сонгох боломжтой
+              multiple
               className="hidden"
-              onChange={handleFileChange} // Файл сонгоход автоматаар хуулалтыг дуудах
-              onClick={(e) => (e.currentTarget.value = "")} // Файлыг дахин сонгох боломжтой болгоно
+              onChange={handleFileChange}
+              onClick={(e) => (e.currentTarget.value = "")} // Allow re-uploading
             />
           </label>
         </div>
