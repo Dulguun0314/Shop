@@ -18,6 +18,7 @@ const IdProductTypes: React.FC<IdProductTypesProps> = ({
   const [selectedSizes, setSelectedSizes] = useState<string[]>(size);
 
   const handleSizeClick = (size: Size) => {
+    
     setSelectedSizes((prevSelectedSizes) => {
       const sizeText = size.text;
       const newSelectedSizes = prevSelectedSizes.includes(sizeText)
@@ -28,6 +29,9 @@ const IdProductTypes: React.FC<IdProductTypesProps> = ({
       handleInputChange({
         target: { name: "size", value: newSelectedSizes.join(",") },
       } as React.ChangeEvent<HTMLSelectElement>);
+
+      console.log(newSelectedSizes);
+      
 
       return newSelectedSizes;
     });

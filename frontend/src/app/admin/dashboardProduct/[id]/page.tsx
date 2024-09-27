@@ -41,10 +41,32 @@ const Page: React.FC = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "size") {
+      // If size is selected, remove any previous selections
+      console.log(value);
+
+      if (value.includes(",")) {
+        const selectedSize = value.split(",");
+        console.log(selectedSize, "==");
+
+        setFormData((prevData) => ({
+          ...prevData,
+          size: selectedSize,
+        }));
+
+        console.log(formData, "=====");
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          size: [value],
+        }));
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleImagesChange = (newImageUrls: string[]) => {
@@ -56,6 +78,9 @@ const Page: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log(formData);
+
     try {
       const response = await api.post("/createProducts", formData);
       setMessage(response.data.message);

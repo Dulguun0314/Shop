@@ -99,9 +99,9 @@ const Product = () => {
 
   return (
     <div className="flex justify-center ">
-      <div className="container flex my-12 h-fit">
-        <div className="grid h-fit gap-12 w-[475px]">
-          <div className="grid h-fit">
+      <div className="container flex my-12  h-screen ">
+        <div className="grid  h-fit gap-12 w-[475px]">
+          <div>
             <p className="text-[16px] font-bold my-4">Ангилал</p>
             <div className="grid gap-1">
               {categories.map((category, index) => (
@@ -141,7 +141,7 @@ const Product = () => {
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-3 grid-rows-5 gap-5 gap-y-10 ">
+        <div className="w-full grid grid-cols-3 grid-flow-row gap-5 gap-y-10 ">
           {filteredProducts.map((product, index) => {
             return (
               <div key={index} className="relative">

@@ -28,26 +28,28 @@ export const ProductCard = ({
       : "h-[450px]";
 
   return (
-    <div className="grid gap-4 relative">
-      <div onClick={() => router.push(`/product/${_id}`)}>
-        <div className="overflow-hidden rounded-2xl hover:border hover:border-black">
-          <div className={`relative cursor-pointer group ${customHeight}`}>
-            <Image
-              src={images[0]} // Assuming you want to display the first image
-              alt={productName}
-              priority
-              fill
-              className="object-cover rounded-md transition-transform duration-700 hover:scale-125"
-            />
+    <div>
+      <div className="grid gap-4 relative">
+        <div onClick={() => router.push(`/product/${_id}`)}>
+          <div className="overflow-hidden rounded-2xl hover:border hover:border-black">
+            <div className={`relative cursor-pointer group ${customHeight}`}>
+              <Image
+                src={images[0]} // Assuming you want to display the first image
+                alt={productName}
+                priority
+                fill
+                className="object-cover rounded-md transition-transform duration-700 hover:scale-125"
+              />
+            </div>
+          </div>
+          <div>
+            <p className="text-[16px]">{productName}</p>
+            <p className="text-[16px] font-bold">{price}</p>
           </div>
         </div>
-        <div>
-          <p className="text-[16px]">{productName}</p>
-          <p className="text-[16px] font-bold">{price}</p>
+        <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
+          <Heart />
         </div>
-      </div>
-      <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
-        <Heart />
       </div>
     </div>
   );

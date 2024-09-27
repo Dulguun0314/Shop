@@ -11,7 +11,6 @@ import { UserProvider } from "./components/utils/AuthProvider";
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
-      
       <body style={{ minHeight: "calc(100vh - 320.5px - 74px)" }}>
         <UserProvider>
           <Header />
