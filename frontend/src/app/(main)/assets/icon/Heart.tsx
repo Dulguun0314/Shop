@@ -4,22 +4,44 @@ import { useState } from "react";
 import { useUser } from "../../components/utils/AuthProvider";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { api } from "@/lib/axios";
 
-const Heart = () => {
+// Define the props type
+interface HeartProps {
+  productId: string; // Assuming productId is a string
+}
+
+// Update the Heart component to use the props
+const Heart: React.FC<HeartProps> = ({ productId }) => {
   const [color, setColor] = useState(false);
   const { user } = useUser();
 
-  const handleHeartClick = () => {
+  const handleHeartClick = async () => {
     if (!user.isAuthenticated) {
       toast.info("Хадгалхын тулд Нэвтэрнэ үү!");
+      return;
+    }
+
+    try {
+      const response = await api.post("/savedProduct", {
+        userId: user.user, // Ensure user.id is available
+        productId: productId,
+      });
+
+      toast.success(response.data.message);
+      setColor(true); // Change color to indicate the product is saved
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save the product");
     }
   };
+
   return (
     <>
       {user && (
         <Link
           href={user.isAuthenticated ? "" : "/login"}
-          onClick={handleHeartClick}
+          onClick={handleHeartClick} // Use the modified handleHeartClick
         >
           <div onClick={() => setColor(!color)}>
             <svg
@@ -27,7 +49,7 @@ const Heart = () => {
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              fill={color ? "bg-black" : "none"}
+              fill={color ? "bg-black" : "none"} // Keep your original fill logic
               className="cursor-pointer"
             >
               <path

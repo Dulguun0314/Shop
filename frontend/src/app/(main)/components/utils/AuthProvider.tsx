@@ -29,6 +29,7 @@ interface UserContextType {
   register: (user: User) => void;
   login: (email: string, password: string) => void;
   logout: () => void; // Function with no arguments
+  updateUser: (userData: Partial<User>) => Promise<void>; // Function for updating user info
 }
 
 const UserContext = createContext<UserContextType>({
@@ -36,6 +37,7 @@ const UserContext = createContext<UserContextType>({
   register: () => {},
   login: () => {},
   logout: () => {},
+  updateUser: async () => {}, // Initialize updateUser
 });
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
@@ -49,7 +51,6 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const { id } = useParams();
   const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
-  // const authPaths = ["/login", "/signup", "/", "/product", `/product/${id}`];
   const authPaths = useMemo(
     () => ["/login", "/signup", "/", "/product", `/product/${id}`],
     [id]
@@ -65,11 +66,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         isAuthenticated: true,
         role: user.role, // Save the role
       });
-      toast.success("Бүртгэл амжилттай!");
 
       // Redirect based on role
       const redirectPath = user.role === "admin" ? "/admin" : "/";
       router.push(redirectPath);
+      toast.success("Бүртгэл амжилттай!");
 
       localStorage.setItem("token", token);
     } catch (error) {
@@ -88,11 +89,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         isAuthenticated: true,
         role: user.role, // Save the role
       });
-      toast.success("Нэвтрэлт амжилттай!");
 
       // Redirect based on role
       const redirectPath = user.role === "admin" ? "/admin" : "/";
       router.push(redirectPath);
+      toast.success("Нэвтрэлт амжилттай!");
 
       localStorage.setItem("token", token);
     } catch (error) {
@@ -104,11 +105,40 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const logout = () => {
     setUser({ user: null, isAuthenticated: false, role: undefined });
 
-    toast.success("Систэмээс гарсан!");
-
     localStorage.removeItem("token");
 
     router.push("/"); // Navigate to home page or login page
+    toast.success("Систэмээс гарсан!");
+  };
+
+  const updateUser = async (userData: Partial<User>) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Та нэвтрэх хэрэгтэй!");
+        return;
+      }
+
+      const response = await api.put("/users/update", userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update the user in the context
+      setUser((prev) => ({
+        ...prev,
+        user: {
+          ...prev.user,
+          ...response.data, // Update with new user data
+        },
+      }));
+
+      toast.success("Мэдээлэл амжилттай шинэчилэгдлээ!");
+    } catch (error) {
+      toast.error("Шинэчлэлийн алдаа гарлаа!");
+      console.error("User update error:", error);
+    }
   };
 
   useEffect(() => {
@@ -152,7 +182,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   if (!isReady) return null;
 
   return (
-    <UserContext.Provider value={{ user, register, login, logout }}>
+    <UserContext.Provider value={{ user, register, login, logout, updateUser }}>
       {children}
     </UserContext.Provider>
   );

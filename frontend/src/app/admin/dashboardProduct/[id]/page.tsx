@@ -9,6 +9,8 @@ import IdProductType from "./IdProductType";
 import IdProductTypes from "./IdProductTypes";
 import IdProductTag from "./IdProductTag";
 import { api } from "@/lib/axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   productName: string;
@@ -22,6 +24,8 @@ interface FormData {
 }
 
 const Page: React.FC = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState<FormData>({
     productName: "",
     price: 0,
@@ -33,8 +37,21 @@ const Page: React.FC = () => {
     productCode: "",
   });
 
-  const [message, setMessage] = useState<string>("");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    console.log(formData);
+
+    try {
+      const response = await api.post("/createProducts", formData);
+      router.push("/admin/dashboardProduct");
+      
+      toast.success("Бүтээгдэхүүн үслээ	");
+    } catch (error) {
+      console.error(error);
+      toast.error("Бүтээгдэхүүн үүсгэхэд алдаа гарлаа");
+    }
+  };
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -74,20 +91,6 @@ const Page: React.FC = () => {
       ...prevData,
       images: [...prevData.images, ...newImageUrls],
     }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    console.log(formData);
-
-    try {
-      const response = await api.post("/createProducts", formData);
-      setMessage(response.data.message);
-    } catch (error) {
-      console.error(error);
-      setMessage("Бүтээгдэхүүн үүсгэхэд алдаа гарлаа");
-    }
   };
 
   return (
@@ -145,7 +148,6 @@ const Page: React.FC = () => {
               Нийтлэх
             </button>
           </div>
-          {message && <div className="mb-4 text-green-500">{message}</div>}
         </div>
       </div>
     </div>

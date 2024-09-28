@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sizes } from "./mockData";
 import StarRating from "../../components/StarRating";
 import OthersComments from "./OthersComment";
 import { useUser } from "../../components/utils/AuthProvider";
@@ -14,8 +13,8 @@ import Heart from "../../assets/icon/Heart";
 type DescriptionProps = {
   id: string;
 };
+
 const ImagesDescription = ({ id }: DescriptionProps) => {
-  const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const plus = () => {
     setCount(count + 1);
   };
@@ -24,8 +23,8 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
       setCount(count - 1);
     }
   };
-  const [slide, setSlide] = useState(false);
 
+  const [slide, setSlide] = useState(false);
   const [count, setCount] = useState(1);
   const { user } = useUser();
   const handleBasketClick = () => {
@@ -38,6 +37,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
       toast.info("Сэтгэгдэл үлээхийн тулд Нэвтэрнэ ");
     }
   };
+
   interface ProductType {
     _id: string;
     productName: string;
@@ -45,14 +45,15 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     qty: number;
     images: [string];
     description: string;
+    size: string[];
   }
+
   const [productsDescription, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
 
   useEffect(() => {
     const getProducts = async () => {
       try {
         const response = await api.get(`/getProductById/${id}`);
-
         setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
       } catch (err: unknown) {
         console.log(err);
@@ -84,28 +85,21 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
               </div>
             );
           })}
-          <Heart />
+          <Heart productId="a" />
         </div>
         <div className="grid h-fit gap-2 my-4">
           <p className="underline underline-offset-4">Хэмжээний заавар</p>
           <div className="flex gap-1">
-            {sizes.map((size, index) => (
-              <div
-                key={index}
-                className={`text-black border border-black w-[32px] h-[32px] rounded-full flex justify-center items-center cursor-pointer ${
-                  selectedSize.text === size.text
-                    ? "bg-black"
-                    : "bg-transparent"
-                }`}
-                onClick={() => setSelectedSize(size)}
-              >
-                <p
-                  className={`${
-                    selectedSize.text === size.text ? "text-white" : ""
-                  }`}
-                >
-                  {size.text}
-                </p>
+            {productsDescription.map((product, index) => (
+              <div key={index} className="flex gap-1">
+                {product.size.map((size, sizeIndex) => (
+                  <div
+                    key={sizeIndex}
+                    className={`text-white border bg-black border-black w-[32px] h-[32px] rounded-full flex items-center justify-center`}
+                  >
+                    {size}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -126,7 +120,13 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
           </div>
         </div>
         <div className="grid h-fit gap-2 pt-4">
-          <p className="text-[20px] font-bold">120’000₮</p>
+          {productsDescription.map((productDescription, index) => {
+            return (
+              <p key={index} className="text-[20px] font-bold">
+                {productDescription.price}₮
+              </p>
+            );
+          })}
           {user && (
             <Link href={`${user.isAuthenticated ? "" : "/login"}`}>
               <button

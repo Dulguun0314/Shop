@@ -8,6 +8,7 @@ import { FaRegUser } from "react-icons/fa";
 
 import { useUser } from "./utils/AuthProvider";
 import { toast } from "react-toastify";
+import SearchDropdown from "./SearchDroptown";
 
 const Header = () => {
   const pathname: string = usePathname();
@@ -69,12 +70,7 @@ const Header = () => {
         </div>
         <div className="flex items-center bg-[#18181B] px-4 py-2 rounded-md gap-4">
           <CiSearch className="text-white w-6 h-6" />
-          <input
-            type="search"
-            name="search"
-            placeholder="Бүтээгдэхүүн хайх"
-            className="text-[#71717A] outline-none bg-[#18181B]"
-          />
+          <SearchDropdown />
         </div>
         <div className="flex items-center gap-6">
           <div className="flex gap-6">

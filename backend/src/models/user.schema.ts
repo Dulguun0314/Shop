@@ -1,6 +1,15 @@
 import { model, Schema } from "mongoose";
 
 const userSchema = new Schema({
+  lastname: {
+    type: String,
+    required: true,
+  },
+  phonenumber: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   username: {
     type: String,
     required: true,
@@ -13,11 +22,21 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
   role: {
     type: String,
-    enum: ["user", "admin"], // Specify roles
-    default: "user", // Default role
+    enum: ["user", "admin"],
+    default: "user",
   },
+  savedProducts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "SavedProduct",
+    },
+  ],
 
   createdAt: {
     type: Date,

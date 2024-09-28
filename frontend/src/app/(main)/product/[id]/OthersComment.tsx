@@ -2,6 +2,7 @@ import StarRating from "../../components/StarRating";
 import { Comments } from "./mockData";
 
 const OthersComments = ({ slide }: { slide: boolean }) => {
+
   return (
     <div
       className={`w-full grid justify-center  gap-6 transition-transform duration-1000 ${

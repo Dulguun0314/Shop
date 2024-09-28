@@ -9,6 +9,7 @@ const productSchema = new Schema({
   size: { type: [String] },
   description: { type: String },
   productCode: { type: String },
+  comments: { type: [String] },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

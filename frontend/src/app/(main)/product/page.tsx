@@ -99,7 +99,7 @@ const Product = () => {
 
   return (
     <div className="flex justify-center ">
-      <div className="container flex my-12  h-screen ">
+      <div className="container flex my-12  h-fit ">
         <div className="grid  h-fit gap-12 w-[475px]">
           <div>
             <p className="text-[16px] font-bold my-4">Ангилал</p>
@@ -167,7 +167,7 @@ const Product = () => {
                   </div>
                 </div>
                 <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
-                  <Heart />
+                  <Heart productId={product._id} />
                 </div>
               </div>
             );
