@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 

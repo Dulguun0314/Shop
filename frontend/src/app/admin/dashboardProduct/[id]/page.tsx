@@ -40,16 +40,21 @@ const Page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Perform validation here if needed
+
     console.log(formData);
 
     try {
       const response = await api.post("/createProducts", formData);
-      router.push("/admin/dashboardProduct");
-      
-      toast.success("Бүтээгдэхүүн үслээ	");
+      if (response.data) {
+        router.push("/admin/dashboardProduct");
+        toast.success("Бүтээгдэхүүн үслээ");
+      } else {
+        throw new Error("No data returned from API");
+      }
     } catch (error) {
       console.error(error);
-      toast.error("Бүтээгдэхүүн үүсгэхэд алдаа гарлаа");
+      toast.error(`Бүтээгдэхүүн үүсгэхэд алдаа гарлаа: `);
     }
   };
   const handleInputChange = (
