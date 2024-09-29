@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import uploadRouter from "./routes/upload.route";
 import categoryRouter from "./routes/category.route";
 import savedProductRouter from "./routes/savedProduct.route";
+import reviewsRouter from "./routes/reviews.route";
 
 dotenv.config(); // Ensure environment variables are loaded
 
@@ -31,6 +32,7 @@ app.use(productGetRouter); // Бүтээгдэхүүн авах (public or use a
 
 app.use(categoryRouter);
 app.use(savedProductRouter);
+app.use(reviewsRouter);
 // Серверийг ажиллуулна
 app.listen(port, () => {
   console.log(`Сервер ${port} порт дээр ажиллаж байна`);

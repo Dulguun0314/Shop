@@ -15,7 +15,7 @@ const ProductCard = () => {
             <ImagesDescription id={id as string} />
           </div>
         </div>
-        <Related />
+        <Related _id={id as string} />
       </div>
     </div>
   );

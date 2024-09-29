@@ -1,1 +1,2 @@
-export * from "./savedProduct.controller";
+export * from "./createSavedProduct.controller";
+export * from "./getSavedProduct.controller";

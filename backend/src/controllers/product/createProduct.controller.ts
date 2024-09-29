@@ -12,7 +12,6 @@ export const createProducts: RequestHandler = async (req, res) => {
       size,
       description,
       productCode,
-      comments,
     } = req.body;
 
     // Create a new product
@@ -24,7 +23,6 @@ export const createProducts: RequestHandler = async (req, res) => {
       productType,
       size,
       description,
-      comments,
       productCode,
     });
 

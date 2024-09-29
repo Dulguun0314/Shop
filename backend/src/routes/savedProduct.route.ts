@@ -1,8 +1,9 @@
 import express from "express";
-import { CreateSavedProduct } from "../controllers";
+import { createSavedProduct, getSavedProducts } from "../controllers";
 
 const savedProductRouter = express.Router();
 
-savedProductRouter.post("/savedProduct", CreateSavedProduct);
-
+savedProductRouter.post("/createSavedProduct", createSavedProduct);
+savedProductRouter.get("/getSavedProduct", getSavedProducts);
+    
 export default savedProductRouter;

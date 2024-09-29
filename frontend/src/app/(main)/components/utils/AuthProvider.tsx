@@ -11,7 +11,7 @@ import { api } from "@/lib/axios";
 import { usePathname, useRouter, useParams } from "next/navigation";
 
 interface User {
-  id?: string;
+  _id: string;
   username?: string;
   email: string;
   password: string;
