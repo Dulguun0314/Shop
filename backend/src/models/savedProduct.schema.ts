@@ -4,12 +4,12 @@ const savedProductSchema = new Schema({
   users: {
     type: [Schema.Types.ObjectId],
     ref: "User",
-    required: true,
+    required: false,
   },
   products: {
     type: [Schema.Types.ObjectId],
     ref: "Product",
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,

@@ -9,12 +9,6 @@ const productSchema = new Schema({
   size: { type: [String] },
   description: { type: String },
   productCode: { type: String },
-  savedProducts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "SavedProduct",
-    },
-  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

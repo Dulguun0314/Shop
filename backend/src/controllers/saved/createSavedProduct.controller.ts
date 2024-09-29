@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { savedProductModel } from "../../models";
 
-// Хадгалсан бүтээгдэхүүн үүсгэх функц
+// Хадгалсан бүтээгдэхүүн үүсгэх
 export const createSavedProduct = async (req: Request, res: Response) => {
   try {
-    const { userId, productId } = req.body;
+    const { users, products } = req.body;
 
-    // Шинэ хадгалсан бүтээгдэхүүн үүсгэх
+    // Шинэ хадгалсан бүтээгдэхүүний баримт бичиг үүсгэх
     const newSavedProduct = new savedProductModel({
-      users: userId,
-      products: productId,
+      users,
+      products,
     });
 
     // Өгөгдлийн санд хадгалах

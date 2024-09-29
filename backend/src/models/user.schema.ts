@@ -26,18 +26,16 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  savedProducts: {
+    type: [Schema.Types.ObjectId],
+    ref: "Product",
+    required: false,
+  },
   role: {
     type: String,
     enum: ["user", "admin"],
     default: "user",
   },
-  savedProducts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "SavedProduct",
-    },
-  ],
-
   createdAt: {
     type: Date,
     required: true,
