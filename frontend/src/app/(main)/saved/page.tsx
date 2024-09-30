@@ -13,15 +13,20 @@ interface SavedProductProps {
 }
 
 const Saved = () => {
-  const [productsaved, setProductsaved] = useState<SavedProductProps[]>([]);
+  const [productSaved, setProductSaved] = useState([] as SavedProductProps);
+  // const [productSaved, setProductSaved] = useState<SavedProductProps[]>([]);
 
   // Fetch saved products when the component mounts
 
   useEffect(() => {
     const savedProduct = async () => {
       try {
-        const response = await api.get("/getSavedProductByUser");
-        setProductsaved(response.data);
+        const response = await api.get("/getSavedProducts");
+        setProductSaved(response.data.savedProducts);
+        console.log(
+          response.data.savedProducts[0].products[0].images[0],
+          "====="
+        );
       } catch (error) {
         console.error("Error fetching saved products:", error);
       }
@@ -31,19 +36,19 @@ const Saved = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="container flex justify-center bg-gray-50">
+      <div className="container flex justify-center bg-gray-50 min-h-screen items-start">
         <div className="grid my-24 p-8">
           <p className="text-xl font-bold">
-            Хадгалсан бараа({productsaved.length})
+            Хадгалсан бараа({productSaved.length})
           </p>
           <div className="grid gap-6">
-            {Array.isArray(productsaved) && productsaved.length > 0 ? (
-              productsaved.map((product, index) => (
+            {Array.isArray(productSaved) && productSaved.length > 0 ? (
+              productSaved[0]?.products?.map((product, index) => (
                 <div key={index} className="my-6">
                   <div className="flex gap-6 border p-4 rounded-xl bg-white">
                     <div className="relative w-[120px] h-[120px]">
                       <Image
-                        src={product.images[0]}
+                        src={product?.images[0]}
                         alt={product.productName}
                         fill
                         className="rounded-xl"

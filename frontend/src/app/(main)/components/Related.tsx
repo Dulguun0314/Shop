@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Heart from "../assets/icon/Heart";
 import { useEffect, useState } from "react";
+import { api } from "@/lib/axios";
 
-interface RelatedProductProps {
+interface RelatedProduct {
   _id: string;
   productName: string;
   price: number;
   images: string[];
-  productType: string; // correct spelling
+  productType: string;
 }
 
 interface RelatedProps {
@@ -19,39 +20,25 @@ interface RelatedProps {
 
 const Related = ({ _id }: RelatedProps) => {
   const router = useRouter();
-  const [relatedProducts, setRelatedProducts] = useState<RelatedProductProps[]>(
-    []
-  );
+  const [relatedProducts, setRelatedProducts] = useState<RelatedProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [productType, setProductType] = useState<string | null>(null); // to store the product type
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       if (_id) {
         try {
-          // Fetch product details
-          const productResponse = await fetch(`/getProducts/${_id}`);
-          if (!productResponse.ok)
-            throw new Error("Failed to fetch product details");
+          const productResponse = await api.get(`/getProductById/${_id}`);
+          const productData = productResponse.data;
 
-          const productData = await productResponse.json();
-          setProductType(productData.type); // Store the product type
-          setRelatedProducts(productData); // Store product details
-
-          // Fetch all related products
-          const relatedResponse = await fetch(
-            `/getRelatedProducts/${productData.type}`
+          const relatedResponse = await api.get(
+            `/getRelatedProducts/${productData.productType}`
           );
-          if (!relatedResponse.ok)
-            throw new Error("Failed to fetch related products");
 
-          const relatedData = await relatedResponse.json();
-          setRelatedProducts((prevProducts) => [
-            ...prevProducts,
-            ...relatedData,
-          ]); // Append related products
+          setRelatedProducts(relatedResponse.data);
         } catch (error) {
           console.error(error);
+          setError("Failed to load related products.");
         } finally {
           setLoading(false);
         }
@@ -62,18 +49,14 @@ const Related = ({ _id }: RelatedProps) => {
   }, [_id]);
 
   if (loading) return <p>Loading...</p>;
-
-  // Filter related products based on productType
-  const filteredRelatedProducts = relatedProducts.filter(
-    (related) => related.productType === productType
-  );
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="flex justify-center mt-12">
       <div className="container">
         <p className="text-[30px] font-bold">Холбоотой бараа</p>
         <div className="w-full grid grid-cols-4 grid-rows-2 gap-5 my-6">
-          {filteredRelatedProducts.slice(0, 8).map((related) => (
+          {relatedProducts.map((related) => (
             <div key={related._id} className="relative">
               <div onClick={() => router.push(`/product/${related._id}`)}>
                 <div className="grid gap-4">
