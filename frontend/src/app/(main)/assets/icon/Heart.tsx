@@ -15,6 +15,7 @@ interface HeartProps {
 const Heart: React.FC<HeartProps> = ({ productId }) => {
   const [color, setColor] = useState(false);
   const { user } = useUser();
+  console.log(user);
 
   const handleHeartClick = async () => {
     if (!user.isAuthenticated) {
@@ -24,9 +25,10 @@ const Heart: React.FC<HeartProps> = ({ productId }) => {
 
     try {
       const response = await api.post("/createSavedProduct", {
-        userId: user.user, // Ensure user.id is available
+        userId: user.user?.user.id, // Ensure user.id is available
         productId: productId,
       });
+      console.log(response);
 
       toast.success(response.data.message);
       setColor(true); // Change color to indicate the product is saved

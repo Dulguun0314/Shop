@@ -37,37 +37,37 @@ const OTP = () => {
             </p>
           </div>
           <Link href={`/restart`}>
-          <form id="otp-form" className="flex w-full justify-center">
-            <input
-              placeholder=""
-              type="number"
-              name="number"
-              maxLength={1}
-              pattern="\d*"
-              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl  border border-[#E4E4E7] rounded-l-md outline-black "
-            />
-            <input
-              placeholder=""
-              type="number"
-              name="number"
-              maxLength={1}
-              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7]  outline-black "
-            />
-            <input
-              placeholder=""
-              type="number"
-              name="number"
-              maxLength={1}
-              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7]  outline-black "
-            />
-            <input
-              placeholder=""
-              type="number"
-              name="number"
-              maxLength={1}
-              className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7] rounded-r-md outline-black "
-            />
-          </form>
+            <form id="otp-form" className="flex w-full justify-center">
+              <input
+                placeholder=""
+                type="number"
+                name="number"
+                maxLength={1}
+                pattern="\d*"
+                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl  border border-[#E4E4E7] rounded-l-md outline-black "
+              />
+              <input
+                placeholder=""
+                type="number"
+                name="number"
+                maxLength={1}
+                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7]  outline-black "
+              />
+              <input
+                placeholder=""
+                type="number"
+                name="number"
+                maxLength={1}
+                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7]  outline-black "
+              />
+              <input
+                placeholder=""
+                type="number"
+                name="number"
+                maxLength={1}
+                className=" w-[56px] h-[64px] px-5 font-semibold text-2xl border border-[#E4E4E7] rounded-r-md outline-black "
+              />
+            </form>
           </Link>
 
           <div>

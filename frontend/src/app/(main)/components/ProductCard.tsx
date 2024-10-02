@@ -48,7 +48,7 @@ export const ProductCard = ({
           </div>
         </div>
         <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
-          <Heart productId={_id} />
+          <Heart productId={_id} initialIsSaved={false} />
         </div>
       </div>
     </div>

@@ -8,7 +8,6 @@ import uploadRouter from "./routes/upload.route";
 import categoryRouter from "./routes/category.route";
 import savedProductRouter from "./routes/savedProduct.route";
 import reviewsRouter from "./routes/reviews.route";
-
 dotenv.config(); // Ensure environment variables are loaded
 
 const app = express();

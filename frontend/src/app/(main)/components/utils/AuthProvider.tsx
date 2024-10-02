@@ -83,6 +83,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     try {
       const response = await api.post("/users/login", { email, password });
       const { token, user } = response.data;
+      console.log(token, user);
 
       setUser({
         user,

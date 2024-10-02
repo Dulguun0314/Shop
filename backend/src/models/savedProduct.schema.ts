@@ -1,8 +1,8 @@
 import { model, Schema } from "mongoose";
 
 const savedProductSchema = new Schema({
-  users: {
-    type: [Schema.Types.ObjectId],
+  user: {
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: false,
   },

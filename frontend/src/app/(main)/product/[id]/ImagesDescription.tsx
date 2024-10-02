@@ -18,6 +18,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
   const plus = () => {
     setCount(count + 1);
   };
+
   const minus = () => {
     if (count > 1) {
       setCount(count - 1);
@@ -27,11 +28,13 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
   const [slide, setSlide] = useState(false);
   const [count, setCount] = useState(1);
   const { user } = useUser();
+
   const handleBasketClick = () => {
     if (!user.isAuthenticated) {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү1");
     }
   };
+
   const handleReviewClick = () => {
     if (!user.isAuthenticated) {
       toast.info("Сэтгэгдэл үлээхийн тулд Нэвтэрнэ ");
@@ -43,7 +46,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     productName: string;
     price: number;
     qty: number;
-    images: [string];
+    images: string[];
     description: string;
     size: string[];
   }
@@ -82,10 +85,14 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
                   {productDescription.productName}
                 </p>
                 {productDescription.description}
+                <Heart
+                  productId={productDescription._id}
+                  initialIsSaved={false}
+                />{" "}
+                {/* Corrected line */}
               </div>
             );
           })}
-          <Heart productId="a" />
         </div>
         <div className="grid h-fit gap-2 my-4">
           <p className="underline underline-offset-4">Хэмжээний заавар</p>
@@ -106,14 +113,14 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
         </div>
         <div className="flex items-center gap-2 mb-6">
           <div
-            className="cursor-pointer border  border-black w-8 h-8 justify-center flex items-center rounded-full"
+            className="cursor-pointer border border-black w-8 h-8 justify-center flex items-center rounded-full"
             onClick={minus}
           >
             <p>-</p>
           </div>
           <div>{count}</div>
           <div
-            className="cursor-pointer border  border-black w-8 h-8 justify-center flex items-center rounded-full"
+            className="cursor-pointer border border-black w-8 h-8 justify-center flex items-center rounded-full"
             onClick={plus}
           >
             <p>+</p>
