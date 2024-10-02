@@ -11,64 +11,52 @@ import { api } from "@/lib/axios";
 import { usePathname, useRouter, useParams } from "next/navigation";
 
 interface User {
-  _id: string;
+  id: string;
   username?: string;
   email: string;
-  password: string;
-  role?: string; // Add role here
+  role?: string;
 }
 
-interface AuthUser {
-  user: User | null;
+interface AuthUser extends User {
   isAuthenticated: boolean;
-  role?: string; // Add role here
+  user?: User;
 }
 
 interface UserContextType {
-  user: AuthUser;
-  register: (user: User) => void;
-  login: (email: string, password: string) => void;
-  logout: () => void; // Function with no arguments
-  updateUser: (userData: Partial<User>) => Promise<void>; // Function for updating user info
+  user: AuthUser | null; // The user object directly
+  register: (user: Omit<User, "password">) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  updateUser: (userData: Partial<User>) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType>({
-  user: { user: null, isAuthenticated: false, role: undefined },
-  register: () => {},
-  login: () => {},
+  user: null,
+  register: async () => {},
+  login: async () => {},
   logout: () => {},
-  updateUser: async () => {}, // Initialize updateUser
+  updateUser: async () => {},
 });
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const [user, setUser] = useState<AuthUser>({
-    user: null,
-    isAuthenticated: false,
-    role: undefined,
-  });
-
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isReady, setIsReady] = useState(false);
   const router = useRouter();
   const { id } = useParams();
-  const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
   const authPaths = useMemo(
     () => ["/login", "/signup", "/", "/product", `/product/${id}`],
     [id]
   );
 
-  const register = async (newUser: User) => {
+  const register = async (newUser: Omit<User, "password">) => {
     try {
       const response = await api.post("/users/register", newUser);
-      const { token, user } = response.data;
+      const { token, user: registeredUser } = response.data;
 
-      setUser({
-        user,
-        isAuthenticated: true,
-        role: user.role, // Save the role
-      });
+      setUser({ ...registeredUser, isAuthenticated: true }); // Set user directly
 
-      // Redirect based on role
-      const redirectPath = user.role === "admin" ? "/admin" : "/";
+      const redirectPath = registeredUser.role === "admin" ? "/admin" : "/";
       router.push(redirectPath);
       toast.success("Бүртгэл амжилттай!");
 
@@ -82,17 +70,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post("/users/login", { email, password });
-      const { token, user } = response.data;
-      console.log(token, user);
+      const { token, user: loggedInUser } = response.data;
 
-      setUser({
-        user,
-        isAuthenticated: true,
-        role: user.role, // Save the role
-      });
+      setUser({ ...loggedInUser, isAuthenticated: true }); // Set user directly
 
-      // Redirect based on role
-      const redirectPath = user.role === "admin" ? "/admin" : "/";
+      const redirectPath = loggedInUser.role === "admin" ? "/admin" : "/";
       router.push(redirectPath);
       toast.success("Нэвтрэлт амжилттай!");
 
@@ -104,11 +86,9 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   };
 
   const logout = () => {
-    setUser({ user: null, isAuthenticated: false, role: undefined });
-
+    setUser(null); // Reset user to null
     localStorage.removeItem("token");
-
-    router.push("/"); // Navigate to home page or login page
+    router.push("/");
     toast.success("Систэмээс гарсан!");
   };
 
@@ -126,13 +106,9 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         },
       });
 
-      // Update the user in the context
       setUser((prev) => ({
         ...prev,
-        user: {
-          ...prev.user,
-          ...response.data, // Update with new user data
-        },
+        ...response.data, // Update with new user data
       }));
 
       toast.success("Мэдээлэл амжилттай шинэчилэгдлээ!");
@@ -154,13 +130,9 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser({
-          user: res.data,
-          isAuthenticated: true,
-          role: res.data.role, // Save the role
-        });
+        setUser({ ...res.data, isAuthenticated: true }); // Set user directly
       } catch (err) {
-        console.log(err);
+        console.error("User loading error:", err);
         localStorage.removeItem("token");
       } finally {
         setIsReady(true);
@@ -173,7 +145,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (authPaths.includes(pathname)) return;
     if (!isReady) return;
-    if (!user.user) {
+    if (!user) {
       router.replace("/login");
     } else if (user.role === "admin" && pathname !== "/admin") {
       router.replace("/"); // Redirect admin users to admin dashboard

@@ -40,12 +40,12 @@ const Header = () => {
     },
   ];
   const handleShopClick = () => {
-    if (!user.isAuthenticated) {
+    if (!user?.isAuthenticated) {
       toast.info("Сагсалсан бараагаа харахын тулд Нэвтэрнэ үү!");
     }
   };
   const handleSaveClick = () => {
-    if (!user.isAuthenticated) {
+    if (!user?.isAuthenticated) {
       toast.info("Хадгалсан  бараагаа харахын тулд Нэвтэрнэ үү!");
     }
   };
@@ -93,7 +93,7 @@ const Header = () => {
           </div>
 
           <div className="flex gap-2">
-            {!user.isAuthenticated && (
+            {!user?.isAuthenticated && (
               <>
                 {userPaths.map((path, index) => {
                   return (
@@ -111,7 +111,7 @@ const Header = () => {
                 })}
               </>
             )}
-            {user.isAuthenticated && (
+            {user?.isAuthenticated && (
               <Link href={`/userInfo`}>
                 <p className="text-white my-2">
                   <FaRegUser />

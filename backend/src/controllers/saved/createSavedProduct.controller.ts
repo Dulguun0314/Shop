@@ -4,46 +4,22 @@ import { savedProductModel } from "../../models";
 // Хадгалсан бүтээгдэхүүн үүсгэх
 export const createSavedProduct = async (req: Request, res: Response) => {
   try {
-    const { userId, productId } = req.body;
+    const { userId, productId }: { userId: string; productId: string } =
+      req.body;
 
-    // Хэрэглэгчийн хадгалсан бүтээгдэхүүнийг олох
-    const savedProduct = await savedProductModel.findOne({ userId });
+    // Хэрэглэгчийн хадгалсан бүтээгдэхүүнд шинэ бүтээгдэхүүн нэмэх
+    const savedProduct = await savedProductModel.findOneAndUpdate(
+      { user: userId }, // Хэрэглэгчийн ID-ийг олох
+      { $addToSet: { products: productId } }, // Бүтээгдэхүүнийг нэмэх
+      { new: true, upsert: true } // Шинэ баримт бичиг үүсгэх эсвэл шинэчлэх
+    );
 
-    if (savedProduct) {
-      // Хэрвээ savedProduct.products undefined эсвэл null байвал шинэ массив үүсгэх
-      if (!savedProduct.products) {
-        savedProduct.products = [];
-      }
-
-      // Хэрэглэгчийн хадгалсан бүтээгдэхүүнд шинэ бүтээгдэхүүн нэмэх
-      if (!savedProduct.products.includes(productId)) {
-        savedProduct.products.push(productId);
-        await savedProduct.save();
-        return res.status(200).json({
-          message: "Бүтээгдэхүүн амжилттай нэмэгдлээ",
-          savedProduct,
-        });
-      } else {
-        return res.status(400).json({
-          message: "Энэ бүтээгдэхүүн аль хэдийн хадгалагдсан байна.",
-        });
-      }
-    } else {
-      // Шинэ хадгалсан бүтээгдэхүүний баримт бичиг үүсгэх
-      const newSavedProduct = new savedProductModel({
-        user: userId,
-        products: [productId],
-      });
-
-      // Өгөгдлийн санд хадгалах
-      const createdSavedProduct = await newSavedProduct.save();
-      console.log(createdSavedProduct);
-
-      return res.status(201).json({
-        message: "Бүтээгдэхүүн амжилттай хадгалагдлаа",
-        savedProduct: createdSavedProduct,
-      });
-    }
+    return res.status(savedProduct ? 200 : 201).json({
+      message: savedProduct
+        ? "Бүтээгдэхүүн амжилттай нэмэгдлээ"
+        : "Бүтээгдэхүүн амжилттай хадгалагдлаа",
+      savedProduct,
+    });
   } catch (error) {
     // error нь unknown төрлийн байгаа тул шалгах шаардлагатай
     if (error instanceof Error) {
