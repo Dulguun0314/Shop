@@ -45,7 +45,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const { id } = useParams();
   const pathname = usePathname();
   const authPaths = useMemo(
-    () => ["/login", "/signup", "/", "/product", `/product/${id}`],
+    () => ["/login", "/signup", "/", "/product", `/product/${id}`, "/saved"],
     [id]
   );
 

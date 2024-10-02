@@ -1,0 +1,14 @@
+.filled-star,
+.empty-star {
+  font-size: 24px; /* Set the font size to 24px */
+  line-height: 24px; /* Ensure line height matches font size for vertical alignment */
+  cursor: pointer; /* Change cursor to pointer when hovering over stars */
+}
+
+.filled-star {
+  color: #FDE047; /* Color for filled stars */
+}
+
+.empty-star {
+  color: gray; /* Color for empty stars */
+}

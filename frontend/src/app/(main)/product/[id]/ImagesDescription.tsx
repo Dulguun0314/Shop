@@ -30,13 +30,13 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
   const { user } = useUser();
 
   const handleBasketClick = () => {
-    if (!user.isAuthenticated) {
+    if (!user?.isAuthenticated) {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү1");
     }
   };
 
   const handleReviewClick = () => {
-    if (!user.isAuthenticated) {
+    if (!user?.isAuthenticated) {
       toast.info("Сэтгэгдэл үлээхийн тулд Нэвтэрнэ ");
     }
   };
@@ -49,6 +49,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     images: string[];
     description: string;
     size: string[];
+    averageRating: number; // Assuming your API provides this
   }
 
   const [productsDescription, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
@@ -80,16 +81,14 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
         <div className="flex gap-2 items-start my-2">
           {productsDescription.map((productDescription, index) => {
             return (
-              <div key={index}>
-                <p className="text-2xl font-semibold">
-                  {productDescription.productName}
-                </p>
-                {productDescription.description}
-                <Heart
-                  productId={productDescription._id}
-                  initialIsSaved={false}
-                />{" "}
-                {/* Corrected line */}
+              <div key={index} className="flex gap-2">
+                <div>
+                  <p className="text-2xl font-semibold">
+                    {productDescription.productName}
+                  </p>
+                  {productDescription.description}
+                </div>
+                <Heart productId={productDescription._id} />
               </div>
             );
           })}
@@ -146,7 +145,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
           )}
         </div>
         <div className="mt-[60px]">
-          <Link href={`${user.isAuthenticated ? "" : "/login"}`}>
+          <Link href={`${user?.isAuthenticated ? "" : "/login"}`}>
             <div className="flex gap-4" onClick={handleReviewClick}>
               <p>Үнэлгээ</p>
               <p
@@ -158,9 +157,14 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
             </div>
           </Link>
         </div>
-        <StarRating totalStars={5} />
+        {productsDescription.length > 0 && (
+          <StarRating
+            totalStars={5}
+            rating={productsDescription[0].averageRating}
+          />
+        )}
       </div>
-      <OthersComments slide={slide} />
+      <OthersComments slide={slide} productId={productsDescription[0]?._id} />
     </>
   );
 };

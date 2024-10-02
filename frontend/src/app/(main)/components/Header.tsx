@@ -44,11 +44,6 @@ const Header = () => {
       toast.info("Сагсалсан бараагаа харахын тулд Нэвтэрнэ үү!");
     }
   };
-  const handleSaveClick = () => {
-    if (!user?.isAuthenticated) {
-      toast.info("Хадгалсан  бараагаа харахын тулд Нэвтэрнэ үү!");
-    }
-  };
 
   return (
     <div className="container w-fit">
@@ -74,14 +69,9 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-6">
           <div className="flex gap-6">
-            {user && (
-              <Link
-                href={`${user.isAuthenticated ? "/saved" : "/login"}`}
-                onClick={handleSaveClick}
-              >
-                <CiHeart className="text-white w-6 h-6" />
-              </Link>
-            )}
+            <Link href={`/saved`}>
+              <CiHeart className="text-white w-6 h-6" />
+            </Link>
             {user && (
               <Link
                 href={`${user.isAuthenticated ? "/basket" : "/login"}`}

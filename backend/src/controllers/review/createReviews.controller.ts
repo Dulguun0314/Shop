@@ -17,7 +17,7 @@ export const createReview = async (
 
     // Create a new review
     const newReview = await reviewsModel.create({
-      userId,
+      userId  ,
       productId,
       comment,
       rating,

@@ -1,57 +1,62 @@
-"use client";
-
-import { useState } from "react";
+import React, { useState } from "react";
+import "./StarRating.css"; // Adjust this path according to your project structure
 
 interface StarRatingProps {
-  totalStars?: number;
-  initialRating?: number;
-  numRatings?: number;
+  totalStars: number;
+  rating?: number; // Add optional rating prop
+  readOnly?: boolean;
+  onRatingChange?: (rating: number) => void;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({
-  totalStars = 5,
-  initialRating = 0,
-  numRatings = 1,
+  totalStars,
+  rating = 0,
+  readOnly = false,
+  onRatingChange,
 }) => {
-  const [rating, setRating] = useState<number>(initialRating);
+  const [hoveredRating, setHoveredRating] = useState<number | null>(null);
+  const [currentRating, setCurrentRating] = useState<number>(rating); // State to keep track of selected rating
 
-  // Calculate the average rating based on the total rating and number of ratings
-  const averageRating = numRatings > 0 ? rating / numRatings : 0;
-
-  const handleClick = (value: number) => {
-    setRating(value);
+  const handleMouseEnter = (index: number) => {
+    if (!readOnly) {
+      setHoveredRating(index + 1);
+    }
   };
 
-  // Calculate percentage based on the rating
-  const ratingPercentage = (averageRating / totalStars) * 100;
+  const handleMouseLeave = () => {
+    setHoveredRating(null);
+  };
+
+  const handleClick = (index: number) => {
+    if (!readOnly && onRatingChange) {
+      setCurrentRating(index + 1); // Update the current rating state
+      onRatingChange(index + 1); // Notify the parent component of the new rating
+    }
+  };
 
   return (
-    <div className="flex">
-      <div className="flex">
-        {[...Array(totalStars)].map((_, index) => {
-          const starValue = index + 1;
-          return (
-            <svg
-              key={index}
-              className={`w-6 h-6 cursor-pointer transition-colors duration-200 ${
-                starValue <= Math.ceil(averageRating)
-                  ? "text-yellow-400"
-                  : "text-gray-300"
-              }`}
-              onClick={() => handleClick(starValue)}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              stroke="none"
-            >
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </svg>
-          );
-        })}
-      </div>
-      <p className="text-gray-700 font-semibold">
-        Average Rating: {ratingPercentage.toFixed(1)}%
-      </p>
+    <div>
+      {[...Array(totalStars)].map((_, index) => {
+        // Use the hovered rating if it exists, otherwise use the current rating
+        const displayRating =
+          hoveredRating !== null ? hoveredRating : currentRating;
+
+        return (
+          <span
+            key={index}
+            className={index < displayRating ? "filled-star" : "empty-star"}
+            onClick={() => handleClick(index)}
+            onMouseEnter={() => handleMouseEnter(index)}
+            onMouseLeave={handleMouseLeave}
+            role="button"
+            aria-label={`Rate ${index + 1} star${index + 1 > 1 ? "s" : ""}`}
+            tabIndex={0}
+            onKeyPress={(e) => e.key === "Enter" && handleClick(index)} // Allow keyboard interaction
+          >
+            ★
+          </span>
+        );
+      })}
     </div>
   );
 };

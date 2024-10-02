@@ -1,28 +1,49 @@
 import { Request, Response } from "express";
 import { savedProductModel } from "../../models";
 
-// Remove saved product controller
-export const removeSavedProduct = async (req: Request, res: Response) => {
-  const { user, productId } = req.body; // Extract user ID and product ID from the request body
+// Remove saved product by product ID for a specific user
+export const removeSavedProduct = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { userId, productId } = req.body; // Extract user ID and product ID from the request body
 
   // Validate input
-  if (!user || !productId) {
+  if (!userId || !productId) {
     return res
       .status(400)
       .json({ message: "User ID and Product ID are required." });
   }
 
   try {
-    // Find and remove the saved product from the database
-    const result = await savedProductModel.findOneAndDelete({
-      user: user,
-      productId: productId,
-    });
+    // Find the saved product for the user
+    const savedProduct = await savedProductModel.findOne({ user: userId });
 
-    // Check if the product was found and deleted
-    if (!result) {
-      return res.status(404).json({ message: "Saved product not found." });
+    // Check if the saved product exists
+    if (!savedProduct) {
+      return res.status(404).json({ message: "Saved products not found." });
     }
+
+    // Check if the products array exists and is not null
+    if (!savedProduct.products || savedProduct.products.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No products found in saved products." });
+    }
+
+    // Check if the productId exists in the products array
+    const productIndex = savedProduct.products.indexOf(productId);
+    if (productIndex === -1) {
+      return res
+        .status(404)
+        .json({ message: "Product ID not found in saved products." });
+    }
+
+    // Remove the productId from the products array
+    savedProduct.products.splice(productIndex, 1);
+
+    // Save the updated document
+    await savedProduct.save();
 
     // Respond with success message
     return res

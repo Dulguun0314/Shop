@@ -167,7 +167,7 @@ const Product = () => {
                   </div>
                 </div>
                 <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
-                  <Heart productId={product._id} initialIsSaved={true} />
+                  <Heart productId={product._id} />
                 </div>
               </div>
             );

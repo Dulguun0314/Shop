@@ -1,45 +1,105 @@
+import { useEffect, useState } from "react";
 import StarRating from "../../components/StarRating";
-import { Comments } from "./mockData";
+import { api } from "@/lib/axios";
+import { useUser } from "../../components/utils/AuthProvider";
+import { toast } from "react-toastify";
 
-const OthersComments = ({ slide }: { slide: boolean }) => {
+interface CommentsProps {
+  slide: boolean;
+  productId: string;
+}
+interface GetComments {
+  user: {
+    user: {
+      username: string;
+    };
+  };
+  rating: number;
+  comment: string;
+}
+
+const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+  const { user } = useUser();
+  const [getComment, setGetComment] = useState<GetComments[]>([]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await api.post("/createReview", {
+        userId: user?.user?.id,
+        productId: productId, // Fixed typo here
+        comment,
+        rating,
+      });
+      // console.log(response.user?.user?.username);
+
+      console.log("Review created:", response.data);
+      setComment("");
+      setRating(0); // Reset rating after submission
+      window.location.reload();
+      toast.success("Сэтгэгдэл амжилттай үүлслээ");
+    } catch (error) {
+      console.log("Error submitting review:", error);
+    }
+  };
+  const getComments = async () => {
+    try {
+      const response = await api.get("/getReviews");
+      setGetComment(response.data);
+    } catch (error) {
+      console.log("Error getting comments:", error);
+    }
+  };
+  useEffect(() => {
+    getComments();
+  }, []);
 
   return (
     <div
-      className={`w-full grid justify-center  gap-6 transition-transform duration-1000 ${
+      className={`w-full grid justify-center gap-6 transition-transform duration-1000 ${
         slide ? "visible" : "hidden"
-      } duration-1000`}
+      }`}
     >
-      <div className="grid gap-4 ">
-        {Comments.map((comment, index) => {
-          return (
-            <div key={index} h-fit>
-              <div className="flex gap-2">
-                <p className="text-black font-medium">{comment.name}</p>
-                <StarRating totalStars={5} />
-              </div>
-              <p className="text-[#71717A]">{comment.text}</p>
-              <div className="w-full h-1 border-t border-dashed border-[#E4E4E7] mt-5"></div>
+      <div className="grid gap-4">
+        {getComment.map((getComment, index) => (
+          <div key={index} className="h-fit">
+            <div className="flex gap-2">
+              <p className="text-black font-medium">
+                {getComment.user?.user?.username}
+              </p>
+              <StarRating totalStars={5} rating={getComment.rating} readOnly />
             </div>
-          );
-        })}
+            <p className="text-[#71717A]">{getComment.comment}</p>
+            <div className="w-full h-1 border-t border-dashed border-[#E4E4E7] mt-5"></div>
+          </div>
+        ))}
       </div>
-      <div className="bg-[#F4F4F5] p-6 grid h-fit gap-6 rounded-lg ">
+      <div className="bg-[#F4F4F5] p-6 grid h-fit gap-6 rounded-lg">
         <div>
           <p>Одоор үнэлэх:</p>
-          <StarRating totalStars={5} />
+          <StarRating totalStars={5} onRatingChange={setRating} />
+          {/* Enable rating selection */}
         </div>
         <div className="grid gap-1">
           <p>Сэтгэгдэл үлдээх:</p>
           <input
-            type="text "
+            type="text"
             placeholder="Энд бичнэ үү"
-            name="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             className="w-[450px] px-3 py-1 pb-[80px] outline-none rounded-md"
           />
         </div>
-        <div className="bg-[#2563EB] rounded-[20px] w-fit text-white ">
+
+        <button
+          className="bg-[#2563EB] rounded-[20px] w-fit text-white"
+          onClick={handleSubmit}
+        >
           <p className="px-9 py-2">Үнэлэх</p>
-        </div>
+        </button>
       </div>
     </div>
   );

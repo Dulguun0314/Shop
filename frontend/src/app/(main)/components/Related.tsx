@@ -79,7 +79,7 @@ const Related = ({ _id }: RelatedProps) => {
                 </div>
               </div>
               <div className="absolute top-4 right-4 overflow-hidden cursor-pointer">
-                <Heart productId={related._id} initialIsSaved={false} />
+                <Heart productId={related._id} />
               </div>
             </div>
           ))}
