@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CiSearch } from "react-icons/ci";
@@ -9,11 +10,12 @@ import { FaRegUser } from "react-icons/fa";
 import { useUser } from "./utils/AuthProvider";
 import { toast } from "react-toastify";
 import SearchDropdown from "./SearchDroptown";
+import { useProduct } from "./utils/ProductProvider";
 
 const Header = () => {
   const pathname: string = usePathname();
   const { user } = useUser(); // Аутентификацийн төлөвийг авах
-
+  const { products: productSaved } = useProduct();
   interface Path {
     name: string;
     path: string;
@@ -70,14 +72,30 @@ const Header = () => {
         <div className="flex items-center gap-6">
           <div className="flex gap-6">
             <Link href={`/saved`}>
-              <CiHeart className="text-white w-6 h-6" />
+              <div className="relative">
+                <CiHeart className="text-white w-6 h-6" />
+                <div
+                  className={`bg-blue-500 w-3 h-3 rounded-full text-white absolute -top-0.5 -right-0.5 ${
+                    productSaved?.length === 0 ? "hidden" : "visible"
+                  } `}
+                >
+                  <p
+                    className={`text-[10px] flex items-center justify-center `}
+                  >
+                    {productSaved?.length}
+                  </p>
+                </div>
+              </div>
             </Link>
             {user && (
               <Link
                 href={`${user.isAuthenticated ? "/basket" : "/login"}`}
                 onClick={handleShopClick}
               >
-                <PiShoppingCartSimple className="text-white w-6 h-6" />
+                <div className="relative">
+                  <PiShoppingCartSimple className="text-white w-6 h-6" />
+                  <div className="bg-blue-500 w-3 h-3 rounded-full text-white absolute -top-0.5 -right-0.5"></div>
+                </div>
               </Link>
             )}
           </div>

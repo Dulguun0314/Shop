@@ -28,7 +28,7 @@ const Heart: React.FC<HeartProps> = ({ productId }) => {
       }
     };
     fetchSavedStatus();
-  }, [user, productId]);
+  }, [user, productId, isSaved]);
 
   const handleHeartClick = async (e: React.MouseEvent) => {
     e.preventDefault();

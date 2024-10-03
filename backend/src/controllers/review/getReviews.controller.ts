@@ -10,7 +10,7 @@ export const getReviews: RequestHandler = async (req, res) => {
 
     const reviews = await reviewsModel
       .find(filter)
-      .populate("userId", "name email") // Modify populated fields as needed
+      .populate("userId", "username") // Modify populated fields as needed
       .populate("productId", "name price")
       .exec();
 

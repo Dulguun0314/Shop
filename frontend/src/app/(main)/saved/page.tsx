@@ -1,36 +1,14 @@
 "use client";
-import { api } from "@/lib/axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import Heart from "../assets/icon/Heart";
+import { useProduct } from "../components/utils/ProductProvider";
 
 // Define Product interface
-interface ProductProps {
-  _id: string;
-  images: string[];
-  productName: string;
-  price: string;
-}
 
 // Define SavedProductProps interface
 
 const Saved = () => {
-  const [productSaved, setProductSaved] = useState<ProductProps[]>([]); // Change the state type here
-
-  // Fetch saved products when the component mounts
-  useEffect(() => {
-    const fetchSavedProducts = async () => {
-      try {
-        const response = await api.get("/getSavedProducts");
-        // Adjust the data assignment based on your actual API response structure
-        const savedProducts = response.data.savedProducts[0]?.products || [];
-        setProductSaved(savedProducts);
-      } catch (error) {
-        console.error("Error fetching saved products:", error);
-      }
-    };
-    fetchSavedProducts();
-  }, []);
+  const { products: productSaved } = useProduct();
 
   return (
     <div className="flex justify-center">
@@ -51,14 +29,17 @@ const Saved = () => {
                           src={product.images[0]}
                           alt={product.productName}
                           fill
-                          className="rounded-xl"
+                          className="rounded-xl object-cover"
                         />
                       </div>
-                      <div>
+                      <div className="">
                         <p className="text-[20px] font-medium">
                           {product.productName}
                         </p>
                         <p className="text-[16px] font-bold">{product.price}</p>
+                        <button className="bg-[#2563EB] rounded-2xl px-4 py-2 text-white h-fit w-fit mt-2">
+                          Сагслах
+                        </button>
                       </div>
                     </div>
                     <div className="flex items-center">

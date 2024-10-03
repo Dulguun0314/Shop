@@ -9,10 +9,8 @@ interface CommentsProps {
   productId: string;
 }
 interface GetComments {
-  user: {
-    user: {
-      username: string;
-    };
+  userId: {
+    username: string;
   };
   rating: number;
   comment: string;
@@ -34,12 +32,10 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
         comment,
         rating,
       });
-      // console.log(response.user?.user?.username);
 
       console.log("Review created:", response.data);
       setComment("");
       setRating(0); // Reset rating after submission
-      window.location.reload();
       toast.success("Сэтгэгдэл амжилттай үүлслээ");
     } catch (error) {
       console.log("Error submitting review:", error);
@@ -55,7 +51,7 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
   };
   useEffect(() => {
     getComments();
-  }, []);
+  }, [comment, rating]);
 
   return (
     <div
@@ -68,7 +64,7 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
           <div key={index} className="h-fit">
             <div className="flex gap-2">
               <p className="text-black font-medium">
-                {getComment.user?.user?.username}
+                {getComment.userId?.username}
               </p>
               <StarRating totalStars={5} rating={getComment.rating} readOnly />
             </div>
