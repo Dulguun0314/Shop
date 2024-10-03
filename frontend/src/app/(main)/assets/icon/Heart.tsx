@@ -1,77 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useUser } from "../../components/utils/AuthProvider";
-import { toast } from "react-toastify";
-import { api } from "@/lib/axios";
+import { useSaved } from "../../components/utils/SavedProvider";
 
 interface HeartProps {
   productId: string;
 }
 
 const Heart: React.FC<HeartProps> = ({ productId }) => {
-  const [isSaved, setIsSaved] = useState(false);
-  const { user } = useUser();
-
-  // Fetch saved status on component mount
-  useEffect(() => {
-    const fetchSavedStatus = async () => {
-      if (user?.user?.id) {
-        try {
-          const response = await api.get(
-            `/checkSavedProduct/${user.user.id}/${productId}`
-          );
-          setIsSaved(response.data.isSaved);
-        } catch (error) {
-          console.error("Failed to check saved product status", error);
-        }
-      }
-    };
-    fetchSavedStatus();
-  }, [user, productId, isSaved]);
-
-  const handleHeartClick = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    if (!user) {
-      toast.error("You need to be logged in to save products.");
-      return;
-    }
-
-    try {
-      // Optimistically update the state
-      const newIsSaved = !isSaved;
-      setIsSaved(newIsSaved);
-
-      if (newIsSaved) {
-        const response = await api.post("/createSavedProduct", {
-          userId: user?.user?.id,
-          productId,
-        });
-        toast.success(response.data.message);
-      } else {
-        const response = await api.post("/removeSavedProduct", {
-          userId: user?.user?.id,
-          productId,
-        });
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update saved product status");
-      // Revert state if there was an error
-      setIsSaved(isSaved); // Reset to previous state
-    }
-  };
+  const { savedStatus, handleHeartClick } = useSaved();
 
   return (
     <svg
-      onClick={handleHeartClick}
+      onClick={() => handleHeartClick(productId)} // Pass productId to handleHeartClick
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      fill={isSaved ? "black" : "none"} // Change fill based on isSaved state
+      fill={savedStatus[productId] ? "black" : "none"} // Use productId to check status
       className="cursor-pointer"
     >
       <path

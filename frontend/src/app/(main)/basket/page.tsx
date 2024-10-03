@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
+import { useProduct } from "../components/utils/ProductProvider";
 
 const Basket = () => {
   const Baskets: BasketType[] = [
@@ -36,8 +37,8 @@ const Basket = () => {
     price: number | string;
     icon: JSX.Element;
   }
-  // Initialize state with counts for each basket item
-  const [counts, setCounts] = useState(Array(Baskets.length).fill(1));
+  const { products } = useProduct();
+  const [counts, setCounts] = useState(Array(products.length).fill(1));
 
   const handlePlus = (index: number) => {
     const newCounts = [...counts];

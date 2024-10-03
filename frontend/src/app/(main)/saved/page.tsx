@@ -1,14 +1,17 @@
 "use client";
 import Image from "next/image";
 import Heart from "../assets/icon/Heart";
-import { useProduct } from "../components/utils/ProductProvider";
-
-// Define Product interface
-
-// Define SavedProductProps interface
+import { useSaved } from "../components/utils/SavedProvider";
+import { useProduct } from "../components/utils/ProductProvider"; // Import the ProductProvider
 
 const Saved = () => {
-  const { products: productSaved } = useProduct();
+  const { products: productSaved } = useSaved();
+  const { handleUpdateBasket } = useProduct(); // Destructure handleUpdateBasket from ProductProvider
+
+  // Function to handle adding product to basket
+  const addToBasket = async (productId: string) => {
+    await handleUpdateBasket(productId); // Call the handleUpdateBasket function
+  };
 
   return (
     <div className="flex justify-center">
@@ -32,12 +35,15 @@ const Saved = () => {
                           className="rounded-xl object-cover"
                         />
                       </div>
-                      <div className="">
+                      <div>
                         <p className="text-[20px] font-medium">
                           {product.productName}
                         </p>
                         <p className="text-[16px] font-bold">{product.price}</p>
-                        <button className="bg-[#2563EB] rounded-2xl px-4 py-2 text-white h-fit w-fit mt-2">
+                        <button
+                          className="bg-[#2563EB] rounded-2xl px-4 py-2 text-white h-fit w-fit mt-2"
+                          onClick={() => addToBasket(product._id)} // Call the function on button click
+                        >
                           Сагслах
                         </button>
                       </div>

@@ -10,12 +10,12 @@ import { FaRegUser } from "react-icons/fa";
 import { useUser } from "./utils/AuthProvider";
 import { toast } from "react-toastify";
 import SearchDropdown from "./SearchDroptown";
-import { useProduct } from "./utils/ProductProvider";
+import { useSaved } from "./utils/SavedProvider";
 
 const Header = () => {
   const pathname: string = usePathname();
   const { user } = useUser(); // Аутентификацийн төлөвийг авах
-  const { products: productSaved } = useProduct();
+  const { products: productSaved } = useSaved();
   interface Path {
     name: string;
     path: string;

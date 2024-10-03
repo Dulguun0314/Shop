@@ -1,4 +1,6 @@
-import { api } from "@/lib/axios";
+"use client";
+
+import { api } from "@/lib/axios"; // Ensure this imports the correct Axios instance
 import {
   createContext,
   PropsWithChildren,
@@ -7,112 +9,78 @@ import {
   useState,
 } from "react";
 import { toast } from "react-toastify";
-import { useUser } from "./AuthProvider";
 
-// Interface for the product
 interface Product {
-  _id: string;
-  images: string[];
-  productName: string;
-  price: string;
+  _id: string; // Product ID
 }
 
-// Interface for Product Context
 interface ProductContextType {
-  products: Product[];
-  getSavedProduct: (product: Product) => void;
-  handleHeartClick: (productId: string) => void; // Added handleHeartClick
-  isProductSaved: (productId: string) => boolean; // Helper to check product save status
+  products: Product[]; // Array of products
+  productIdToAdd: string;
+  setProductIdToAdd: (id: string) => void; // Function to set the product ID
+  handleUpdateBasket: (id: string) => Promise<void>; // Function to update the basket
+  isLoading: boolean; // Loading state for fetching products
 }
 
-// Create the ProductContext
-const ProductContext = createContext<ProductContextType>(
-  {} as ProductContextType
-);
+const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-// ProductProvider component
 export const ProductProvider = ({ children }: PropsWithChildren) => {
-  const [productSaved, setProductSaved] = useState<Product[]>([]);
-  const [savedStatus, setSavedStatus] = useState<{ [key: string]: boolean }>(
-    {}
-  );
-  const { user } = useUser();
+  const [products, setProducts] = useState<Product[]>([]); // State to hold products
+  const [productIdToAdd, setProductIdToAdd] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
-  // Fetch saved products when the component mounts
-  useEffect(() => {
-    const fetchSavedProducts = async () => {
-      try {
-        const response = await api.get("/getSavedProducts");
-        const savedProducts = response.data.savedProducts[0]?.products || [];
-        setProductSaved(savedProducts);
+  // Function to fetch products
+  console.log(products);
 
-        // Map to store saved status for each product
-        const status = savedProducts.reduce(
-          (acc: Record<string, boolean>, product: Product) => {
-            acc[product._id] = true;
-            return acc;
-          },
-          {}
-        );
-        setSavedStatus(status);
-      } catch (error) {
-        console.error("Error fetching saved products:", error);
-      }
-    };
-    fetchSavedProducts();
-  }, [user]);
-
-  // Check if the product is saved by the user
-  const isProductSaved = (productId: string) => {
-    return savedStatus[productId] || false;
-  };
-
-  // Handle heart click for saving/removing product
-  const handleHeartClick = async (productId: string) => {
-    if (!user) {
-      toast.error("You need to be logged in to save products.");
-      return;
-    }
-
-    const newIsSaved = !isProductSaved(productId);
-    setSavedStatus((prevStatus) => ({
-      ...prevStatus,
-      [productId]: newIsSaved,
-    }));
-
+  const fetchProducts = async () => {
+    setIsLoading(true); // Set loading to true
     try {
-      if (newIsSaved) {
-        const response = await api.post("/createSavedProduct", {
-          userId: user.id,
-          productId,
-        });
-        toast.success(response.data.message);
-      } else {
-        const response = await api.post("/removeSavedProduct", {
-          userId: user.id,
-          productId,
-        });
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      console.error("Failed to update saved product status", error);
-      toast.error("Failed to update saved product status");
-      // Revert state if there was an error
-      setSavedStatus((prevStatus) => ({
-        ...prevStatus,
-        [productId]: !newIsSaved,
-      }));
+      const response = await api.get<Product[]>("/getProducts"); // Adjust this endpoint as needed
+      setProducts(response.data);
+    } catch (error: any) {
+      console.error("Error fetching products:", error.message || error);
+      toast.error("Failed to fetch products");
+    } finally {
+      setIsLoading(false); // Set loading to false after fetch
     }
   };
+
+  // Function to handle updating the basket
+  const handleUpdateBasket = async (_id: string) => {
+    try {
+      const response = await api.put(`/updateProducts/${_id}`, {
+        basket: [{ productId: _id }],
+      });
+      setProductIdToAdd(productIdToAdd); // Reset the productIdToAdd after updating
+      toast.success("Product updated successfully!");
+    } catch (error: any) {
+      if (error.response) {
+        // Server responded with a status code different from 2xx
+        toast.error(`Failed to update product: ${error.response.data.message}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        toast.error("Failed to update product: No response from server");
+      } else {
+        // Something else caused the error
+        toast.error(`Failed to update product: ${error.message}`);
+      }
+      console.error("Error updating product:", error);
+    }
+  };
+
+  // Fetch products when the component mounts
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <ProductContext.Provider
       value={{
-        products: productSaved,
-        getSavedProduct: (product: Product) =>
-          setProductSaved((prevProducts) => [...prevProducts, product]),
-        handleHeartClick,
-        isProductSaved,
+        products,
+        productIdToAdd,
+        setProductIdToAdd,
+        handleUpdateBasket,
+        isLoading, // Provide loading state
       }}
     >
       {children}
@@ -120,5 +88,10 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-// Custom hook to use the ProductContext
-export const useProduct = () => useContext(ProductContext);
+export const useProduct = () => {
+  const context = useContext(ProductContext);
+  if (context === undefined) {
+    throw new Error("useProduct must be used within a ProductProvider");
+  }
+  return context;
+};

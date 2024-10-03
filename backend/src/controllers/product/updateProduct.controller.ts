@@ -3,9 +3,17 @@ import { productModel } from "../../models/product.schema";
 
 export const updateProduct: RequestHandler = async (req, res) => {
   try {
+    const productId = req.params.id; // The product ID to be updated
+
+    // Check if the request body has a basket to update
+    if (!req.body.basket) {
+      return res.status(400).json({ message: "Basket data is required" });
+    }
+
+    // Update the product's basket
     const updatedProduct = await productModel.findByIdAndUpdate(
-      req.params.id, // The product ID to be updated
-      { $set: req.body }, // Updates the fields that are provided in the request body
+      productId,
+      { $addToSet: { basket: [{ productId }] } }, // Add product ID to basket if it doesn't already exist
       { new: true, runValidators: true } // Returns the updated product and validates the updates
     );
 
@@ -14,7 +22,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Product updated successfully",
+      message: "Product basket updated successfully",
       product: updatedProduct,
     });
   } catch (error) {

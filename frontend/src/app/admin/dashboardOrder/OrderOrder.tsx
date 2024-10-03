@@ -2,11 +2,62 @@
 import { FaRegCalendar } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoChevronDownOutline, IoChevronForward } from "react-icons/io5";
-import { Orders, OrderText } from "./mockData";
+import { OrderText } from "./mockData";
 import { useRouter } from "next/navigation";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { api } from "@/lib/axios";
+import { useEffect, useState } from "react";
+
+interface OrderProps {
+  _id: string;
+  products: [
+    {
+      _id: string;
+      productId: string;
+      qty: number;
+      price: number;
+    }
+  ];
+  status: string;
+  orderNumber: number;
+  createdAt: string;
+  userId: {
+    username: string;
+    email: string;
+  };
+}
 
 const OrderOrder = () => {
   const router = useRouter();
+  const [Order, setOrder] = useState<OrderProps[]>([]);
+  const getOrder = async () => {
+    try {
+      const response = await api.get("/getOrders");
+      const Order = response.data;
+      console.log(response.data);
+      setOrder(Order);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getOrder();
+  }, []);
+  const DateAndTime = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+  const Time = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString();
+  };
+
   return (
     <>
       <div className="flex justify-between my-6">
@@ -26,53 +77,54 @@ const OrderOrder = () => {
         <div className="bg-white rounded-lg border border-[#ECEDF0] flex items-center gap-2 p-2">
           <IoIosSearch className=" w-[24px] h-[24px]" />
           <input
-            type="search "
+            type="search"
             placeholder="Дугаар, Имэйл"
             className="outline-none w-[240px]"
           />
         </div>
       </div>
-      <div className="border border-[#ECEDF0]  bg-white rounded-lg">
-        <p className="text-[20px] font-bold p-6">Захиалга</p>
-        <div className="flex border  bg-gray-100 gap-[68px] px-6 py-3 ">
-          {OrderText.map((text, index) => {
-            return (
-              <div
-                key={index}
-                className={`font-semibold text-[12px] flex-1  justify-center  flex -gap-2`}
-              >
-                {text.text}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="grid gap-2 bg-white">
-        {Orders.map((order, index) => {
-          return (
-            <div
-              key={index}
-              className="flex items-center justify-start gap-12  px-6 py-3"
-            >
-              <p className="flex-1">{order.phone}</p>
-              <div className="flex-1">
-                <p>{order.customer}</p>
-                <p>{order.email}</p>
-              </div>
-              <p className="flex-1">{order.date}</p>
-              <p className="flex-1  ">{order.time}</p>
-              <p className="flex-1">{order.price}</p>
-              <button className="flex-1 border border-gray-100 rounded-2xl ">
-                {order.status}
-              </button>
-              <IoChevronForward
-                className="flex-1"
-                onClick={() => router.push(`/admin/dashboardOrder/${order.id}`)}
-              />
-            </div>
-          );
-        })}
-      </div>
+      <p className="text-[20px] font-bold  px-3 py-5 bg-white rounded-t-2xl">
+        Захиалга
+      </p>
+      <Table>
+        <TableHeader>
+          <TableRow className="border border-gray-200">
+            {OrderText.map((text, index) => (
+              <TableHead key={index}>
+                <p className="font-semibold">{text.text}</p>
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Order.map((order, index) => (
+            <TableRow key={index} className="bg-white">
+              <TableCell className="font-semibold">
+                {order.orderNumber}
+              </TableCell>
+              <TableCell>
+                <div>
+                  <p className="font-semibold">{order.userId.username}</p>
+                  <p>{order.userId.email}</p>
+                </div>
+              </TableCell>
+              <TableCell>{DateAndTime(order.createdAt)}</TableCell>
+              <TableCell>{Time(order.createdAt)}</TableCell>
+              <TableCell>{order.products[0].price}</TableCell>
+              <TableCell>
+                <button>{order.status}</button>
+              </TableCell>
+              <TableCell>
+                <IoChevronForward
+                  onClick={() =>
+                    router.push(`/admin/dashboardOrder/${order._id}`)
+                  }
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </>
   );
 };

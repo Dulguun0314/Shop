@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import "./global.css";
 import { PropsWithChildren } from "react";
 import { UserProvider } from "./components/utils/AuthProvider";
+import { SavedProvider } from "./components/utils/SavedProvider";
 import { ProductProvider } from "./components/utils/ProductProvider";
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -14,12 +15,14 @@ const Layout = ({ children }: PropsWithChildren) => {
     <>
       <body style={{ minHeight: "calc(100vh - 320.5px - 74px)" }}>
         <UserProvider>
-          <ProductProvider>
-            <Header />
-            {children}
-            <Footer />
-            <ToastContainer />
-          </ProductProvider>
+          <SavedProvider>
+            <ProductProvider>
+              <Header />
+              {children}
+              <Footer />
+              <ToastContainer />
+            </ProductProvider>
+          </SavedProvider>
         </UserProvider>
       </body>
     </>
