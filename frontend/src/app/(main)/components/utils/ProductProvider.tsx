@@ -1,6 +1,5 @@
 "use client";
 
-import { api } from "@/lib/axios"; // Ensure this imports the correct Axios instance
 import {
   createContext,
   PropsWithChildren,
@@ -8,86 +7,89 @@ import {
   useEffect,
   useState,
 } from "react";
-import { toast } from "react-toastify";
 
+// Define the Product interface
 interface Product {
-  _id: string; // Product ID
+  id: string;
+  productName: string;
+  price: number;
+  size: string[];
+  qty: number;
 }
 
+// Define the context type
 interface ProductContextType {
-  products: Product[]; // Array of products
-  productIdToAdd: string;
-  setProductIdToAdd: (id: string) => void; // Function to set the product ID
-  handleUpdateBasket: (id: string) => Promise<void>; // Function to update the basket
-  isLoading: boolean; // Loading state for fetching products
+  products: Product[];
+  addToBasket: (id: string, qty: number, price: number, size: string) => void; // Accepts both product ID and quantity
 }
 
+// Create a context with an initial value of undefined
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
+// ProductProvider component to wrap around the app
 export const ProductProvider = ({ children }: PropsWithChildren) => {
-  const [products, setProducts] = useState<Product[]>([]); // State to hold products
-  const [productIdToAdd, setProductIdToAdd] = useState("");
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [products, setProducts] = useState<Product[]>([]);
 
-  // Function to fetch products
-  console.log(products);
+  // Function to handle adding a product to the basket with quantity
+  const handleBasketAdd = (
+    id: string,
+    count: number,
+    price: number,
+    size: string
+  ) => {
+    const localBasket: {
+      id: string;
+      count: number;
+      price: number;
+      size: string;
+    }[] = JSON.parse(localStorage.getItem("basket") || "[]");
 
-  const fetchProducts = async () => {
-    setIsLoading(true); // Set loading to true
-    try {
-      const response = await api.get<Product[]>("/getProducts"); // Adjust this endpoint as needed
-      setProducts(response.data);
-    } catch (error: any) {
-      console.error("Error fetching products:", error.message || error);
-      toast.error("Failed to fetch products");
-    } finally {
-      setIsLoading(false); // Set loading to false after fetch
+    console.log("Current basket:", localBasket);
+    console.log("Current basket lenght", localBasket.length);
+    console.log("Product ID to add:", id);
+
+    if (localBasket.length === 0) {
+      localBasket.push({ id, count, price, size });
+      localStorage.setItem("basket", JSON.stringify(localBasket));
+      return;
     }
-  };
 
-  // Function to handle updating the basket
-  const handleUpdateBasket = async (_id: string) => {
-    try {
-      const response = await api.put(`/updateProducts/${_id}`, {
-        basket: [{ productId: _id }],
-      });
-      setProductIdToAdd(productIdToAdd); // Reset the productIdToAdd after updating
-      toast.success("Product updated successfully!");
-    } catch (error: any) {
-      if (error.response) {
-        // Server responded with a status code different from 2xx
-        toast.error(`Failed to update product: ${error.response.data.message}`);
-      } else if (error.request) {
-        // Request was made but no response received
-        toast.error("Failed to update product: No response from server");
+    localBasket.forEach((el) => {
+      if (el.id !== id) {
+        localBasket.push({ id, count, price, size });
+        console.log(localBasket);
       } else {
-        // Something else caused the error
-        toast.error(`Failed to update product: ${error.message}`);
+        if (el.size == size) {
+          el.count += count;
+          console.log(localBasket);
+        } else {
+          localBasket.push({ id, count, price, size });
+          console.log(localBasket);
+        }
       }
-      console.error("Error updating product:", error);
-    }
+    });
+    localStorage.setItem("basket", JSON.stringify(localBasket));
+  };
+  const fetchProducts = () => {
+    const localProducts: Product[] = JSON.parse(
+      localStorage.getItem("basket") || "[]"
+    );
+    setProducts(localProducts);
   };
 
-  // Fetch products when the component mounts
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  console.log(products);
   return (
-    <ProductContext.Provider
-      value={{
-        products,
-        productIdToAdd,
-        setProductIdToAdd,
-        handleUpdateBasket,
-        isLoading, // Provide loading state
-      }}
-    >
+    <ProductContext.Provider value={{ products, addToBasket: handleBasketAdd }}>
       {children}
     </ProductContext.Provider>
   );
 };
 
+// Hook to use the Product context
 export const useProduct = () => {
   const context = useContext(ProductContext);
   if (context === undefined) {

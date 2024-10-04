@@ -9,6 +9,7 @@ import Link from "next/link";
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
 import Heart from "../../assets/icon/Heart";
+import { useProduct } from "../../components/utils/ProductProvider";
 
 type DescriptionProps = {
   id: string;
@@ -28,12 +29,19 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
   const [slide, setSlide] = useState(false);
   const [count, setCount] = useState(1);
   const { user } = useUser();
+  const { addToBasket: handleBasketAdd } = useProduct();
+  const [size, setSize] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
 
   const handleBasketClick = () => {
     if (!user?.isAuthenticated) {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү1");
+    } else {
+      handleBasketAdd(id, count, price, size);
+      toast.success("Сагсанд амжилттай нэмэгдлээ!");
     }
   };
+  console.log(id, price, size, count);
 
   const handleReviewClick = () => {
     if (!user?.isAuthenticated) {
@@ -59,6 +67,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
       try {
         const response = await api.get(`/getProductById/${id}`);
         setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
+        setPrice(response.data.price); // Set the price for the product
       } catch (err: unknown) {
         console.log(err);
         if (err instanceof AxiosError) {
@@ -98,12 +107,19 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
           <div className="flex gap-1">
             {productsDescription.map((product, index) => (
               <div key={index} className="flex gap-1">
-                {product.size.map((size, sizeIndex) => (
+                {product.size.map((sizeOption, sizeIndex) => (
                   <div
                     key={sizeIndex}
-                    className={`text-white border bg-black border-black w-[32px] h-[32px] rounded-full flex items-center justify-center`}
+                    className={`w-[32px] h-[32px] rounded-full flex items-center justify-center 
+            ${
+              sizeOption === size
+                ? "bg-blue-500 text-white border-blue-500"
+                : "bg-white text-black border-black"
+            } 
+            border`}
+                    onClick={() => setSize(sizeOption)} // Set size on click
                   >
-                    {size}
+                    <p>{sizeOption}</p>
                   </div>
                 ))}
               </div>

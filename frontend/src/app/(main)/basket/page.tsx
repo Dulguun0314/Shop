@@ -3,40 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { BsTrash3 } from "react-icons/bs";
 import { useProduct } from "../components/utils/ProductProvider";
 
 const Basket = () => {
-  const Baskets: BasketType[] = [
-    {
-      src: "/smallChunky.png",
-      text: "smallChunky Glyph Tee",
-      alt: "smallChunky Glyph Tee",
-      price: "120’000₮",
-      icon: <BsTrash3 className="w-6 h-6" />,
-    },
-    {
-      src: "/smallChunky.png",
-      text: "smallChunky Glyph Tee",
-      alt: "smallChunky Glyph Tee",
-      price: "120’000₮",
-      icon: <BsTrash3 className="w-6 h-6" />,
-    },
-    {
-      src: "/smallChunky.png",
-      text: "smallChunky Glyph Tee",
-      alt: "smallChunky Glyph Tee",
-      price: "120’000₮",
-      icon: <BsTrash3 className="w-6 h-6" />,
-    },
-  ];
-  interface BasketType {
-    src: string;
-    alt: string;
-    text: string;
-    price: number | string;
-    icon: JSX.Element;
-  }
   const { products } = useProduct();
   const [counts, setCounts] = useState(Array(products.length).fill(1));
 
@@ -74,15 +43,15 @@ const Basket = () => {
           <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6 my-24  p-8 h-screen">
             <div className="flex gap-1 items-center">
               <p className="font-medium text-[20px]">1. Сагс</p>
-              <p className="text-[#71717A]">(4)</p>
+              <p className="text-[#71717A]">({products.length})</p>
             </div>
-            {Baskets.map((basket, index) => (
+            {products.map((basket, index) => (
               <div key={index} className="h-fit">
                 <div className="flex justify-between gap-6">
                   <div className="">
                     <div className="relative w-[120px] h-[120px] ">
                       <Image
-                        src={basket.src}
+                        src={basket.images}
                         alt={basket.alt}
                         fill
                         className="rounded-xl"

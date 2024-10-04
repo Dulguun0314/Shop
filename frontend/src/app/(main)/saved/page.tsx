@@ -1,16 +1,17 @@
-"use client";
+"use client"; // Make sure this is used if you're in a Next.js client component
+
 import Image from "next/image";
 import Heart from "../assets/icon/Heart";
 import { useSaved } from "../components/utils/SavedProvider";
 import { useProduct } from "../components/utils/ProductProvider"; // Import the ProductProvider
 
 const Saved = () => {
-  const { products: productSaved } = useSaved();
-  const { handleUpdateBasket } = useProduct(); // Destructure handleUpdateBasket from ProductProvider
+  const { products: productSaved } = useSaved(); // Get saved products from the SavedProvider
+  const { handleCreateBasket } = useProduct(); // Destructure handleCreateBasket from ProductProvider
 
   // Function to handle adding product to basket
   const addToBasket = async (productId: string) => {
-    await handleUpdateBasket(productId); // Call the handleUpdateBasket function
+    await handleCreateBasket(productId); // Call the handleUpdateBasket function
   };
 
   return (

@@ -36,31 +36,30 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
     {}
   );
   const { user } = useUser();
+  const fetchSavedProducts = async () => {
+    if (!user) return;
+    try {
+      const response = await api.get("/getSavedProducts");
+      const savedProducts = response.data.savedProducts[0]?.products || [];
+      setProductSaved(savedProducts);
 
+      // Map to store saved status for each product
+      const status = savedProducts.reduce(
+        (acc: Record<string, boolean>, product: Saved) => {
+          acc[product._id] = true;
+          return acc;
+        },
+        {}
+      );
+      setSavedStatus(status);
+    } catch (error) {
+      console.error("Error fetching saved products:", error);
+    }
+  };
   // Fetch saved products when the component mounts
   useEffect(() => {
-    const fetchSavedProducts = async () => {
-      if (!user) return;
-      try {
-        const response = await api.get("/getSavedProducts");
-        const savedProducts = response.data.savedProducts[0]?.products || [];
-        setProductSaved(savedProducts);
-
-        // Map to store saved status for each product
-        const status = savedProducts.reduce(
-          (acc: Record<string, boolean>, product: Saved) => {
-            acc[product._id] = true;
-            return acc;
-          },
-          {}
-        );
-        setSavedStatus(status);
-      } catch (error) {
-        console.error("Error fetching saved products:", error);
-      }
-    };
     fetchSavedProducts();
-  }, [user, savedStatus]);
+  }, [user]);
 
   // Check if the product is saved by the user
   const isProductSaved = (productId: string) => {
@@ -83,6 +82,7 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
           productId,
         });
         toast.success(response.data.message);
+        fetchSavedProducts();
         setSavedStatus((prevStatus) => ({ ...prevStatus, [productId]: false }));
       } else {
         // Save product
@@ -91,6 +91,7 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
           productId,
         });
         toast.success(response.data.message);
+        fetchSavedProducts();
         setSavedStatus((prevStatus) => ({ ...prevStatus, [productId]: true }));
       }
     } catch (error) {

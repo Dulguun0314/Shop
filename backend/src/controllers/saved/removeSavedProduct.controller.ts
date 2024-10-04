@@ -43,13 +43,11 @@ export const removeSavedProduct = async (
     savedProduct.products.splice(productIndex, 1);
 
     // If the products array is empty after removal, delete the saved product entry for the user
-    if (savedProduct.products.length === 0) {
+    if (savedProduct.products.length === 1 && savedProduct.products[0] === productId) {
       await savedProductModel.deleteOne({ user: userId });
-      return res
-        .status(200)
-        .json({
-          message: "No products left, user removed from saved products.",
-        });
+      return res.status(200).json({
+        message: "No products left, user removed from saved products.",
+      });
     }
 
     // Save the updated document if there are still products
