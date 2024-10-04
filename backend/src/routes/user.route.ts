@@ -9,7 +9,7 @@ const userRouter = express.Router();
 userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.post("/logout", logout);
-userRouter.put("update", updateUser);
+userRouter.put("/update/:userId", updateUser);
 userRouter.get("/me", authMiddleware, getMe);
 
 export default userRouter;

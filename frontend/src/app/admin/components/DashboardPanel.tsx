@@ -8,8 +8,8 @@ import PanelSales from "./PanelSales";
 const DashboardPanel = () => {
   return (
     <div className="flex justify-start">
-      <div className="container flex items-start">
-        <div className=" bg-gray-100 h-fit p-6 w-screen ">
+      <div className="container flex items-start ">
+        <div className=" bg-gray-100 h-fit p-6 w-full">
           <div className="grid gap-6 h-fit ">
             <div className="flex h-fit gap-6">
               <PanelIncome />

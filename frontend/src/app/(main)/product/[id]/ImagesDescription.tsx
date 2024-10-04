@@ -16,32 +16,19 @@ type DescriptionProps = {
 };
 
 const ImagesDescription = ({ id }: DescriptionProps) => {
-  const plus = () => {
-    setCount(count + 1);
-  };
-
-  const minus = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    }
-  };
-
-  const [slide, setSlide] = useState(false);
   const [count, setCount] = useState(1);
-  const { user } = useUser();
-  const { addToBasket: handleBasketAdd } = useProduct();
+  const [slide, setSlide] = useState(false);
   const [size, setSize] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
+  const [images, setImages] = useState<string[]>([]);
+  const [productsDescription, setProducts] = useState<ProductType[]>([]);
+  const [productName, setProductName] = useState<string>();
+  const { user } = useUser();
+  const { addToBasket: handleBasketAdd } = useProduct();
 
-  const handleBasketClick = () => {
-    if (!user?.isAuthenticated) {
-      toast.info("Сагсалхын тулд Нэвтэрнэ үү1");
-    } else {
-      handleBasketAdd(id, count, price, size);
-      toast.success("Сагсанд амжилттай нэмэгдлээ!");
-    }
-  };
-  console.log(id, price, size, count);
+  const plus = () => setCount((prevCount) => prevCount + 1);
+  const minus = () =>
+    setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : prevCount));
 
   const handleReviewClick = () => {
     if (!user?.isAuthenticated) {
@@ -57,17 +44,19 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     images: string[];
     description: string;
     size: string[];
-    averageRating: number; // Assuming your API provides this
+    averageRating: number;
   }
-
-  const [productsDescription, setProducts] = useState<ProductType[]>([]); // Initialize with empty array
 
   useEffect(() => {
     const getProducts = async () => {
       try {
         const response = await api.get(`/getProductById/${id}`);
-        setProducts([response.data] as ProductType[]); // Cast response data to ProductType[]
-        setPrice(response.data.price); // Set the price for the product
+        const product = response.data as ProductType;
+
+        setProducts([product]);
+        setPrice(product.price);
+        setImages(product.images);
+        setProductName(product.productName);
       } catch (err: unknown) {
         console.log(err);
         if (err instanceof AxiosError) {
@@ -81,6 +70,16 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     getProducts();
   }, [id]);
 
+  const handleBasketClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default link behavior
+    if (!user?.isAuthenticated) {
+      toast.info("Сагсалхын тулд Нэвтэрнэ үү");
+    } else {
+      handleBasketAdd(id, count, price, size, images[0], productName); // Ensure images is passed correctly
+      toast.success("Сагсанд амжилттай нэмэгдлээ!");
+    }
+  };
+
   return (
     <>
       <div className="relative h-[640px] pt-32 ">
@@ -88,19 +87,17 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
           шинэ
         </p>
         <div className="flex gap-2 items-start my-2">
-          {productsDescription.map((productDescription, index) => {
-            return (
-              <div key={index} className="flex gap-2">
-                <div>
-                  <p className="text-2xl font-semibold">
-                    {productDescription.productName}
-                  </p>
-                  {productDescription.description}
-                </div>
-                <Heart productId={productDescription._id} />
+          {productsDescription.map((productDescription, index) => (
+            <div key={index} className="flex gap-2">
+              <div>
+                <p className="text-2xl font-semibold">
+                  {productDescription.productName}
+                </p>
+                {productDescription.description}
               </div>
-            );
-          })}
+              <Heart productId={productDescription._id} />
+            </div>
+          ))}
         </div>
         <div className="grid h-fit gap-2 my-4">
           <p className="underline underline-offset-4">Хэмжээний заавар</p>
@@ -111,13 +108,13 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
                   <div
                     key={sizeIndex}
                     className={`w-[32px] h-[32px] rounded-full flex items-center justify-center 
-            ${
-              sizeOption === size
-                ? "bg-blue-500 text-white border-blue-500"
-                : "bg-white text-black border-black"
-            } 
-            border`}
-                    onClick={() => setSize(sizeOption)} // Set size on click
+                    ${
+                      sizeOption === size
+                        ? "bg-blue-500 text-white border-blue-500"
+                        : "bg-white text-black border-black"
+                    } 
+                    border`}
+                    onClick={() => setSize(sizeOption)}
                   >
                     <p>{sizeOption}</p>
                   </div>
@@ -142,22 +139,18 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
           </div>
         </div>
         <div className="grid h-fit gap-2 pt-4">
-          {productsDescription.map((productDescription, index) => {
-            return (
-              <p key={index} className="text-[20px] font-bold">
-                {productDescription.price}₮
-              </p>
-            );
-          })}
+          {productsDescription.map((productDescription, index) => (
+            <p key={index} className="text-[20px] font-bold">
+              {productDescription.price}₮
+            </p>
+          ))}
           {user && (
-            <Link href={`${user.isAuthenticated ? "" : "/login"}`}>
-              <button
-                className="bg-[#2563EB] px-9 py-2 text-white rounded-[20px] w-fit"
-                onClick={handleBasketClick}
-              >
-                <p>Сагсанд нэмэх</p>
-              </button>
-            </Link>
+            <button
+              className="bg-[#2563EB] px-9 py-2 text-white rounded-[20px] w-fit"
+              onClick={handleBasketClick}
+            >
+              <p>Сагсанд нэмэх</p>
+            </button>
           )}
         </div>
         <div className="mt-[60px]">

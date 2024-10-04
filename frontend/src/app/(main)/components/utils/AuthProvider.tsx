@@ -12,6 +12,9 @@ import { usePathname, useRouter, useParams } from "next/navigation";
 
 interface User {
   id: string;
+  lastName: string;
+  phone: number | string;
+  address: string;
   username?: string;
   email: string;
   role?: string;

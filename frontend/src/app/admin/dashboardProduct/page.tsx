@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div className="flex justify-center">
       <div className="container flex items-start ">
-        <div className="w-screen bg-gray-100 h-screen">
+        <div className=" bg-gray-100 h-screen w-full">
           <div className="flex my-6 mx-4 gap-2">
             <p>Бүтээгдэхүүн</p>
             <p>Ангилал</p>

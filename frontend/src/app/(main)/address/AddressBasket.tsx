@@ -1,18 +1,19 @@
 import Image from "next/image";
-import { Addresses, addressType } from "./mockData";
+import { useProduct } from "../components/utils/ProductProvider";
 
 const AddressBasket = () => {
+  const { products } = useProduct();
   return (
     <div>
-      {Addresses.map((Address: addressType, index: number) => {
+      {products.map((product, index) => {
         return (
           <div key={index}>
             <div className="flex justify-between gap-6">
               <div>
                 <div className="relative w-[120px] h-[120px]">
                   <Image
-                    src={Address.src}
-                    alt={Address.alt}
+                    src={`/`}
+                    alt={product.productName}
                     fill
                     className="rounded-xl"
                   />
@@ -20,10 +21,10 @@ const AddressBasket = () => {
               </div>
               <div>
                 <p className="text-[20px] font-medium w-[620px] pb-1">
-                  {Address.text}
+                  {product.productName}
                 </p>
 
-                <p className="text-[16px] font-bold">{Address.price}</p>
+                <p className="text-[16px] font-bold">{product.price}</p>
               </div>
             </div>
           </div>

@@ -16,9 +16,13 @@ export default function RootLayout({
     <html lang="en">
       <body style={{ minHeight: "calc(100vh - 320.5px - 74px)" }}>
         <AdminHeader />
-        <div className="flex justify-center items-start ">
-          <AllCategory />
-          <AdminProvider>{children}</AdminProvider>
+        <div className="flex items-start container w-screen m-auto ">
+          <div className="flex">
+            <AllCategory />
+          </div>
+          <div className="flex-1">
+            <AdminProvider>{children}</AdminProvider>
+          </div>
           <ToastContainer />
         </div>
       </body>

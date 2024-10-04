@@ -7,7 +7,7 @@ const DashboardOrder = () => {
   return (
     <div className="flex justify-center">
       <div className="container flex items-start ">
-        <div className=" bg-gray-100 h-fit p-6 w-screen">
+        <div className=" bg-gray-100 h-fit p-6 w-full">
           <OrderTitle />
           <OrderOrder />
         </div>

@@ -9,15 +9,6 @@ const productSchema = new Schema({
   size: { type: [String] },
   description: { type: String },
   productCode: { type: String },
-  basket: [
-    {
-      productId: {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-        required: true,
-      },
-    },
-  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

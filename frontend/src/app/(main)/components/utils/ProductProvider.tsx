@@ -14,13 +14,21 @@ interface Product {
   productName: string;
   price: number;
   size: string[];
-  qty: number;
+  count: number;
+  images: string[];
 }
 
 // Define the context type
 interface ProductContextType {
   products: Product[];
-  addToBasket: (id: string, qty: number, price: number, size: string) => void; // Accepts both product ID and quantity
+  addToBasket: (
+    id: string,
+    count: number,
+    price: number,
+    size: string,
+    images: string,
+    productName: string | undefined
+  ) => void;
 }
 
 // Create a context with an initial value of undefined
@@ -35,45 +43,40 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     id: string,
     count: number,
     price: number,
-    size: string
+    size: string,
+    images: string,
+    productName: string | undefined
   ) => {
     const localBasket: {
       id: string;
       count: number;
       price: number;
       size: string;
+      images: string;
+      productName: string | undefined;
     }[] = JSON.parse(localStorage.getItem("basket") || "[]");
 
-    console.log("Current basket:", localBasket);
-    console.log("Current basket lenght", localBasket.length);
-    console.log("Product ID to add:", id);
+    // Check if the product already exists in the basket
+    const existingProduct = localBasket.find(
+      (el) => el.id === id && el.size === size
+    );
 
-    if (localBasket.length === 0) {
-      localBasket.push({ id, count, price, size });
-      localStorage.setItem("basket", JSON.stringify(localBasket));
-      return;
+    if (existingProduct) {
+      existingProduct.count += count; // Update quantity if it exists
+    } else {
+      localBasket.push({ id, count, price, size, images, productName }); // Add new product
     }
+    console.log(localBasket);
 
-    localBasket.forEach((el) => {
-      if (el.id !== id) {
-        localBasket.push({ id, count, price, size });
-        console.log(localBasket);
-      } else {
-        if (el.size == size) {
-          el.count += count;
-          console.log(localBasket);
-        } else {
-          localBasket.push({ id, count, price, size });
-          console.log(localBasket);
-        }
-      }
-    });
     localStorage.setItem("basket", JSON.stringify(localBasket));
   };
+
+  // Fetch products (update this to fetch from an API or your data source)
   const fetchProducts = () => {
+    // For now, assuming you want to set the product state from local storage
     const localProducts: Product[] = JSON.parse(
       localStorage.getItem("basket") || "[]"
-    );
+    ); // Assuming a separate "products" key
     setProducts(localProducts);
   };
 
@@ -81,7 +84,6 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     fetchProducts();
   }, []);
 
-  console.log(products);
   return (
     <ProductContext.Provider value={{ products, addToBasket: handleBasketAdd }}>
       {children}

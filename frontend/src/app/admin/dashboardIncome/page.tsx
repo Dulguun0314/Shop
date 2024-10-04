@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div className="flex justify-start">
       <div className="container flex items-start ">
-        <div className=" w-screen bg-gray-100 h-fit p-6">
+        <div className=" bg-gray-100 h-fit p-6 w-full">
           <div className="grid gap-6">
             <Income />
             <div className="flex justify-between bg-white border rounded-b-xl p-6 ">
