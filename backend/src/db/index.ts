@@ -1,9 +1,20 @@
 import { connect } from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const connectToDatabase = async () => {
-  await connect(
-    "mongodb+srv://Dulguun:Dulguun0714@cluster0.ljmmd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  const mongoUri = process.env.MONGODB_URI;
 
-  console.log("Connected to database");
+  if (!mongoUri) {
+    throw new Error("MONGODB_URI is not defined in the environment variables");
+  }
+
+  try {
+    await connect(mongoUri);
+    console.log("Connected to database");
+  } catch (error) {
+    console.error("Database connection error:", error);
+  }
 };
+  

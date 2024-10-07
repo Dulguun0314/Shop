@@ -74,6 +74,10 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     e.preventDefault(); // Prevent default link behavior
     if (!user?.isAuthenticated) {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү");
+    }
+    if (!size) {
+      toast.error("Хэмжээгээ сонгоно уу?");
+      return;
     } else {
       addToBasket(id, count, price, size, images[0], productName); // Ensure images is passed correctly
       toast.success("Сагсанд амжилттай нэмэгдлээ!");
