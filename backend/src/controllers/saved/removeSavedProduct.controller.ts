@@ -43,7 +43,10 @@ export const removeSavedProduct = async (
     savedProduct.products.splice(productIndex, 1);
 
     // If the products array is empty after removal, delete the saved product entry for the user
-    if (savedProduct.products.length === 1 && savedProduct.products[0] === productId) {
+    if (
+      savedProduct.products.length === 1 &&
+      savedProduct.products[0] === productId
+    ) {
       await savedProductModel.deleteOne({ user: userId });
       return res.status(200).json({
         message: "No products left, user removed from saved products.",
@@ -56,7 +59,7 @@ export const removeSavedProduct = async (
     // Respond with success message
     return res
       .status(200)
-      .json({ message: "Saved product removed successfully." });
+      .json({ message: "Хадгалсан бараа амжилттай устлаа." });
   } catch (error) {
     console.error("Error removing saved product:", error);
 

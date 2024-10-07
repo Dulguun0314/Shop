@@ -55,6 +55,7 @@ const UserInfo: React.FC = () => {
     const savedValues = localStorage.getItem("userInfo");
     if (savedValues) {
       setInitialValues(JSON.parse(savedValues));
+      setIsSubmitted(true); // Set to true if values exist in local storage
     } else if (user) {
       setInitialValues({
         lastName: user.lastName || "",
@@ -63,6 +64,13 @@ const UserInfo: React.FC = () => {
         username: user.user?.username || "",
         email: user.user?.email || "",
       });
+
+      // Check if lastName exists and set isSubmitted accordingly
+      if (user.lastName) {
+        setIsSubmitted(true); // Set to true if lastName exists
+      } else {
+        setIsSubmitted(false); // Set to false if lastName does not exist
+      }
     }
   }, [user]);
 
@@ -137,12 +145,21 @@ const UserInfo: React.FC = () => {
               <p>Утасны дугаар: {initialValues.phone}</p>
               <p>Имэйл хаяг: {initialValues.email}</p>
               <p>Хаяг: {initialValues.address}</p>
-              <button
-                onClick={() => setIsSubmitted(false)} // Reset form if needed
-                className="border border-[#2563EB] text-[#2563EB] rounded-2xl hover:bg-[#2563EB] hover:text-white duration-1000"
-              >
-                <p className="px-9 py-2">Шинэчлэлт хийх</p>
-              </button>
+              <div className="flex gap-4 m-4">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="border border-red-500 rounded-2xl text-red-500 hover:bg-red-600 duration-700 hover:text-white"
+                >
+                  <p className="px-9 py-2">Гарах</p>
+                </button>
+                <button
+                  onClick={() => setIsSubmitted(false)} // Reset form if needed
+                  className="border border-[#2563EB] text-[#2563EB] rounded-2xl hover:bg-[#2563EB] hover:text-white duration-1000"
+                >
+                  <p className="px-9 py-2">Шинэчлэлт хийх</p>
+                </button>
+              </div>
             </div>
           ) : (
             <Formik
@@ -205,14 +222,14 @@ const UserInfo: React.FC = () => {
                       onClick={handleLogout}
                       className="border border-red-500 rounded-2xl text-red-500 hover:bg-red-600 duration-700 hover:text-white"
                     >
-                      <p className="px-9 py-2">Систэмээс гарах</p>
+                      <p className="px-9 py-2">Гарах</p>
                     </button>
                     <button
                       type="submit"
-                      disabled={isSubmitting} // Disable button while submitting
+                      disabled={isSubmitting}
                       className="border border-[#2563EB] text-[#2563EB] rounded-2xl hover:bg-[#2563EB] hover:text-white duration-1000"
                     >
-                      <p className="px-9 py-2">Мэдээлэл шинэчлэх</p>
+                      <p className="px-9 py-2">Шинэчлэх</p>
                     </button>
                   </div>
                 </Form>

@@ -24,7 +24,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
   const [productsDescription, setProducts] = useState<ProductType[]>([]);
   const [productName, setProductName] = useState<string>();
   const { user } = useUser();
-  const { addToBasket: handleBasketAdd } = useProduct();
+  const { addToBasket } = useProduct();
 
   const plus = () => setCount((prevCount) => prevCount + 1);
   const minus = () =>
@@ -75,7 +75,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     if (!user?.isAuthenticated) {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү");
     } else {
-      handleBasketAdd(id, count, price, size, images[0], productName); // Ensure images is passed correctly
+      addToBasket(id, count, price, size, images[0], productName); // Ensure images is passed correctly
       toast.success("Сагсанд амжилттай нэмэгдлээ!");
     }
   };

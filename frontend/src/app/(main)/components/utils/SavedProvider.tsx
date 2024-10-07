@@ -69,7 +69,7 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
   // Handle heart click for saving/removing product
   const handleHeartClick = async (productId: string) => {
     if (!user) {
-      toast.error("You need to be logged in to save products.");
+      toast.error("Хадгалахын тулд нэвтэрнэ үү  !");
       return;
     }
 

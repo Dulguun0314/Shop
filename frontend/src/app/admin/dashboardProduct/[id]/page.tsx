@@ -101,7 +101,7 @@ const Page: React.FC = () => {
   return (
     <div className="flex justify-center">
       <div className="container items-start flex">
-        <div className="h-screen bg-gray-100 w-screen">
+        <div className="h-fit bg-gray-100 w-full">
           <Link href={`/admin/dashboardProduct`}>
             <div className="flex gap-2 p-4 items-center bg-white">
               <IoChevronBackOutline />

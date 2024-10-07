@@ -4,7 +4,7 @@ import { useProduct } from "../components/utils/ProductProvider";
 const AddressBasket = () => {
   const { products } = useProduct();
   return (
-    <div>
+    <div className="grid gap-4">
       {products.map((product, index) => {
         return (
           <div key={index}>
@@ -12,7 +12,7 @@ const AddressBasket = () => {
               <div>
                 <div className="relative w-[120px] h-[120px]">
                   <Image
-                    src={`/`}
+                    src={product.images}
                     alt={product.productName}
                     fill
                     className="rounded-xl"
@@ -23,8 +23,11 @@ const AddressBasket = () => {
                 <p className="text-[20px] font-medium w-[620px] pb-1">
                   {product.productName}
                 </p>
+                <p className="text-[12px] ">
+                  {product.count} * {product.price}₮
+                </p>
 
-                <p className="text-[16px] font-bold">{product.price}</p>
+                <p className="text-[16px] font-bold">{product.price}₮</p>
               </div>
             </div>
           </div>

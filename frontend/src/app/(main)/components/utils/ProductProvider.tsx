@@ -7,13 +7,14 @@ import {
   useEffect,
   useState,
 } from "react";
+import { toast } from "react-toastify";
 
 // Define the Product interface
 interface Product {
   id: string;
-  productName: string;
+  productName: string; // Ensuring productName is always a string
   price: number;
-  size: string[];
+  size: string;
   count: number;
   images: string;
   icon?: React.ReactNode;
@@ -30,6 +31,7 @@ interface ProductContextType {
     images: string,
     productName: string | undefined
   ) => void;
+  removeFromBasket: (index: number) => void;
 }
 
 // Create a context with an initial value of undefined
@@ -40,7 +42,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
   const [products, setProducts] = useState<Product[]>([]);
 
   // Function to handle adding a product to the basket with quantity
-  const handleBasketAdd = (
+  const addToBasket = (
     id: string,
     count: number,
     price: number,
@@ -54,8 +56,11 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
       price: number;
       size: string;
       images: string;
-      productName: string | undefined;
+      productName: string;
     }[] = JSON.parse(localStorage.getItem("basket") || "[]");
+
+    // Ensure productName is a string
+    const name = productName ?? "Unknown Product"; // Default value if undefined
 
     // Check if the product already exists in the basket
     const existingProduct = localBasket.find(
@@ -65,19 +70,18 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     if (existingProduct) {
       existingProduct.count += count; // Update quantity if it exists
     } else {
-      localBasket.push({ id, count, price, size, images, productName }); // Add new product
+      localBasket.push({ id, count, price, size, images, productName: name }); // Add new product
     }
-    console.log(localBasket);
 
     localStorage.setItem("basket", JSON.stringify(localBasket));
+    setProducts(localBasket as Product[]);
   };
 
-  // Fetch products (update this to fetch from an API or your data source)
+  // Function to fetch products from local storage
   const fetchProducts = () => {
-    // For now, assuming you want to set the product state from local storage
     const localProducts: Product[] = JSON.parse(
       localStorage.getItem("basket") || "[]"
-    ); // Assuming a separate "products" key
+    );
     setProducts(localProducts);
   };
 
@@ -85,8 +89,32 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     fetchProducts();
   }, []);
 
+  // Function to remove a specific item from the basket by index
+  const removeFromBasket = (index: number) => {
+    const localBasket: {
+      id: string;
+      count: number;
+      price: number;
+      size: string;
+      images: string;
+      productName: string;
+    }[] = JSON.parse(localStorage.getItem("basket") || "[]");
+
+    // Remove the item at the specified index
+    localBasket.splice(index, 1);
+
+    // Update localStorage with the modified basket
+    localStorage.setItem("basket", JSON.stringify(localBasket));
+    toast.success("Амжилттай сагснаас устлаа ");
+
+    // Update the products state
+    setProducts(localBasket as Product[]);
+  };
+
   return (
-    <ProductContext.Provider value={{ products, addToBasket: handleBasketAdd }}>
+    <ProductContext.Provider
+      value={{ products, addToBasket, removeFromBasket }}
+    >
       {children}
     </ProductContext.Provider>
   );
@@ -95,7 +123,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
 // Hook to use the Product context
 export const useProduct = () => {
   const context = useContext(ProductContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useProduct must be used within a ProductProvider");
   }
   return context;

@@ -16,7 +16,7 @@ export const createSavedProduct = async (req: Request, res: Response) => {
 
     return res.status(savedProduct ? 200 : 201).json({
       message: savedProduct
-        ? "Бүтээгдэхүүн амжилттай нэмэгдлээ"
+        ? "Бүтээгдэхүүн амжилттай хадгалагдлаа "
         : "Бүтээгдэхүүн амжилттай хадгалагдлаа",
       savedProduct,
     });
