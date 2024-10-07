@@ -97,7 +97,7 @@ const Header = () => {
                   <PiShoppingCartSimple className="text-white w-6 h-6" />
                   <div
                     className={`bg-blue-500 w-3 h-3 rounded-full text-white absolute -top-0.5 -right-0.5 ${
-                      productSaved?.length === 0 ? "hidden" : "visible"
+                      products?.length === 0 ? "hidden" : "visible"
                     } `}
                   >
                     <p

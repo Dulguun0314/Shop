@@ -15,7 +15,8 @@ interface Product {
   price: number;
   size: string[];
   count: number;
-  images: string[];
+  images: string;
+  icon?: React.ReactNode;
 }
 
 // Define the context type
