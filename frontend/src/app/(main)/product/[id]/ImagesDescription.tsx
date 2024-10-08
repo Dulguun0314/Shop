@@ -19,10 +19,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
   const [count, setCount] = useState(1);
   const [slide, setSlide] = useState(false);
   const [size, setSize] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
-  const [images, setImages] = useState<string[]>([]);
   const [productsDescription, setProducts] = useState<ProductType[]>([]);
-  const [productName, setProductName] = useState<string>();
   const { user } = useUser();
   const { addToBasket } = useProduct();
 
@@ -54,9 +51,6 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
         const product = response.data as ProductType;
 
         setProducts([product]);
-        setPrice(product.price);
-        setImages(product.images);
-        setProductName(product.productName);
       } catch (err: unknown) {
         console.log(err);
         if (err instanceof AxiosError) {
@@ -79,7 +73,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
       toast.error("Хэмжээгээ сонгоно уу?");
       return;
     } else {
-      addToBasket(id, count, price, size, images[0], productName); // Ensure images is passed correctly
+      addToBasket(id, count, size); // Ensure images is passed correctly
       toast.success("Сагсанд амжилттай нэмэгдлээ!");
     }
   };

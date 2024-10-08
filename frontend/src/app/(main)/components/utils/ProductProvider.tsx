@@ -26,10 +26,7 @@ interface ProductContextType {
   addToBasket: (
     id: string,
     count: number,
-    price: number,
     size: string,
-    images: string,
-    productName: string | undefined
   ) => void;
   removeFromBasket: (index: number) => void;
 }
@@ -45,22 +42,15 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
   const addToBasket = (
     id: string,
     count: number,
-    price: number,
+ 
     size: string,
-    images: string,
-    productName: string | undefined
   ) => {
     const localBasket: {
       id: string;
       count: number;
-      price: number;
       size: string;
-      images: string;
-      productName: string;
     }[] = JSON.parse(localStorage.getItem("basket") || "[]");
 
-    // Ensure productName is a string
-    const name = productName ?? "Unknown Product"; // Default value if undefined
 
     // Check if the product already exists in the basket
     const existingProduct = localBasket.find(
@@ -70,7 +60,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     if (existingProduct) {
       existingProduct.count += count; // Update quantity if it exists
     } else {
-      localBasket.push({ id, count, price, size, images, productName: name }); // Add new product
+      localBasket.push({ id, count, size}); // Add new product
     }
 
     localStorage.setItem("basket", JSON.stringify(localBasket));
