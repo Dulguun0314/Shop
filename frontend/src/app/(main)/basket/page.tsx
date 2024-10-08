@@ -19,26 +19,12 @@ const Basket: React.FC = () => {
   const { products, removeFromBasket, addToBasket } = useProduct();
 
   const handleIncrease = (basket: BasketItem) => {
-    addToBasket(
-      basket.id,
-      1,
-      basket.price,
-      basket.size,
-      basket.images,
-      basket.productName
-    );
+    addToBasket(basket.id, 1, basket.size);
   };
 
   const handleDecrease = (basket: BasketItem) => {
     if (basket.count > 1) {
-      addToBasket(
-        basket.id,
-        -1,
-        basket.price,
-        basket.size,
-        basket.images,
-        basket.productName
-      );
+      addToBasket(basket.id, -1, basket.size);
     }
   };
 

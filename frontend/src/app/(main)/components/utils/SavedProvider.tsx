@@ -36,6 +36,7 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
     {}
   );
   const { user } = useUser();
+  // Fetch saved products when the component mounts
   const fetchSavedProducts = async () => {
     if (!user) return;
     try {
@@ -56,7 +57,6 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
       console.error("Error fetching saved products:", error);
     }
   };
-  // Fetch saved products when the component mounts
   useEffect(() => {
     fetchSavedProducts();
   }, [user]);

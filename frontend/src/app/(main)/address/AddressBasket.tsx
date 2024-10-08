@@ -2,18 +2,9 @@
 
 import Image from "next/image";
 import { useProduct } from "../components/utils/ProductProvider";
-import { useMemo } from "react";
 
 const AddressBasket = () => {
   const { products } = useProduct();
-
-  // This calculates the total price for all products in the basket
-  const totalPrice = useMemo(() => {
-    return products.reduce(
-      (total, product) => total + product.price * product.count,
-      0
-    );
-  }, [products]);
 
   return (
     <div className="grid gap-4">

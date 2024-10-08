@@ -34,10 +34,7 @@ const Saved: React.FC = () => {
     addToBasket(
       product._id,
       count,
-      Number(product.price),
-      selectedSizes[product._id] || "", // Use the selected size for this product
-      product.images[0],
-      product.productName
+      selectedSizes[product._id] || "" // Use the selected size for this product
     ); // Ensure images is passed correctly
     if (product.size && !selectedSizes[product._id]) {
       toast.error("Хэмжээгээ сонгоно уу?");

@@ -24,14 +24,17 @@ interface AuthUser extends User {
   isAuthenticated: boolean;
   user?: User;
 }
-
+interface newUser extends User {
+  password: string;
+}
 interface UserContextType {
   user: AuthUser | null; // The user object directly
-  register: (user: Omit<User, "password">) => Promise<void>;
+  register: (userData: Partial<newUser>) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => Promise<void>;
 }
+``;
 
 const UserContext = createContext<UserContextType>({
   user: null,
@@ -52,7 +55,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     [id]
   );
 
-  const register = async (newUser: Omit<User, "password">) => {
+  const register = async (newUser: Partial<newUser>) => {
     try {
       const response = await api.post("/users/register", newUser);
       const { token, user: registeredUser } = response.data;
@@ -156,6 +159,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   }, [pathname, user, isReady, authPaths, router]);
 
   if (!isReady) return null;
+  console.log(user);
 
   return (
     <UserContext.Provider value={{ user, register, login, logout, updateUser }}>
