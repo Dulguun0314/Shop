@@ -92,7 +92,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     // Update the products state
     setProducts(localBasket as Product[]);
   };
-  
+
   return (
     <ProductContext.Provider
       value={{ products, addToBasket, removeFromBasket }}

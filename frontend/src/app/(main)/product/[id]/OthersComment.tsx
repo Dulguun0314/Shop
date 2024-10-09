@@ -8,6 +8,7 @@ interface CommentsProps {
   slide: boolean;
   productId: string;
 }
+
 interface GetComments {
   userId: {
     username: string;
@@ -26,32 +27,45 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
     e.preventDefault();
 
     try {
+      // Сэтгэгдэл илгээх
       const response = await api.post("/createReview", {
         userId: user?.user?.id,
-        productId: productId, // Fixed typo here
+        productId: productId,
         comment,
         rating,
       });
 
-      console.log("Review created:", response.data);
+      console.log("Сэтгэгдэл үүсгэсэн:", response.data);
       setComment("");
-      setRating(0); // Reset rating after submission
+      setRating(0); // Үнэлгээг илгээсний дараа дахин эхлүүлэх
       toast.success("Сэтгэгдэл амжилттай үүлслээ");
+
+      // Шинэ сэтгэгдлүүдийг дахин татаж авах
+      const updatedComments = await api.get("/getReviews", {
+        params: { productId },
+      });
+      setGetComment(updatedComments.data);
     } catch (error) {
-      console.log("Error submitting review:", error);
+      console.log("Сэтгэгдэл илгээхэд алдаа гарлаа:", error);
     }
   };
-  const getComments = async () => {
-    try {
-      const response = await api.get("/getReviews");
-      setGetComment(response.data);
-    } catch (error) {
-      console.log("Error getting comments:", error);
-    }
-  };
+
   useEffect(() => {
-    getComments();
-  }, [comment, rating]);
+    const getComments = async () => {
+      try {
+        const response = await api.get("/getReviews", {
+          params: { productId }, // productId-г query параметр болгон дамжуулна
+        });
+        setGetComment(response.data);
+      } catch (error) {
+        console.log("Сэтгэгдэл татаж авахад алдаа гарлаа:", error);
+      }
+    };
+
+    if (productId) {
+      getComments();
+    }
+  }, [productId]); // Зөвхөн productId өөрчлөгдөхөд л шинэчлэгдэх
 
   return (
     <div
@@ -77,7 +91,6 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
         <div>
           <p>Одоор үнэлэх:</p>
           <StarRating totalStars={5} onRatingChange={setRating} />
-          {/* Enable rating selection */}
         </div>
         <div className="grid gap-1">
           <p>Сэтгэгдэл үлдээх:</p>
@@ -89,7 +102,6 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
             className="w-[450px] px-3 py-1 pb-[80px] outline-none rounded-md"
           />
         </div>
-
         <button
           className="bg-[#2563EB] rounded-[20px] w-fit text-white"
           onClick={handleSubmit}

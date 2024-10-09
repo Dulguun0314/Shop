@@ -31,16 +31,21 @@ const Saved: React.FC = () => {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү");
       return;
     }
+
+    // Check if the product has sizes and a size is selected
+    if (product.size && !selectedSizes[product._id]) {
+      toast.error("Хэмжээгээ сонгоно уу?"); // Size not selected
+      return; // Prevent adding to basket if size is not selected
+    }
+
+    // If a size is selected, proceed to add to basket
     addToBasket(
       product._id,
       count,
       selectedSizes[product._id] || "" // Use the selected size for this product
-    ); // Ensure images is passed correctly
-    if (product.size && !selectedSizes[product._id]) {
-      toast.error("Хэмжээгээ сонгоно уу?");
-      return;
-    }
-    toast.success("Сагсанд амжилттай нэмэгдлээ!");
+    );
+
+    toast.success("Сагсанд амжилттай нэмэгдлээ!"); // Show success message
   };
 
   const plus = () => setCount((prevCount) => prevCount + 1);

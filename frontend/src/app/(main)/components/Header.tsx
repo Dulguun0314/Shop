@@ -88,27 +88,25 @@ const Header = () => {
                 </div>
               </div>
             </Link>
-            {user && (
-              <Link
-                href={`${user.isAuthenticated ? "/basket" : "/login"}`}
-                onClick={handleShopClick}
-              >
-                <div className="relative">
-                  <PiShoppingCartSimple className="text-white w-6 h-6" />
-                  <div
-                    className={`bg-blue-500 w-3 h-3 rounded-full text-white absolute -top-0.5 -right-0.5 ${
-                      products?.length === 0 ? "hidden" : "visible"
-                    } `}
+            <Link
+              href={`${user?.isAuthenticated ? "/basket" : "/login"}`}
+              onClick={handleShopClick}
+            >
+              <div className="relative">
+                <PiShoppingCartSimple className="text-white w-6 h-6" />
+                <div
+                  className={`bg-blue-500 w-3 h-3 rounded-full text-white absolute -top-0.5 -right-0.5 ${
+                    products?.length === 0 ? "hidden" : "visible"
+                  } `}
+                >
+                  <p
+                    className={`text-[10px] flex items-center justify-center `}
                   >
-                    <p
-                      className={`text-[10px] flex items-center justify-center `}
-                    >
-                      {products.length}
-                    </p>
-                  </div>
+                    {products.length}
+                  </p>
                 </div>
-              </Link>
-            )}
+              </div>
+            </Link>
           </div>
 
           <div className="flex gap-2">

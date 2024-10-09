@@ -68,6 +68,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
     e.preventDefault(); // Prevent default link behavior
     if (!user?.isAuthenticated) {
       toast.info("Сагсалхын тулд Нэвтэрнэ үү");
+      return; // Exit the function if the user is not authenticated
     }
     if (!size) {
       toast.error("Хэмжээгээ сонгоно уу?");
@@ -106,12 +107,12 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
                   <div
                     key={sizeIndex}
                     className={`w-[32px] h-[32px] rounded-full flex items-center justify-center 
-                    ${
-                      sizeOption === size
-                        ? "bg-blue-500 text-white border-blue-500"
-                        : "bg-white text-black border-black"
-                    } 
-                    border`}
+                      ${
+                        sizeOption === size
+                          ? "bg-blue-500 text-white border-blue-500"
+                          : "bg-white text-black border-black"
+                      } 
+                      border`}
                     onClick={() => setSize(sizeOption)}
                   >
                     <p>{sizeOption}</p>
@@ -142,14 +143,14 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
               {productDescription.price}₮
             </p>
           ))}
-          {user && (
+          <Link href={`${user?.isAuthenticated ? "" : "/login"}`}>
             <button
               className="bg-[#2563EB] px-9 py-2 text-white rounded-[20px] w-fit"
               onClick={handleBasketClick}
             >
               <p>Сагсанд нэмэх</p>
             </button>
-          )}
+          </Link>
         </div>
         <div className="mt-[60px]">
           <Link href={`${user?.isAuthenticated ? "" : "/login"}`}>
