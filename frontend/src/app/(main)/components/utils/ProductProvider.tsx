@@ -23,11 +23,7 @@ interface Product {
 // Define the context type
 interface ProductContextType {
   products: Product[];
-  addToBasket: (
-    id: string,
-    count: number,
-    size: string,
-  ) => void;
+  addToBasket: (id: string, count: number, size: string) => void;
   removeFromBasket: (index: number) => void;
 }
 
@@ -42,15 +38,14 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
   const addToBasket = (
     id: string,
     count: number,
- 
-    size: string,
+
+    size: string
   ) => {
     const localBasket: {
       id: string;
       count: number;
       size: string;
     }[] = JSON.parse(localStorage.getItem("basket") || "[]");
-
 
     // Check if the product already exists in the basket
     const existingProduct = localBasket.find(
@@ -60,7 +55,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     if (existingProduct) {
       existingProduct.count += count; // Update quantity if it exists
     } else {
-      localBasket.push({ id, count, size}); // Add new product
+      localBasket.push({ id, count, size }); // Add new product
     }
 
     localStorage.setItem("basket", JSON.stringify(localBasket));
@@ -84,10 +79,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     const localBasket: {
       id: string;
       count: number;
-      price: number;
       size: string;
-      images: string;
-      productName: string;
     }[] = JSON.parse(localStorage.getItem("basket") || "[]");
 
     // Remove the item at the specified index
@@ -100,7 +92,7 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
     // Update the products state
     setProducts(localBasket as Product[]);
   };
-
+  
   return (
     <ProductContext.Provider
       value={{ products, addToBasket, removeFromBasket }}

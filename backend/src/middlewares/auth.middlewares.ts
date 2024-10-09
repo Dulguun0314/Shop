@@ -2,6 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { decode } from "punycode";
 
 dotenv.config();
 type UserType = {
@@ -27,6 +28,7 @@ export const authMiddleware: (
 
     // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as UserType;
+    
 
     // Attach userId to request object
     req.user = decoded;

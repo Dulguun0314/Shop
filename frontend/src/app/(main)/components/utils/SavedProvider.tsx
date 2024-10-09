@@ -40,7 +40,12 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
   const fetchSavedProducts = async () => {
     if (!user) return;
     try {
-      const response = await api.get("/getSavedProducts");
+      const response = await api.get("/getSavedProducts", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
       const savedProducts = response.data.savedProducts[0]?.products || [];
       setProductSaved(savedProducts);
 
@@ -86,10 +91,18 @@ export const SavedProvider = ({ children }: PropsWithChildren) => {
         setSavedStatus((prevStatus) => ({ ...prevStatus, [productId]: false }));
       } else {
         // Save product
-        const response = await api.post("/createSavedProduct", {
-          userId: user?.user?.id,
-          productId,
-        });
+        const response = await api.post(
+          "/createSavedProduct",
+          {
+            userId: user?.user?.id,
+            productId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         toast.success(response.data.message);
         fetchSavedProducts();
         setSavedStatus((prevStatus) => ({ ...prevStatus, [productId]: true }));

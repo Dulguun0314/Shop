@@ -8,11 +8,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 // Define the structure of a basket item
 interface BasketItem {
   id: string;
-  productName: string;
-  price: number;
   size: string;
   count: number;
-  images: string;
 }
 
 const Basket: React.FC = () => {

@@ -2,9 +2,10 @@ import { RequestHandler } from "express";
 import { savedProductModel } from "../../models";
 
 export const getSavedProductsController: RequestHandler = async (req, res) => {
+  
   try {
     const savedProducts = await savedProductModel
-      .find({})
+      .find({user : req.user.userId})
       .populate("products"); // Populate productId with Product documents
 
     if (!savedProducts || savedProducts.length === 0) {

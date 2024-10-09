@@ -11,7 +11,7 @@ import { checkSavedProduct } from "../controllers/saved/checkSavedProduct.contro
 const savedProductRouter = express.Router();
 
 savedProductRouter.post("/createSavedProduct", createSavedProduct);
-savedProductRouter.get("/getSavedProducts", getSavedProductsController);
+savedProductRouter.get("/getSavedProducts", authMiddleware, getSavedProductsController);
 savedProductRouter.post("/removeSavedProduct", removeSavedProduct);
 savedProductRouter.get(
   "/checkSavedProduct/:userId/:productId",
