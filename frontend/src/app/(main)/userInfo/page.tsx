@@ -12,10 +12,10 @@ import { useState, useEffect } from "react";
 // Define the initial values interface
 interface UserValues {
   lastName: string;
-  phone: string | number;
+  phone: string;
   address: string;
-  username: string; // Add name to the interface
-  email: string; // Add email to the interface
+  username: string;
+  email: string;
 }
 
 const UserInfo: React.FC = () => {
@@ -28,56 +28,55 @@ const UserInfo: React.FC = () => {
   }
 
   const paths: Path[] = [
-    {
-      name: "Хэрэглэгчийн хэсэг",
-      path: "/userInfo",
-    },
-    {
-      name: "Захиалгын түүх",
-      path: "/orderHistory",
-    },
+    { name: "Хэрэглэгчийн хэсэг", path: "/userInfo" },
+    { name: "Захиалгын түүх", path: "/orderHistory" },
   ];
 
-  // State to manage form values and submission status
   const [initialValues, setInitialValues] = useState<UserValues>({
     lastName: "",
     phone: "",
     address: "",
-    username: "", // Initialize with empty string
-    email: "", // Initialize with empty string
+    username: "",
+    email: "",
   });
 
-  const [isSubmitted, setIsSubmitted] = useState(false); // New state for submission status
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [userData, setUserData] = useState<UserValues | null>(null); // Changed to UserValues | null
 
-  // Effect to update initialValues when user changes or retrieve from local storage
-  useEffect(() => {
-    // Check local storage for saved values
-    const savedValues = localStorage.getItem("userInfo");
-    if (savedValues) {
-      setInitialValues(JSON.parse(savedValues));
-      setIsSubmitted(true); // Set to true if values exist in local storage
-    } else if (user) {
-      setInitialValues({
-        lastName: user.lastName || "",
-        phone: user.phone || "",
-        address: user.address || "",
-        username: user.user?.username || "",
-        email: user.user?.email || "",
-      });
-
-      // Check if lastName exists and set isSubmitted accordingly
-      if (user.lastName) {
-        setIsSubmitted(true); // Set to true if lastName exists
-      } else {
-        setIsSubmitted(false); // Set to false if lastName does not exist
-      }
+  // Fetch user data
+  const fetchUserData = async () => {
+    if (!user?.user?.id) return; // Ensure user ID exists
+    try {
+      const response = await api.get(`/users/getUser/${user.user.id}`); // Fetch user data
+      setUserData(response.data.user);
+    } catch (error) {
+      console.error("Error fetching user data", error);
+      toast.error("Error fetching user data");
     }
+  };
+
+  // Effect to fetch user data when user changes
+  useEffect(() => {
+    fetchUserData();
   }, [user]);
 
-  // Validation schema
+  // Effect to set initial values from fetched user data
+  useEffect(() => {
+    if (userData) {
+      setInitialValues({
+        lastName: userData.lastName || "",
+        phone: userData.phone || "",
+        address: userData.address || "",
+        username: userData.username || "",
+        email: userData.email || "",
+      });
+      setIsSubmitted(!!userData.lastName);
+    }
+  }, [userData]);
+
   const validationSchema = Yup.object().shape({
     lastName: Yup.string().required("Овог оруулна уу"),
-    username: Yup.string().required("Нэр оруулна уу"), // Fixed field name
+    username: Yup.string().required("Нэр оруулна уу"),
     phone: Yup.string().required("Утасны дугаар оруулна уу"),
     email: Yup.string()
       .email("Имэйл хаяг буруу байна")
@@ -85,7 +84,6 @@ const UserInfo: React.FC = () => {
     address: Yup.string().required("Хаяг оруулна уу"),
   });
 
-  // Submit handler
   const handleSubmit = async (
     values: UserValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
@@ -94,25 +92,18 @@ const UserInfo: React.FC = () => {
       const response = await api.put(`/users/update/${user?.user?.id}`, values);
       console.log("User details updated successfully", response.data);
       toast.success("Мэдээлэл амжилттай шинэчлэгдлээ");
-      setIsSubmitted(true); // Set submission status to true
-
-      // Save values to local storage
-      localStorage.setItem("userInfo", JSON.stringify(values));
-
-      // Optionally update initial values with the new data
-      setInitialValues(values);
+      setIsSubmitted(true);
+      setInitialValues(values); // Update initialValues with the submitted values
     } catch (error) {
       console.error("Error updating user details", error);
       toast.error("Error updating user details");
     } finally {
-      setSubmitting(false); // Stop the submission status
+      setSubmitting(false);
     }
   };
 
-  // Logout handler
   const handleLogout = () => {
     logout();
-    localStorage.removeItem("userInfo"); // Clear saved data on logout
   };
 
   return (
@@ -138,7 +129,6 @@ const UserInfo: React.FC = () => {
           <div className="w-full border my-6"></div>
 
           {isSubmitted ? (
-            // Render user information instead of form inputs
             <div>
               <p>Овог: {initialValues.lastName}</p>
               <p>Нэр: {initialValues.username}</p>
@@ -154,7 +144,7 @@ const UserInfo: React.FC = () => {
                   <p className="px-9 py-2">Гарах</p>
                 </button>
                 <button
-                  onClick={() => setIsSubmitted(false)} // Reset form if needed
+                  onClick={() => setIsSubmitted(false)}
                   className="border border-[#2563EB] text-[#2563EB] rounded-2xl hover:bg-[#2563EB] hover:text-white duration-1000"
                 >
                   <p className="px-9 py-2">Шинэчлэлт хийх</p>
@@ -181,7 +171,7 @@ const UserInfo: React.FC = () => {
                   <div>
                     <p className="font-medium">Нэр:</p>
                     <Field
-                      name="username" // Updated field name
+                      name="username"
                       placeholder="Нэр"
                       className="border border-[#E4E4E7] rounded-[18px] w-full px-3 py-2"
                     />
@@ -229,7 +219,9 @@ const UserInfo: React.FC = () => {
                       disabled={isSubmitting}
                       className="border border-[#2563EB] text-[#2563EB] rounded-2xl hover:bg-[#2563EB] hover:text-white duration-1000"
                     >
-                      <p className="px-9 py-2">Шинэчлэх</p>
+                      <p className="px-9 py-2">
+                        {isSubmitting ? "Шинэчлэх..." : "Шинэчлэх"}
+                      </p>
                     </button>
                   </div>
                 </Form>

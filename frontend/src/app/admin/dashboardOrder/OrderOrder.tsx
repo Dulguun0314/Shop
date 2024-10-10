@@ -26,6 +26,7 @@ interface OrderProps {
   userId: string;
   products: [
     {
+      _id: string;
       productId: string;
       size: string;
       count: number;
@@ -50,7 +51,7 @@ const OrderOrder = () => {
       console.log(response.data.order);
       setOrder(Order);
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching orders:", error);
     }
   };
 
@@ -69,19 +70,35 @@ const OrderOrder = () => {
   useEffect(() => {
     if (Order.length > 0) {
       const getUserId = async (userId: string) => {
-        const response = await api.get(`/getByUserId/${userId}`);
-        const User = response.data;
-        // Update the corresponding order with the user data
-        setOrder((prevOrders) =>
-          prevOrders.map((order) =>
-            order.userId === userId ? { ...order, User } : order
-          )
-        );
+        if (!userId) {
+          console.error("User ID is undefined");
+          return;
+        }
+
+        try {
+          console.log("Fetching user with ID:", userId);
+          const response = await api.get(`/users/getUser/${userId}`);
+          const User = response.data.user;
+
+          // Update the corresponding order with the user data
+          setOrder((prevOrders) =>
+            prevOrders.map((order) =>
+              order.userId === userId ? { ...order, User } : order
+            )
+          );
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
       };
+
       getUserId(Order[0]?.userId);
     }
-  }, [Order]);
-  
+  }, []);
+  // const productIds = Order.flatMap((order) =>
+  //   order.products.map((product) => product.productId)
+  // );
+  console.log(Order);
+
   return (
     <>
       <div className="flex justify-between my-6">
@@ -140,11 +157,7 @@ const OrderOrder = () => {
               </TableCell>
               <TableCell>
                 <IoChevronForward
-                  onClick={() =>
-                    router.push(
-                      `/admin/dashboardOrder/${order.products[0]?.productId}`
-                    )
-                  }
+                  onClick={() => router.push(`/admin/dashboardOrder`)}
                 />
               </TableCell>
             </TableRow>

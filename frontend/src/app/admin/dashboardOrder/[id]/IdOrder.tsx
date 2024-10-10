@@ -2,8 +2,12 @@ import React from "react";
 import { products } from "../../components/mockData";
 import Image from "next/image";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { useParams } from "next/navigation";
 
 const IdOrder = () => {
+  const { id } = useParams();
+  console.log(id);
+
   return (
     <div className="flex-1 bg-white border border-gray-100 rounded-lg items-start p-5 flex  h-screen ">
       <div className="grid gap-6">

@@ -11,10 +11,6 @@ const Payment = () => {
   const { products } = useProduct();
   const { user } = useUser();
 
-  console.log(products);
-  console.log(user);
-  
-  
   const [loading, setLoading] = useState(false);
 
   const handleOrderCreation = async () => {
@@ -22,28 +18,24 @@ const Payment = () => {
       return; // Handle error (e.g., show notification)
     }
     console.log(products);
-    const basketProducts = products?.map((el)=>{
+    const basketProducts = products?.map((el) => {
       return {
         productId: el._id,
         count: el.count,
         price: el.price,
         size: el.size,
         totalPrice: el.count * el.price,
-      }
-    })
-
-    // const productId = products[0].id; // Assuming you're using the first product
-    // const orderData = {
-    //   userId: user.id, // Assuming user has an 'id' field
-    //   products: productId,
-    //   status: "pending",
-    //   orderNumber: Date.now(), // You can generate an order number based on timestamp
-    // };
+      };
+    });
 
     setLoading(true);
     try {
-      const response = await api.post("/createOrder", {basketProducts, userId: user?.user?.id, });
+      const response = await api.post("/createOrder", {
+        basketProducts,
+        userId: user?.user?.id,
+      });
       console.log(response.data);
+      localStorage.removeItem("basket"); // basket нэртэй item-ийг устгана
       // Handle success (e.g., redirect or show success message)
     } catch (error) {
       console.error(error);
