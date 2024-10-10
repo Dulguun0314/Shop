@@ -3,15 +3,16 @@ import { orderModel } from "../../models";
 
 export const createOrder: RequestHandler = async (req, res) => {
   try {
-    const { productId, userId, status, price, orderNumber } = req.body;
+    const { basketProducts, userId, status="pending", orderNumber=new Date() } = req.body;
+    console.log(req.body);
+    
 
     const newOrder = await orderModel.create({
-      userId,
+      userId: userId,
       status,
-      price,
       createdAt: new Date(),
       orderNumber,
-      productId,
+      products: basketProducts,
     });
     return res
       .status(201)

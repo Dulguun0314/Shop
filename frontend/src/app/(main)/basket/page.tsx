@@ -7,29 +7,29 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 // Define the structure of a basket item
 interface BasketItem {
-  id: string;
+  _id: string;
   productName: string;
   price: number;
   size: string;
   count: number;
-  images: string;
+  images: string[];
 }
 
 const Basket: React.FC = () => {
   const { products, removeFromBasket, addToBasket } = useProduct();
 
   const handleIncrease = (basket: BasketItem) => {
-    addToBasket(basket.id, 1, basket.size);
+    addToBasket(basket._id, 1, basket.size); // Pass the new count directly
   };
 
   const handleDecrease = (basket: BasketItem) => {
     if (basket.count > 1) {
-      addToBasket(basket.id, -1, basket.size);
+      addToBasket(basket._id, -1, basket.size); // Pass the new count directly
     }
   };
 
   return (
-    <div className="flex justify-center ">
+    <div className="flex justify-center">
       <div className="container grid justify-center min-h-screen">
         <div>
           {products.length === 0 ? (
@@ -37,19 +37,19 @@ const Basket: React.FC = () => {
               Сагсалсан бараа байхгүй байна !
             </p>
           ) : (
-            <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6 my-24 p-8 ">
+            <div className="bg-[#F4F4F5E5] rounded-[16px] grid gap-6 my-24 p-8">
               <div className="flex gap-1 items-center">
                 <p className="font-medium text-[20px]">1. Сагс</p>
                 <p className="text-[#71717A]">({products.length})</p>
               </div>
               {products.map((basket) => (
-                <div key={basket.id}>
+                <div key={basket._id}>
                   <div className="flex justify-between gap-6">
                     <div>
                       <div className="relative w-[120px] h-[120px]">
                         <Image
                           alt={basket.productName}
-                          src={basket.images}
+                          src={basket.images[0]}
                           fill
                           className="rounded-xl object-fill"
                         />
@@ -75,7 +75,7 @@ const Basket: React.FC = () => {
                         >
                           <p>+</p>
                         </div>
-                        <p> Сонгосон хэмжээ :{basket.size}</p>
+                        <p>Сонгосон хэмжээ: {basket.size}</p>
                       </div>
                       <p className="text-[16px] font-bold">{basket.price}₮</p>
                     </div>

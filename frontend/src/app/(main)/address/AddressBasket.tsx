@@ -18,7 +18,7 @@ const AddressBasket = () => {
               <div>
                 <div className="relative w-[120px] h-[120px]">
                   <Image
-                    src={product.images}
+                    src={product.images[0]}
                     alt={product.productName}
                     fill
                     className="rounded-xl"

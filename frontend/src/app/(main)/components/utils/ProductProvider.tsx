@@ -1,5 +1,6 @@
 "use client";
 
+import { api } from "@/lib/axios";
 import {
   createContext,
   PropsWithChildren,
@@ -11,12 +12,12 @@ import { toast } from "react-toastify";
 
 // Define the Product interface
 interface Product {
-  id: string;
-  productName: string; // Ensuring productName is always a string
+  _id: string;
+  productName: string;
   price: number;
   size: string;
   count: number;
-  images: string;
+  images: string[];
   icon?: React.ReactNode;
 }
 
@@ -34,40 +35,68 @@ const ProductContext = createContext<ProductContextType | undefined>(undefined);
 export const ProductProvider = ({ children }: PropsWithChildren) => {
   const [products, setProducts] = useState<Product[]>([]);
 
-  // Function to handle adding a product to the basket with quantity
-  const addToBasket = (
-    id: string,
-    count: number,
+  // Function to fetch a product by ID
+  const getProductById = async (id: string) => {
+    try {
+      const response = await api.get(`/getProductById/${id}`);
+      return response.data as Product;
+    } catch (error) {
+      console.error("Failed to fetch product by ID:", error);
+      toast.error("Failed to fetch product details.");
+      return null;
+    }
+  };
 
-    size: string
-  ) => {
-    const localBasket: {
-      id: string;
-      count: number;
-      size: string;
-    }[] = JSON.parse(localStorage.getItem("basket") || "[]");
+  const addToBasket = async (id: string, count: number, size: string) => {
+    // Get the current basket from local storage
+    const localBasket: { id: string; count: number; size: string }[] =
+      JSON.parse(localStorage.getItem("basket") || "[]");
 
-    // Check if the product already exists in the basket
+    // Find the existing product by id and size
     const existingProduct = localBasket.find(
       (el) => el.id === id && el.size === size
     );
 
+    // If the product exists, update the count
     if (existingProduct) {
-      existingProduct.count += count; // Update quantity if it exists
+      existingProduct.count += count;
+
+      // Ensure that the count does not go below 1
+      if (existingProduct.count < 1) {
+        existingProduct.count = 1;
+      }
     } else {
-      localBasket.push({ id, count, size }); // Add new product
+      // If the product is not in the basket, add it with the specified count and size
+      localBasket.push({ id, count, size });
     }
 
+    // Save the updated basket to local storage
     localStorage.setItem("basket", JSON.stringify(localBasket));
-    setProducts(localBasket as Product[]);
+
+    // Fetch the updated product list and update the state
+    await fetchProducts();
   };
 
-  // Function to fetch products from local storage
-  const fetchProducts = () => {
-    const localProducts: Product[] = JSON.parse(
-      localStorage.getItem("basket") || "[]"
+  // Function to fetch products from local storage and update the state
+  const fetchProducts = async () => {
+    const localBasket: { id: string; count: number; size: string }[] =
+      JSON.parse(localStorage.getItem("basket") || "[]");
+
+    // Map through the local basket and fetch full product details for each item
+    const fetchedProducts = await Promise.all(
+      localBasket.map(async (item) => {
+        const product = await getProductById(item.id);
+        if (product) {
+          return { ...product, count: item.count, size: item.size };
+        }
+        return null;
+      })
     );
-    setProducts(localProducts);
+
+    // Filter out any null values if a product fetch failed
+    setProducts(
+      fetchedProducts.filter((product) => product !== null) as Product[]
+    );
   };
 
   useEffect(() => {
@@ -76,21 +105,14 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
 
   // Function to remove a specific item from the basket by index
   const removeFromBasket = (index: number) => {
-    const localBasket: {
-      id: string;
-      count: number;
-      size: string;
-    }[] = JSON.parse(localStorage.getItem("basket") || "[]");
+    const localBasket: { id: string; count: number; size: string }[] =
+      JSON.parse(localStorage.getItem("basket") || "[]");
 
-    // Remove the item at the specified index
     localBasket.splice(index, 1);
 
-    // Update localStorage with the modified basket
     localStorage.setItem("basket", JSON.stringify(localBasket));
-    toast.success("Амжилттай сагснаас устлаа ");
-
-    // Update the products state
-    setProducts(localBasket as Product[]);
+    toast.success("Амжилттай сагснаас устлаа");
+    fetchProducts(); // Update the products state
   };
 
   return (

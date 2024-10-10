@@ -26,6 +26,9 @@ interface Size {
 
 export const sizes: Size[] = [
   {
+    text: "free",
+  },
+  {
     text: "S",
   },
   {
@@ -39,6 +42,12 @@ export const sizes: Size[] = [
   },
   {
     text: "2XL",
+  },
+  {
+    text: "3XL",
+  },
+  {
+    text: "4XL",
   },
 ];
 export const products: Product[] = [

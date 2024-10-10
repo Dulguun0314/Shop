@@ -1,9 +1,9 @@
 "use client";
 
-import { useAdmin } from "../utils/AdminProvider";
+import { useUser } from "@/app/(main)/components/utils/AuthProvider";
 
 const Dashboard = () => {
-  const { logout } = useAdmin();
+  const { logout } = useUser();
 
   return (
     <div className="flex justify-center">

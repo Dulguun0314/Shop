@@ -15,48 +15,73 @@ import {
 import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
 
+// Define User interface
+interface User {
+  username: string;
+  email: string;
+}
+
+// Update OrderProps to include User
 interface OrderProps {
-  _id: string;
+  userId: string;
   products: [
     {
-      _id: string;
       productId: string;
-      qty: number;
+      size: string;
+      count: number;
       price: number;
+      totalPrice: number;
     }
   ];
   status: string;
   orderNumber: number;
   createdAt: string;
-  userId: {
-    username: string;
-    email: string;
-  };
+  User?: User; // Adding User property
 }
 
 const OrderOrder = () => {
   const router = useRouter();
   const [Order, setOrder] = useState<OrderProps[]>([]);
+
   const getOrder = async () => {
     try {
       const response = await api.get("/getOrders");
-      const Order = response.data;
-      console.log(response.data);
+      const Order = response.data.order;
+      console.log(response.data.order);
       setOrder(Order);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getOrder();
   }, []);
+
   const DateAndTime = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
+
   const Time = (dateString: string) => {
     return new Date(dateString).toLocaleTimeString();
   };
 
+  useEffect(() => {
+    if (Order.length > 0) {
+      const getUserId = async (userId: string) => {
+        const response = await api.get(`/getByUserId/${userId}`);
+        const User = response.data;
+        // Update the corresponding order with the user data
+        setOrder((prevOrders) =>
+          prevOrders.map((order) =>
+            order.userId === userId ? { ...order, User } : order
+          )
+        );
+      };
+      getUserId(Order[0]?.userId);
+    }
+  }, [Order]);
+  
   return (
     <>
       <div className="flex justify-between my-6">
@@ -103,8 +128,8 @@ const OrderOrder = () => {
               </TableCell>
               <TableCell>
                 <div>
-                  <p className="font-semibold">{order.userId.username}</p>
-                  <p>{order.userId.email}</p>
+                  <p className="font-semibold">{order.User?.username}</p>
+                  <p>{order.User?.email}</p>
                 </div>
               </TableCell>
               <TableCell>{DateAndTime(order.createdAt)}</TableCell>
@@ -116,7 +141,9 @@ const OrderOrder = () => {
               <TableCell>
                 <IoChevronForward
                   onClick={() =>
-                    router.push(`/admin/dashboardOrder/${order._id}`)
+                    router.push(
+                      `/admin/dashboardOrder/${order.products[0]?.productId}`
+                    )
                   }
                 />
               </TableCell>

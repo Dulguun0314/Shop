@@ -69,7 +69,7 @@ const OthersComments: React.FC<CommentsProps> = ({ slide, productId }) => {
 
   return (
     <div
-      className={`w-full grid justify-center gap-6 transition-transform duration-1000 ${
+      className={`w-fit grid  gap-6 transition-transform duration-1000 my-6 ${
         slide ? "visible" : "hidden"
       }`}
     >

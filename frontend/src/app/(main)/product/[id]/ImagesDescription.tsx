@@ -85,14 +85,16 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
         <p className="border w-fit h-fit border-[#2563EB] px-2 rounded-xl items-center my-2 font-semibold text-[12px]">
           шинэ
         </p>
-        <div className="flex gap-2 items-start my-2">
+        <div className="flex gap-2 items-start my-2 ">
           {productsDescription.map((productDescription, index) => (
             <div key={index} className="flex gap-2">
               <div>
                 <p className="text-2xl font-semibold">
                   {productDescription.productName}
                 </p>
-                {productDescription.description}
+                <p className="max-w-[800px]">
+                  {productDescription.description}
+                </p>
               </div>
               <Heart productId={productDescription._id} />
             </div>
@@ -152,7 +154,7 @@ const ImagesDescription = ({ id }: DescriptionProps) => {
             </button>
           </Link>
         </div>
-        <div className="mt-[60px]">
+        <div className="mt-[60px] ">
           <Link href={`${user?.isAuthenticated ? "" : "/login"}`}>
             <div className="flex gap-4" onClick={handleReviewClick}>
               <p>Үнэлгээ</p>
