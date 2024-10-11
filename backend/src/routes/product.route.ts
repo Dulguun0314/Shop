@@ -16,4 +16,5 @@ productGetRouter.get("/getProducts/", getProducts);
 productGetRouter.get("/getProductById/:id", getProductById);
 productPostRouter.delete("/deleteProduct/:id", deleteProduct);
 productGetRouter.get("/getRelatedProducts/:type", getRelatedProducts);
+
 export { productPostRouter, productGetRouter };

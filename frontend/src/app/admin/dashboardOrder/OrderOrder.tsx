@@ -23,6 +23,7 @@ interface User {
 
 // Update OrderProps to include User
 interface OrderProps {
+  _id: string;
   userId: string;
   products: [
     {
@@ -93,11 +94,7 @@ const OrderOrder = () => {
 
       getUserId(Order[0]?.userId);
     }
-  }, []);
-  // const productIds = Order.flatMap((order) =>
-  //   order.products.map((product) => product.productId)
-  // );
-  console.log(Order);
+  }, [Order]);
 
   return (
     <>
@@ -157,7 +154,10 @@ const OrderOrder = () => {
               </TableCell>
               <TableCell>
                 <IoChevronForward
-                  onClick={() => router.push(`/admin/dashboardOrder`)}
+                  onClick={() =>
+                    router.push(`/admin/dashboardOrder/${order._id}`)
+                  }
+                  className="cursor-pointer"
                 />
               </TableCell>
             </TableRow>
