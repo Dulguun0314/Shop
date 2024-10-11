@@ -17,7 +17,6 @@ const Payment = () => {
     if (!user || !products.length) {
       return; // Handle error (e.g., show notification)
     }
-    console.log(products);
     const basketProducts = products?.map((el) => {
       return {
         productId: el._id,
@@ -34,7 +33,7 @@ const Payment = () => {
         basketProducts,
         userId: user?.user?.id,
       });
-      console.log(response.data);
+      response.status;
       localStorage.removeItem("basket"); // basket нэртэй item-ийг устгана
       // Handle success (e.g., redirect or show success message)
     } catch (error) {

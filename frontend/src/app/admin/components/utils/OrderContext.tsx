@@ -89,9 +89,6 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({
       getUserDetails();
     }
   }, [order]);
-  console.log(order);
-  console.log(productDetails);
-  console.log(userDetails);
 
   return (
     <OrderContext.Provider value={{ order, productDetails, userDetails }}>

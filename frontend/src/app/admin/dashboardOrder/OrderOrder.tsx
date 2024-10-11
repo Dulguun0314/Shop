@@ -1,4 +1,3 @@
-"use client";
 import { FaRegCalendar } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoChevronDownOutline, IoChevronForward } from "react-icons/io5";
@@ -21,20 +20,21 @@ interface User {
   email: string;
 }
 
+// Define Product interface
+interface Product {
+  _id: string;
+  productId: string;
+  size: string;
+  count: number;
+  price: number;
+  totalPrice: number;
+}
+
 // Update OrderProps to include User
 interface OrderProps {
   _id: string;
   userId: string;
-  products: [
-    {
-      _id: string;
-      productId: string;
-      size: string;
-      count: number;
-      price: number;
-      totalPrice: number;
-    }
-  ];
+  products: Product[]; // Use the Product type here
   status: string;
   orderNumber: number;
   createdAt: string;
@@ -49,7 +49,6 @@ const OrderOrder = () => {
     try {
       const response = await api.get("/getOrders");
       const Order = response.data.order;
-      console.log(response.data.order);
       setOrder(Order);
     } catch (error) {
       console.log("Error fetching orders:", error);
@@ -95,6 +94,13 @@ const OrderOrder = () => {
       getUserId(Order[0]?.userId);
     }
   }, [Order]);
+
+  const deliveryFee = 5000;
+
+  // Specify the type of products parameter
+  const calculateTotalAmount = (products: Product[]) => {
+    return products.reduce((total, product) => total + product.totalPrice, 0);
+  };
 
   return (
     <>
@@ -148,7 +154,10 @@ const OrderOrder = () => {
               </TableCell>
               <TableCell>{DateAndTime(order.createdAt)}</TableCell>
               <TableCell>{Time(order.createdAt)}</TableCell>
-              <TableCell>{order.products[0].price}</TableCell>
+              <TableCell>
+                {calculateTotalAmount(order.products) + deliveryFee}{" "}
+                {/* Total for the order */}
+              </TableCell>
               <TableCell>
                 <button>{order.status}</button>
               </TableCell>

@@ -3,9 +3,7 @@ import { orderModel } from "../../models";
 
 export const createOrder: RequestHandler = async (req, res) => {
   try {
-    const { basketProducts, userId, status = "pending" } = req.body;
-
-    console.log(req.body);
+    const { basketProducts, userId, status = "Шинэ захиалга" } = req.body;
 
     // Fetch the last order number
     const lastOrder = await orderModel

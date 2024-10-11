@@ -78,7 +78,7 @@ const IdOrder = () => {
 
   return (
     <div className="flex-1 bg-white border border-gray-100 rounded-lg items-start p-5 flex h-screen">
-      <div className="grid gap-6">
+      <div className="grid gap-6 w-full">
         <div className="flex justify-between items-center">
           <div className="flex gap-2">
             <p className="text-[#3F4145] text-[16px]">Захиалгын ID дугаар:</p>
