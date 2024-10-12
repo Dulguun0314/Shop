@@ -107,7 +107,6 @@ export const ProductProvider = ({ children }: PropsWithChildren) => {
   const removeFromBasket = (index: number) => {
     const localBasket: { id: string; count: number; size: string }[] =
       JSON.parse(localStorage.getItem("basket") || "[]");
-
     localBasket.splice(index, 1);
 
     localStorage.setItem("basket", JSON.stringify(localBasket));

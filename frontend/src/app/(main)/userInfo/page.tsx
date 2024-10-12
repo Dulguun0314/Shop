@@ -44,19 +44,19 @@ const UserInfo: React.FC = () => {
   const [userData, setUserData] = useState<UserValues | null>(null); // Changed to UserValues | null
 
   // Fetch user data
-  const fetchUserData = async () => {
-    if (!user?.user?.id) return; // Ensure user ID exists
-    try {
-      const response = await api.get(`/users/getUser/${user.user.id}`); // Fetch user data
-      setUserData(response.data.user);
-    } catch (error) {
-      console.error("Error fetching user data", error);
-      toast.error("Error fetching user data");
-    }
-  };
 
   // Effect to fetch user data when user changes
   useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user?.user?.id) return; // Ensure user ID exists
+      try {
+        const response = await api.get(`/users/getUser/${user.user.id}`); // Fetch user data
+        setUserData(response.data.user);
+      } catch (error) {
+        console.error("Error fetching user data", error);
+        toast.error("Error fetching user data");
+      }
+    };
     fetchUserData();
   }, [user]);
 

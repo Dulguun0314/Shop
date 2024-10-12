@@ -6,10 +6,13 @@ import { useProduct } from "../components/utils/ProductProvider";
 import { useUser } from "../components/utils/AuthProvider";
 import { useState } from "react";
 import { api } from "@/lib/axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 const Payment = () => {
   const { products } = useProduct();
   const { user } = useUser();
+  const router = useRouter(); // Initialize router
 
   const [loading, setLoading] = useState(false);
 
@@ -17,15 +20,13 @@ const Payment = () => {
     if (!user || !products.length) {
       return; // Handle error (e.g., show notification)
     }
-    const basketProducts = products?.map((el) => {
-      return {
-        productId: el._id,
-        count: el.count,
-        price: el.price,
-        size: el.size,
-        totalPrice: el.count * el.price,
-      };
-    });
+    const basketProducts = products.map((el) => ({
+      productId: el._id,
+      count: el.count,
+      price: el.price,
+      size: el.size,
+      totalPrice: el.count * el.price,
+    }));
 
     setLoading(true);
     try {
@@ -33,9 +34,11 @@ const Payment = () => {
         basketProducts,
         userId: user?.user?.id,
       });
-      response.status;
-      localStorage.removeItem("basket"); // basket нэртэй item-ийг устгана
-      // Handle success (e.g., redirect or show success message)
+      response;
+
+      localStorage.removeItem("basket"); // Remove item from local storage
+      toast.success("Амжилттай баталгаажлаа,Тантай холбогдох болно :) ");
+      router.push("/"); // Redirect to the home page
     } catch (error) {
       console.error(error);
       // Handle error (e.g., show error message)
@@ -54,7 +57,7 @@ const Payment = () => {
             </p>
           </div>
           <div className="w-20 h-[1px] bg-[#2563EB]"></div>
-          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center ">
+          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center">
             <p className="text-white">
               <IoMdCheckmark className="text-white" />
             </p>
@@ -71,7 +74,7 @@ const Payment = () => {
             </p>
             <div className="grid gap-4">
               <div
-                className="relative w-[187px] h-[187px] pt-[64px] "
+                className="relative w-[187px] h-[187px] pt-[64px]"
                 onClick={handleOrderCreation}
               >
                 <Image
