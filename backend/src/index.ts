@@ -14,6 +14,9 @@ dotenv.config(); // Ensure environment variables are loaded
 const app = express();
 const port = 5000;
 
+app.get("/", (req, res) => {
+  res.send("Express on Vercel");
+});
 // MongoDB-д холбогдон
 connectToDatabase();
 
