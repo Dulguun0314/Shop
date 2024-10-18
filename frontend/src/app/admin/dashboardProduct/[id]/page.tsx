@@ -48,7 +48,7 @@ const Page: React.FC = () => {
       const response = await api.post("/createProducts", formData);
       if (response.data) {
         router.push("/admin/dashboardProduct");
-        toast.success("Бүтээгдэхүүн үслээ");
+        toast.success("Бүтээгдэхүүн үүслээ");
       } else {
         throw new Error("No data returned from API");
       }
