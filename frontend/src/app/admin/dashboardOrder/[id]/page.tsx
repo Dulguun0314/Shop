@@ -20,9 +20,11 @@ const OrderDetails = () => {
             <p>Захиалгын дэлгэрэнгүй</p>
           </div>
           <div className="flex-1 flex bg-gray-100 p-5 gap-5 h-screen ">
-            <IdOrder />
+            <div className="flex-1">
+              <IdOrder />
+            </div>
             <div className="flex-1 flex items-start ">
-              <div className="grid gap-4">
+              <div className="grid gap-4 w-full">
                 <IdDelivery />
                 <IdPayment />
               </div>

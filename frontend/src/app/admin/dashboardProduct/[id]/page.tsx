@@ -65,18 +65,14 @@ const Page: React.FC = () => {
     const { name, value } = e.target;
     if (name === "size") {
       // If size is selected, remove any previous selections
-      console.log(value);
 
       if (value.includes(",")) {
         const selectedSize = value.split(",");
-        console.log(selectedSize, "==");
 
         setFormData((prevData) => ({
           ...prevData,
           size: selectedSize,
         }));
-
-        console.log(formData, "=====");
       } else {
         setFormData((prevData) => ({
           ...prevData,

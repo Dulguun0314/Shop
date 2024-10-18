@@ -6,45 +6,39 @@ import { useProduct } from "../components/utils/ProductProvider";
 import { useUser } from "../components/utils/AuthProvider";
 import { useState } from "react";
 import { api } from "@/lib/axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 const Payment = () => {
   const { products } = useProduct();
   const { user } = useUser();
+  const router = useRouter(); // Initialize router
 
-  console.log(products);
-  console.log(user);
-  
-  
   const [loading, setLoading] = useState(false);
 
   const handleOrderCreation = async () => {
     if (!user || !products.length) {
       return; // Handle error (e.g., show notification)
     }
-    console.log(products);
-    const basketProducts = products?.map((el)=>{
-      return {
-        productId: el._id,
-        count: el.count,
-        price: el.price,
-        size: el.size,
-        totalPrice: el.count * el.price,
-      }
-    })
-
-    // const productId = products[0].id; // Assuming you're using the first product
-    // const orderData = {
-    //   userId: user.id, // Assuming user has an 'id' field
-    //   products: productId,
-    //   status: "pending",
-    //   orderNumber: Date.now(), // You can generate an order number based on timestamp
-    // };
+    const basketProducts = products.map((el) => ({
+      productId: el._id,
+      count: el.count,
+      price: el.price,
+      size: el.size,
+      totalPrice: el.count * el.price,
+    }));
 
     setLoading(true);
     try {
-      const response = await api.post("/createOrder", {basketProducts, userId: user?.user?.id, });
-      console.log(response.data);
-      // Handle success (e.g., redirect or show success message)
+      const response = await api.post("/createOrder", {
+        basketProducts,
+        userId: user?.user?.id,
+      });
+      response;
+
+      localStorage.removeItem("basket"); // Remove item from local storage
+      toast.success("Амжилттай баталгаажлаа,Тантай холбогдох болно :) ");
+      router.push("/"); // Redirect to the home page
     } catch (error) {
       console.error(error);
       // Handle error (e.g., show error message)
@@ -63,7 +57,7 @@ const Payment = () => {
             </p>
           </div>
           <div className="w-20 h-[1px] bg-[#2563EB]"></div>
-          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center ">
+          <div className="w-[32px] h-[32px] border border-[#2563EB] bg-[#2563EB] rounded-full flex justify-center items-center">
             <p className="text-white">
               <IoMdCheckmark className="text-white" />
             </p>
@@ -80,7 +74,7 @@ const Payment = () => {
             </p>
             <div className="grid gap-4">
               <div
-                className="relative w-[187px] h-[187px] pt-[64px] "
+                className="relative w-[187px] h-[187px] pt-[64px]"
                 onClick={handleOrderCreation}
               >
                 <Image

@@ -23,29 +23,40 @@ const AddressDelivery = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { user } = useUser();
+  const [userData, setUserData] = useState<DeliveryValues | null>(null); // Changed to UserValues | null
+
+  // Fetch user data
+
+  // Effect to fetch user data when user changes
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user?.user?.id) return; // Ensure user ID exists
+      try {
+        const response = await api.get(`/users/getUser/${user.user.id}`); // Fetch user data
+        setUserData(response.data.user);
+      } catch (error) {
+        console.error("Error fetching user data", error);
+        toast.error("Error fetching user data");
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   // API-гаас өгөгдөл татаж авах
   useEffect(() => {
-    const savedDeliveryInfo = localStorage.getItem("userInfo");
-    if (savedDeliveryInfo) {
-      setInitialValues(JSON.parse(savedDeliveryInfo));
-      setIsSubmitted(true);
-    } else if (user) {
+    if (userData) {
       setInitialValues({
-        lastName: user.lastName || "",
-        phone: user.phone || "",
-        address: user.address || "",
-        username: user.user?.username || "",
+        lastName: userData.lastName || "",
+        phone: userData.phone || "",
+        address: userData.address || "",
+        username: userData.username || "",
       });
 
       // Check if lastName exists and set isSubmitted accordingly
-      if (user.lastName) {
-        setIsSubmitted(true); // Set to true if lastName exists
-      } else {
-        setIsSubmitted(false); // Set to false if lastName does not exist
-      }
+      setIsSubmitted(!!userData.lastName);
     }
-  }, [user]);
+  }, [userData]);
 
   // Хүснэгт баталгаажуулалтын схем
   const validationSchema = Yup.object().shape({
@@ -61,11 +72,10 @@ const AddressDelivery = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      const response = await api.put(`/users/update/${user?.user?.id}`, values); // POST эсвэл PUT сонгож болно
+      const response = await api.put(`/users/update/${user?.user?.id}`, values);
       console.log("Delivery details updated successfully", response.data);
       toast.success("Хүргэлтийн мэдээлэл амжилттай шинэчлэгдлээ");
       setIsSubmitted(true);
-      localStorage.setItem("userInfo", JSON.stringify(values));
       setInitialValues(values);
     } catch (error) {
       console.error("Error updating delivery details", error);

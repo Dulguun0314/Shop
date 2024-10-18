@@ -1,4 +1,3 @@
-"use client";
 import { FaRegCalendar } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoChevronDownOutline, IoChevronForward } from "react-icons/io5";
@@ -21,18 +20,21 @@ interface User {
   email: string;
 }
 
+// Define Product interface
+interface Product {
+  _id: string;
+  productId: string;
+  size: string;
+  count: number;
+  price: number;
+  totalPrice: number;
+}
+
 // Update OrderProps to include User
 interface OrderProps {
+  _id: string;
   userId: string;
-  products: [
-    {
-      productId: string;
-      size: string;
-      count: number;
-      price: number;
-      totalPrice: number;
-    }
-  ];
+  products: Product[]; // Use the Product type here
   status: string;
   orderNumber: number;
   createdAt: string;
@@ -47,10 +49,9 @@ const OrderOrder = () => {
     try {
       const response = await api.get("/getOrders");
       const Order = response.data.order;
-      console.log(response.data.order);
       setOrder(Order);
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching orders:", error);
     }
   };
 
@@ -69,19 +70,38 @@ const OrderOrder = () => {
   useEffect(() => {
     if (Order.length > 0) {
       const getUserId = async (userId: string) => {
-        const response = await api.get(`/getByUserId/${userId}`);
-        const User = response.data;
-        // Update the corresponding order with the user data
-        setOrder((prevOrders) =>
-          prevOrders.map((order) =>
-            order.userId === userId ? { ...order, User } : order
-          )
-        );
+        if (!userId) {
+          console.error("User ID is undefined");
+          return;
+        }
+
+        try {
+          console.log("Fetching user with ID:", userId);
+          const response = await api.get(`/users/getUser/${userId}`);
+          const User = response.data.user;
+
+          // Update the corresponding order with the user data
+          setOrder((prevOrders) =>
+            prevOrders.map((order) =>
+              order.userId === userId ? { ...order, User } : order
+            )
+          );
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
       };
+
       getUserId(Order[0]?.userId);
     }
   }, [Order]);
-  
+
+  const deliveryFee = 5000;
+
+  // Specify the type of products parameter
+  const calculateTotalAmount = (products: Product[]) => {
+    return products.reduce((total, product) => total + product.totalPrice, 0);
+  };
+
   return (
     <>
       <div className="flex justify-between my-6">
@@ -134,17 +154,19 @@ const OrderOrder = () => {
               </TableCell>
               <TableCell>{DateAndTime(order.createdAt)}</TableCell>
               <TableCell>{Time(order.createdAt)}</TableCell>
-              <TableCell>{order.products[0].price}</TableCell>
+              <TableCell>
+                {calculateTotalAmount(order.products) + deliveryFee}{" "}
+                {/* Total for the order */}
+              </TableCell>
               <TableCell>
                 <button>{order.status}</button>
               </TableCell>
               <TableCell>
                 <IoChevronForward
                   onClick={() =>
-                    router.push(
-                      `/admin/dashboardOrder/${order.products[0]?.productId}`
-                    )
+                    router.push(`/admin/dashboardOrder/${order._id}`)
                   }
+                  className="cursor-pointer"
                 />
               </TableCell>
             </TableRow>
